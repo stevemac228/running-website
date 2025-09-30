@@ -6,11 +6,19 @@ export default function RaceCard({ race }) {
   const keyFields = ["Location", "Kms", "Date", "registrationStart", "registrationDeadline", "Terrain"];
   const extraFields = Object.keys(race).filter(f => !["id", "name", ...keyFields].includes(f));
 
+  const dateTimeStr = `${race.date} ${race.startTime}`; // "12/06/2025 10:00 AM"
+  const raceDate = new Date(dateTimeStr);
+  const displayDate = raceDate.toLocaleDateString("en-US", {
+    month: "long",    // full month name
+    day: "numeric",
+    year: "numeric"
+  }) + ` @ ${raceDate.toLocaleTimeString("en-US", { hour: "numeric", minute: undefined })}`;
+
   return (
     <div className="race-card">
-      <h2>{race.name}</h2>
-      <p>{race.location} — {race.distance}km</p>
-      <p>Race Date: {race.date}</p>
+      <h2>{race.name} <span style={{ fontSize: "16px" }}> {race.distance}km</span></h2>
+      <p>{race.location}</p>
+      <p>{displayDate}</p>
       <p>Registration: {race.registrationStart} → {race.registrationDeadline}</p>
       {/* Terrain Badge */}
       {race.terrain && (

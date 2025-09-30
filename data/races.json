@@ -2,7 +2,7 @@
   {
     "name": "Shamrockin' 5K",
     "day": "Sun",
-    "date": "Mar 16",
+    "date": "03/16/2025",
     "startTime": "11:00 AM",
     "distance": 5,
     "registrationStart": "Dec 17",
@@ -24,7 +24,7 @@
   {
     "name": "Boston Pizza Flat Out 5K",
     "day": "Sun",
-    "date": "Apr 27",
+    "date": "04/17/2025",
     "startTime": "8:00 AM",
     "distance": 5,
     "registrationStart": "",
@@ -46,7 +46,7 @@
   {
     "name": "Cinco de Mayo",
     "day": "Sun",
-    "date": "May 04",
+    "date": "05/04/2025",
     "startTime": "11:00 AM",
     "distance": 5,
     "registrationStart": "Jan 14",
@@ -68,7 +68,7 @@
   {
     "name": "LiveBy Wealth Mundy Pond 5K",
     "day": "Sun",
-    "date": "May 11",
+    "date": "05/11/2025",
     "startTime": "8:00 AM",
     "distance": 5,
     "registrationStart": "",
@@ -90,7 +90,7 @@
   {
     "name": "Paradise Backyard Ultra",
     "day": "Sat",
-    "date": "May 24",
+    "date": "05/24/2025",
     "startTime": "9:00 AM",
     "distance": "∞",
     "registrationStart": "Oct 30",
@@ -112,7 +112,7 @@
   {
     "name": "Kicking Pancreas",
     "day": "Sat",
-    "date": "May 31",
+    "date": "05/31/2025",
     "startTime": "6:30 PM",
     "distance": 5,
     "registrationStart": "",
@@ -134,7 +134,7 @@
   {
     "name": "Banished Brewing Five & Dime Road Race",
     "day": "Sun",
-    "date": "Jun 01",
+    "date": "06/01/2025",
     "startTime": "8:00 AM",
     "distance": 5,
     "registrationStart": "",
@@ -156,7 +156,7 @@
   {
     "name": "Banished Brewing Five & Dime Road Race",
     "day": "Sun",
-    "date": "Jun 01",
+    "date": "06/01/2025",
     "startTime": "9:00 AM",
     "distance": 10,
     "registrationStart": "",
@@ -178,7 +178,7 @@
   {
     "name": "Run for Beer",
     "day": "Sat",
-    "date": "Jun 07",
+    "date": "06/07/2025",
     "startTime": "8:30 AM",
     "distance": 8,
     "registrationStart": "",
@@ -200,7 +200,7 @@
   {
     "name": "TrailRacer for ECTA",
     "day": "Sat",
-    "date": "Jun 07",
+    "date": "06/07/2025",
     "startTime": "",
     "distance": 12.1,
     "registrationStart": "",
@@ -222,7 +222,7 @@
   {
     "name": "Mews Memorial 8K",
     "day": "Sun",
-    "date": "Jun 08",
+    "date": "06/08/2025",
     "startTime": "8:00 AM",
     "distance": 8,
     "registrationStart": "",
@@ -244,7 +244,7 @@
   {
     "name": "SDM Run for Women",
     "day": "Sat",
-    "date": "Jun 14",
+    "date": "06/14/2025",
     "startTime": "9:30 AM",
     "distance": 5,
     "registrationStart": "",
@@ -266,7 +266,7 @@
   {
     "name": "SDM Run for Women",
     "day": "Sat",
-    "date": "Jun 14",
+    "date": "06/14/2025",
     "startTime": "9:15 AM",
     "distance": 10,
     "registrationStart": "",
@@ -288,7 +288,7 @@
   {
     "name": "Tely 10",
     "day": "Sun",
-    "date": "Jun 22",
+    "date": "06/22/2025",
     "startTime": "8:00 AM",
     "distance": 16.09,
     "registrationStart": "",
@@ -310,7 +310,7 @@
   {
     "name": "Seaside Showdown Series: Deadman's Bay Path",
     "day": "Sat",
-    "date": "Jun 28",
+    "date": "06/28/2025",
     "startTime": "",
     "distance": 10.6,
     "registrationStart": "",
@@ -332,7 +332,7 @@
   {
     "name": "Outpost 8k",
     "day": "Sat",
-    "date": "Jul 05",
+    "date": "07/05/2025",
     "startTime": "9:00 AM",
     "distance": 9,
     "registrationStart": "",
@@ -354,7 +354,7 @@
   {
     "name": "Kelligrews Soiree 8K Road Race",
     "day": "Sat",
-    "date": "Jul 05",
+    "date": "07/05/2025",
     "startTime": "8:00 AM",
     "distance": 8,
     "registrationStart": "",
@@ -376,7 +376,7 @@
   {
     "name": "8K Roody Road Race",
     "day": "Sat",
-    "date": "Jul 19",
+    "date": "07/19/2025",
     "startTime": "8:00 AM",
     "distance": 8,
     "registrationStart": "",
@@ -398,7 +398,7 @@
   {
     "name": "Seaside Showdown Series: Sugarloaf Path",
     "day": "Sat",
-    "date": "Jul 19",
+    "date": "07/19/2025",
     "startTime": "",
     "distance": 9,
     "registrationStart": "",
@@ -420,7 +420,7 @@
   {
     "name": "Pride Fun Run",
     "day": "Sun",
-    "date": "Jul 20",
+    "date": "07/20/2025",
     "startTime": "",
     "distance": 5,
     "registrationStart": "",
@@ -442,7 +442,7 @@
   {
     "name": "Endurotrack 12hr",
     "day": "Sat",
-    "date": "Jul 26",
+    "date": "07/26/2025",
     "startTime": "8:00 AM",
     "distance": "∞",
     "registrationStart": "",
@@ -464,7 +464,7 @@
   {
     "name": "Endurotrack 24hr",
     "day": "Sat",
-    "date": "Jul 26",
+    "date": "07/26/2025",
     "startTime": "8:00 AM",
     "distance": "∞",
     "registrationStart": "",
@@ -486,7 +486,7 @@
   {
     "name": "Pharmasave Figure 8 Trail Race",
     "day": "Sun",
-    "date": "Jul 27",
+    "date": "07/27/2025",
     "startTime": "8:00 AM",
     "distance": 8,
     "registrationStart": "",
@@ -508,7 +508,7 @@
   {
     "name": "Seaside Showdown Series: Mickeleens Path",
     "day": "Sat",
-    "date": "Aug 02",
+    "date": "08/02/2025",
     "startTime": "",
     "distance": 11,
     "registrationStart": "",
@@ -530,7 +530,7 @@
   {
     "name": "Seaside Showdown Series: Cape Spear Path",
     "day": "Sat",
-    "date": "Aug 16",
+    "date": "08/16/2025",
     "startTime": "",
     "distance": 9.3,
     "registrationStart": "",
@@ -552,7 +552,7 @@
   {
     "name": "NL Sun Run",
     "day": "Sun",
-    "date": "Aug 17",
+    "date": "08/17/2025",
     "startTime": "10:00 AM",
     "distance": 5,
     "registrationStart": "",
@@ -574,7 +574,7 @@
   {
     "name": "Torbay 5K Fun Run/Walk",
     "day": "Sun",
-    "date": "Aug 24",
+    "date": "08/24/2025",
     "startTime": "9:00 AM",
     "distance": 5,
     "registrationStart": "",
@@ -596,7 +596,7 @@
   {
     "name": "Steep Ultra",
     "day": "Sat",
-    "date": "Sep 06",
+    "date": "09/06/2025",
     "startTime": "",
     "distance": 50,
     "registrationStart": "",
@@ -618,7 +618,7 @@
   {
     "name": "Steep Ultra",
     "day": "Sat",
-    "date": "Sep 06",
+    "date": "09/06/2025",
     "startTime": "",
     "distance": 100,
     "registrationStart": "",
@@ -640,7 +640,7 @@
   {
     "name": "Uniformed Services Run",
     "day": "Sun",
-    "date": "Sep 07",
+    "date": "09/07/2025",
     "startTime": "8:00 AM",
     "distance": 42.2,
     "registrationStart": "Apr 01",
@@ -662,7 +662,7 @@
   {
     "name": "Uniformed Services Run",
     "day": "Sun",
-    "date": "Sep 07",
+    "date": "09/07/2025",
     "startTime": "8:00 AM",
     "distance": 21.1,
     "registrationStart": "Apr 01",
@@ -684,7 +684,7 @@
   {
     "name": "Uniformed Services Run",
     "day": "Sun",
-    "date": "Sep 07",
+    "date": "09/07/2025",
     "startTime": "8:00 AM",
     "distance": 10,
     "registrationStart": "Apr 01",
@@ -706,7 +706,7 @@
   {
     "name": "Damnable Trail Coastal Ridge Challenge",
     "day": "Sat",
-    "date": "Sep 20",
+    "date": "09/20/2025",
     "startTime": "8:00 AM",
     "distance": 22,
     "registrationStart": "",
@@ -728,7 +728,7 @@
   {
     "name": "T’Railway Trek Half Marathon",
     "day": "Sun",
-    "date": "Sep 21",
+    "date": "09/21/2025",
     "startTime": "8:00 AM",
     "distance": 21.1,
     "registrationStart": "",
@@ -750,7 +750,7 @@
   {
     "name": "Candlelighters Go Gold",
     "day": "Sun",
-    "date": "Sep 21",
+    "date": "09/21/2025",
     "startTime": "11:00 AM",
     "distance": 3.8,
     "registrationStart": "Jun 26",
@@ -772,7 +772,7 @@
   {
     "name": "Carved by the Sea",
     "day": "Sun",
-    "date": "Sep 21",
+    "date": "09/21/2025",
     "startTime": "8:00 AM",
     "distance": 10,
     "registrationStart": "",
@@ -794,7 +794,7 @@
   {
     "name": "Trinity Fort to Forge",
     "day": "Sat",
-    "date": "Sep 27",
+    "date": "09/27/2025",
     "startTime": "10:00 AM",
     "distance": 5,
     "registrationStart": "",
@@ -816,7 +816,7 @@
   {
     "name": "Trinity Fort to Forge",
     "day": "Sat",
-    "date": "Sep 27",
+    "date": "09/27/2025",
     "startTime": "10:00 AM",
     "distance": 10,
     "registrationStart": "",
@@ -838,7 +838,7 @@
   {
     "name": "Rockcut 50k",
     "day": "Sat",
-    "date": "Sep 27",
+    "date": "09/27/2025",
     "startTime": "",
     "distance": 50,
     "registrationStart": "",
@@ -860,7 +860,7 @@
   {
     "name": "Rockcut Half Marathon",
     "day": "Sat",
-    "date": "Sep 27",
+    "date": "09/27/2025",
     "startTime": "",
     "distance": 21.1,
     "registrationStart": "",
@@ -882,7 +882,7 @@
   {
     "name": "Rockcur 9k",
     "day": "Sat",
-    "date": "Sep 27",
+    "date": "09/27/2025",
     "startTime": "",
     "distance": 9,
     "registrationStart": "",
@@ -904,7 +904,7 @@
   {
     "name": "Run Walk Stroll and Roll",
     "day": "Sun",
-    "date": "Sep 28",
+    "date": "09/28/2025",
     "startTime": "2:00 PM",
     "distance": 2,
     "registrationStart": "",
@@ -926,7 +926,7 @@
   {
     "name": "Run Walk Stroll and Roll",
     "day": "Sun",
-    "date": "Sep 28",
+    "date": "09/28/2025",
     "startTime": "2:00 PM",
     "distance": 5,
     "registrationStart": "",
@@ -948,7 +948,7 @@
   {
     "name": "ECT 15",
     "day": "Sat",
-    "date": "Oct 04",
+    "date": "10/04/2025",
     "startTime": "9:00 AM",
     "distance": 15,
     "registrationStart": "",
@@ -970,7 +970,7 @@
   {
     "name": "Turkey Tea",
     "day": "Sun",
-    "date": "Oct 05",
+    "date": "10/05/2025",
     "startTime": "8:00 AM",
     "distance": 10,
     "registrationStart": "",
@@ -992,7 +992,7 @@
   {
     "name": "CIBC Run for the Cure",
     "day": "Sun",
-    "date": "Oct 05",
+    "date": "10/05/2025",
     "startTime": "",
     "distance": 5,
     "registrationStart": "",
@@ -1014,7 +1014,7 @@
   {
     "name": "RBC Race for the Kids",
     "day": "Sat",
-    "date": "Oct 11",
+    "date": "10/11/2025",
     "startTime": "10:00 AM",
     "distance": 5,
     "registrationStart": "",
@@ -1036,7 +1036,7 @@
   {
     "name": "ECT 50%",
     "day": "Sat",
-    "date": "Oct 11",
+    "date": "10/11/2025",
     "startTime": "9:00 AM",
     "distance": 21.1,
     "registrationStart": "",
@@ -1058,7 +1058,7 @@
   {
     "name": "Trapline Marathon",
     "day": "Sun",
-    "date": "Oct 12",
+    "date": "10/12/2025",
     "startTime": "",
     "distance": 5,
     "registrationStart": "",
@@ -1080,7 +1080,7 @@
   {
     "name": "Trapline Marathon",
     "day": "Sun",
-    "date": "Oct 12",
+    "date": "10/12/2025",
     "startTime": "",
     "distance": 10,
     "registrationStart": "",
@@ -1102,7 +1102,7 @@
   {
     "name": "Trapline Marathon",
     "day": "Sun",
-    "date": "Oct 12",
+    "date": "10/12/2025",
     "startTime": "",
     "distance": 21.1,
     "registrationStart": "",
@@ -1124,7 +1124,7 @@
   {
     "name": "Trapline Marathon",
     "day": "Sun",
-    "date": "Oct 12",
+    "date": "10/12/2025",
     "startTime": "",
     "distance": 42.2,
     "registrationStart": "",
@@ -1146,7 +1146,7 @@
   {
     "name": "2025 Capital Subaru Cape to Cabot",
     "day": "Sun",
-    "date": "Oct 19",
+    "date": "10/19/2025",
     "startTime": "8:00 AM",
     "distance": 20,
     "registrationStart": "Aug 01",
@@ -1168,7 +1168,7 @@
   {
     "name": "ECT 50",
     "day": "Sat",
-    "date": "Oct 25",
+    "date": "10/25/2025",
     "startTime": "7:35 AM",
     "distance": 50,
     "registrationStart": "",
@@ -1190,7 +1190,7 @@
   {
     "name": "Spooky Sprint",
     "day": "Sun",
-    "date": "Oct 26",
+    "date": "10/26/2025",
     "startTime": "11:00 AM",
     "distance": 5,
     "registrationStart": "",
@@ -1212,7 +1212,7 @@
   {
     "name": "Giv'er on the River Fun Run",
     "day": "Sun",
-    "date": "Oct 26",
+    "date": "10/26/2025",
     "startTime": "",
     "distance": 5,
     "registrationStart": "",
@@ -1234,7 +1234,7 @@
   {
     "name": "Run to Remember",
     "day": "Tue",
-    "date": "Nov 11",
+    "date": "11/11/2025",
     "startTime": "8:00 AM",
     "distance": 11,
     "registrationStart": "",
@@ -1256,7 +1256,7 @@
   {
     "name": "Mummers Run",
     "day": "Sat",
-    "date": "Nov 15",
+    "date": "11/15/2025",
     "startTime": "10:00 AM",
     "distance": 5,
     "registrationStart": "",
@@ -1278,7 +1278,7 @@
   {
     "name": "Joy Run",
     "day": "Sat",
-    "date": "Nov 15",
+    "date": "11/15/2025",
     "startTime": "",
     "distance": 50,
     "registrationStart": "",
@@ -1300,7 +1300,7 @@
   {
     "name": "Santa Shuffle Fun Run & Elf Walk 2025",
     "day": "Sat",
-    "date": "Dec 06",
+    "date": "12/06/2025",
     "startTime": "10:00 AM",
     "distance": 5,
     "registrationStart": "",

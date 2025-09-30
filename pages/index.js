@@ -3,7 +3,7 @@ import RaceList from "../components/RaceList";
 import races from "../data/races.json";
 
 export default function Home() {
-  const upcomingRaces = races.filter(r => new Date(r.raceDate) >= new Date());
+  const upcomingRaces = races.filter(r => new Date(r.date) >= new Date());
 
   return (
     <div>
