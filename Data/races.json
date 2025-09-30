@@ -1,0 +1,24 @@
+[
+  {
+    "id": "halifax-marathon",
+    "name": "Halifax Marathon",
+    "city": "Halifax",
+    "distance": "10k",
+    "raceDate": "2025-09-01",
+    "registrationStart": "2025-06-01",
+    "registrationEnd": "2025-08-25",
+    "type": "road",
+    "website": "https://halifaxmarathon.ca"
+  },
+  {
+    "id": "capebreton-trail",
+    "name": "Cape Breton Trail Run",
+    "city": "Sydney",
+    "distance": "5k",
+    "raceDate": "2025-07-12",
+    "registrationStart": "2025-05-01",
+    "registrationEnd": "2025-07-01",
+    "type": "trail",
+    "website": "https://capebretontrail.ca"
+  }
+]
