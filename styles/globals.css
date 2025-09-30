@@ -1,0 +1,82 @@
+/* Global body */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  color: #111;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar / header */
+header {
+  background-color: #1e40af;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+nav a {
+  color: white;
+  margin-left: 1rem;
+  text-decoration: none;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* Race card */
+.race-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  padding: 1rem;
+  margin: 1rem 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: box-shadow 0.2s;
+}
+
+.race-card:hover {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.race-card h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.race-card p {
+  margin: 0.2rem 0;
+}
+
+.race-card .badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  color: white;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+
+}
+
+.badge-road { background-color: #1e40af; }
+.badge-trail { background-color: #16a34a; }
+.badge-funrun { background-color: #f97316; }
+.badge-competitive { background-color: #e90619; }
+
+button.toggle {
+  margin-top: 0.5rem;
+  background: none;
+  border: none;
+  color: #1e40af;
+  cursor: pointer;
+  text-decoration: underline;
+}
