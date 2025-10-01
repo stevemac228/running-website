@@ -60,11 +60,9 @@ nav a:hover {
   display: inline-block;
   padding: 0.2rem 0.5rem;
   color: white;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 0.8rem;
-  margin-top: 0.5rem;
-  margin-right: 0.5rem;
-
+  margin-right: 0.1rem;
 }
 
 .badge-road { background-color: #1e40af; }
@@ -79,4 +77,35 @@ button.toggle {
   color: #1e40af;
   cursor: pointer;
   text-decoration: underline;
+}
+
+.chevron-toggle {
+  background: none;      /* removes background */
+  border: none;          /* removes border */
+  cursor: pointer;       /* shows pointer on hover */
+  padding: 0;            /* optional: remove extra space */
+  display: inline-flex;
+  align-items: center;
+  color: #1e40af;        /* same as your theme */
+  transition: color 0.2s;
+}
+
+.race-card-collapsed {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.chevron-toggle {
+  justify-content: center;
+  align-items: center;
+  height: 100%;}
+
+.medal-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 0.25rem;
+  margin-left: 0.25rem;
+  vertical-align: middle;
 }
