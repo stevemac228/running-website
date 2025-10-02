@@ -48,6 +48,10 @@ export default function UpcomingRaceCard({ race }) {
                   ? "badge badge-road"
                   : race.terrain.toLowerCase() === "trail"
                   ? "badge badge-trail"
+                  : race.terrain.toLowerCase() === "track"
+                  ? "badge badge-track"
+                  : race.terrain.toLowerCase() === "gravel"
+                  ? "badge badge-gravel"
                   : "badge"
               }
             >
