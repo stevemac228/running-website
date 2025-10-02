@@ -20,12 +20,25 @@ export default function Home() {
     })
     .sort((a, b) => parseUSDate(a.date) - parseUSDate(b.date));
 
+  const upcomingRegistrations = races
+    .filter(r => {
+      const raceRegDate = parseUSDate(r.registrationStart);
+      return raceRegDate >= today && raceRegDate <= threeMonthsFromNow;
+    })
+    .sort((a, b) => parseUSDate(a.date) - parseUSDate(b.date));
+
   return (
     <div>
       <Header />
-      <main style={{ padding: "1rem" }}>
-        <h1>Upcoming Races</h1>
-        <RaceList races={upcomingRaces} type="upcoming" />
+      <main class = "homepage" >
+        <div>
+          <h1>Upcoming Races</h1>
+          <RaceList races={upcomingRaces} type="upcoming" />
+        </div>
+        <div>
+          <h1>Upcoming Registrations</h1>
+          <RaceList races={upcomingRegistrations} type="upcoming" />
+        </div>
       </main>
     </div>
   );

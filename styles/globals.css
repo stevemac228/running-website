@@ -172,3 +172,8 @@ button.toggle {
   font-size: 1.2rem;
   margin-left: 0.5rem;
 }
+
+.homepage {
+  display: flex;
+  flex-direction: row;
+}
