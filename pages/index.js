@@ -10,7 +10,7 @@ export default function Home() {
       <Header />
       <main style={{ padding: "1rem" }}>
         <h1>Upcoming Races</h1>
-        <RaceList races={upcomingRaces} />
+        <RaceList races={upcomingRaces} type="upcoming"/>
       </main>
     </div>
   );

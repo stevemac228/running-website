@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function RaceCard({ race }) {
+export default function UpcomingRaceCard({ race }) {
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = () => setExpanded(!expanded);
 
@@ -48,10 +48,6 @@ export default function RaceCard({ race }) {
                   ? "badge badge-road"
                   : race.terrain.toLowerCase() === "trail"
                   ? "badge badge-trail"
-                  : race.terrain.toLowerCase() === "track"
-                  ? "badge badge-track"
-                  : race.terrain.toLowerCase() === "gravel"
-                  ? "badge badge-gravel"
                   : "badge"
               }
             >
