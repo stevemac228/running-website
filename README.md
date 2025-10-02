@@ -3,6 +3,9 @@
   - Distance
 - Date Filtering
     - Date Range Picker (Like when booking a hotel)
+- Results Counter
+    - Display a filter on the all races pace and the home page that diaplays the amount of races in the current filter.
+    - Default will return total amount of races.
 - Website/Facebook links and make sure all info is up to date
   - Make the name clickable to go to the website?
 - Make upcomingRaces only go 3 months ahead
