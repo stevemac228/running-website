@@ -13,6 +13,7 @@
   - About
   - Gitlab
   - Buy me a Coffee
+  - "Not responsible for any incorrect information, please check official race registration websites for the most up to date info."
 - Calendar Page
   - Also include calendar for the current month on the homepage
 - Navbar Styling
