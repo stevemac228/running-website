@@ -38,7 +38,7 @@ export default function Races() {
     if (activeFilters.includes("competitive") && race.format !== "Competitive") return false;
     if (activeFilters.includes("trail") && race.terrain !== "Trail") return false;
     if (activeFilters.includes("road") && race.terrain !== "Road") return false;
-    
+
     // Multi-select filters (OR logic): distance
     const distanceFilters = ["5k","10k","half","full","ultra"].filter(f => activeFilters.includes(f));
     if (distanceFilters.length > 0) {
@@ -64,7 +64,7 @@ export default function Races() {
     const term = searchTerm.toLowerCase();
     return (
       race.name.toLowerCase().includes(term) ||
-      race.city?.toLowerCase().includes(term)
+      race.location?.toLowerCase().includes(term)
     );
   });
 
