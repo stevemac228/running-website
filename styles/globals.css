@@ -176,4 +176,9 @@ button.toggle {
 .homepage {
   display: flex;
   flex-direction: row;
+  width: 100%;
+}
+
+.upcomingRegistrations {
+  margin-left: 10px;
 }

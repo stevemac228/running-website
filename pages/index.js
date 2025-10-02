@@ -31,11 +31,11 @@ export default function Home() {
     <div>
       <Header />
       <main class = "homepage" >
-        <div>
+        <div class = "upcomingRaces">
           <h1>Upcoming Races</h1>
           <RaceList races={upcomingRaces} type="upcoming" />
         </div>
-        <div>
+        <div class = "upcomingRegistrations">
           <h1>Upcoming Registrations</h1>
           <RaceList races={upcomingRegistrations} type="upcoming" />
         </div>
