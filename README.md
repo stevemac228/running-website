@@ -1,7 +1,7 @@
 # To-DO
 - **SORT BY**
   - Distance
-  - Timeline
+- Date Filtering
     - Date Range Picker (Like when booking a hotel)
 - Website/Facebook links and make sure all info is up to date
   - Make the name clickable to go to the website?
@@ -9,13 +9,21 @@
   - (If I start putting next years races in then technically everything will be upcoming)
 - Add "No Results Found" when search returns null
 - Footer
-  - Name and Contact Info
+  - Name and Email
+  - About
+  - Gitlab
+  - Buy me a Coffee
+- Calendar Page
+  - Also include calendar for the current month on the homepage
 - Navbar Styling
+- Hamburger Menu for mobile once the new pages are added to the navbar.
+- Maybe Contact Me in NavBar
 - Overall Styling
 - Security
 - Domain Name
 
 ## Future Functionality in order of complexity
+- Search in the nvabar with results appearing below and blurring the background?
 - Fuse.js Fuzzy Search
 - Regisitration open visual indicator based on registration dates
   - Could also be a home page item
@@ -26,7 +34,8 @@
   - Favorites that pin to home page
   - Add countdown to home page for selected race
 
-
+### Optional Features
+- Cartoon Running Puffin Logo?
 
 
 npm run dev to start
