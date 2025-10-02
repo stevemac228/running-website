@@ -33,16 +33,30 @@ export default function Races() {
   const filteredRaces = races.filter(race => {
     // Example filter logic
     if (activeFilters.includes("medal") && !race.medal) return false;
-    if (activeFilters.includes("5k") && race.distance !== 5) return false;
-    if (activeFilters.includes("10k") && race.distance !== 10) return false;
-    if (activeFilters.includes("half") && race.distance !== 21.1) return false;
-    if (activeFilters.includes("full") && race.distance !== 42.2) return false;
-    if (activeFilters.includes("ultra") && race.distance <= 42.2) return false;
     if (activeFilters.includes("tshirt") && !race.shirt) return false;
     if (activeFilters.includes("funRun") && race.format !== "Fun") return false;
     if (activeFilters.includes("competitive") && race.format !== "Competitive") return false;
     if (activeFilters.includes("trail") && race.terrain !== "Trail") return false;
     if (activeFilters.includes("road") && race.terrain !== "Road") return false;
+    
+    // Multi-select filters (OR logic): distance
+    const distanceFilters = ["5k","10k","half","full","ultra"].filter(f => activeFilters.includes(f));
+    if (distanceFilters.length > 0) {
+      const distanceMap = {
+        "5k": 5,
+        "10k": 10,
+        "half": 21.1,
+        "full": 42.2,
+        "ultra": 42.3 // any distance > 42.2
+      };
+
+      let matchDistance = distanceFilters.some(filter => {
+        if (filter === "ultra") return race.distance > 42.2;
+        return race.distance === distanceMap[filter];
+      });
+
+      if (!matchDistance) return false;
+    }
 
     return true;
   }).filter(race => {
