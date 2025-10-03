@@ -17,9 +17,7 @@ export default function SearchFilter({ onSearch }) {
     <div className="search-container">
       <div className="search-wrapper">
         {/* Search icon */}
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M21 20l-5.6-5.6A7.936 7.936 0 0016 9a8 8 0 10-8 8 7.936 7.936 0 005.4-2.6L20 21l1-1zM4 9a5 5 0 115 5 5.006 5.006 0 01-5-5z" />
-        </svg>
+        <img src="/icons/search.svg" alt="Search" className="search-icon" fill="none"/>
 
         {/* Controlled input */}
         <input
