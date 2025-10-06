@@ -41,9 +41,6 @@ export default function Home() {
           <h1>Upcoming Registrations</h1>
           <RaceList races={upcomingRegistrations} type="upcoming" />
         </div>
-        <div className="homepage-right">
-        <Calendar />
-        </div>
       </main>
 
       <Footer />

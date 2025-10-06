@@ -12,6 +12,7 @@ export default function Header() {
         <nav>
           <ul class = "nav_links">
             <Link href="/">Home</Link>
+            <Link href="/calendar">Calendar</Link>
             <Link href="/races">All Races</Link>
           </ul>
         </nav>
