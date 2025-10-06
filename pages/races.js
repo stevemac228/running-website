@@ -4,10 +4,11 @@ import FilterChip from "../components/FilterChip";
 import Header from "../components/Header";
 import races from "../data/races.json";
 import SearchFilter from "../components/SearchFilter";
+import Footer from "../components/Footer";
 
 export default function Races() {
-  console.log("Races passed in:", races);
-    const filterOptions = [
+
+  const filterOptions = [
     { key: "5k", label: "5K" },
     { key: "10k", label: "10K" },
     { key: "half", label: "Half Marathon" },
@@ -23,7 +24,9 @@ export default function Races() {
 
   const [activeFilters, setActiveFilters] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // new state for search
+  const [sortOption, setSortOption] = useState("date-asc"); // default
 
+  /// Filters
   const toggleFilter = (key) => {
     setActiveFilters(prev =>
       prev.includes(key) ? prev.filter(f => f !== key) : [...prev, key]
@@ -31,7 +34,6 @@ export default function Races() {
   };
 
   const filteredRaces = races.filter(race => {
-    // Example filter logic
     if (activeFilters.includes("medal") && !race.medal) return false;
     if (activeFilters.includes("tshirt") && !race.shirt) return false;
     if (activeFilters.includes("funRun") && race.format !== "Fun") return false;
@@ -59,16 +61,38 @@ export default function Races() {
     }
 
     return true;
-  }).filter(race => {
+  })
+  .filter(race => {
     // Search filter
     const term = searchTerm.toLowerCase();
     return (
       race.name.toLowerCase().includes(term) ||
       race.location?.toLowerCase().includes(term)
     );
-  });
+  })
+  .sort((a, b) => {
+    // Sorting
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
 
-  console.log("Filtered races:", filteredRaces);
+    switch (sortOption) {
+      case "date-asc":
+        return dateA - dateB;
+      case "date-desc":
+        return dateB - dateA;
+      case "distance-asc":
+        return a.distance - b.distance;
+      case "distance-desc":
+        return b.distance - a.distance;
+      case "name-asc":
+        return a.name.localeCompare(b.name);
+      case "name-desc":
+        return b.name.localeCompare(a.name);
+      default:
+        return 0;
+      }
+    });
+
 
   return (
     <div>
@@ -81,21 +105,41 @@ export default function Races() {
           <SearchFilter onSearch={setSearchTerm} />
 
           {/* Filter chips */}
-          <div class = "chips">
-            {filterOptions.map(opt => (
-              <FilterChip
-                key={opt.key}
-                label={opt.label}
-                active={activeFilters.includes(opt.key)}
-                onClick={() => toggleFilter(opt.key)}
-              />
-            ))} 
+          <div className="filters-row">
+            <div className="chips">
+              {filterOptions.map((opt) => (
+                <FilterChip
+                  key={opt.key}
+                  label={opt.label}
+                  active={activeFilters.includes(opt.key)}
+                  onClick={() => toggleFilter(opt.key)}
+                />
+              ))}
+            </div>
+
+          {/* Sort dropdown */}
+            <div className="sort-container">
+              <select
+                className="sort-dropdown"
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+              >
+                <option value="date-asc">Date (Soonest)</option>
+                <option value="date-desc">Date (Latest)</option>
+                <option value="distance-asc">Distance (Shortest)</option>
+                <option value="distance-desc">Distance (Longest)</option>
+                <option value="name-asc">Name (A–Z)</option>
+                <option value="name-desc">Name (Z–A)</option>
+              </select>
+            </div>
           </div>
+
         </div>
         
         {/* Race list */}
         <RaceList races={filteredRaces} type="all"/>
       </main>
+      <Footer />
     </div>
   );
 }

@@ -269,13 +269,236 @@ button.toggle {
   margin-left: 10px;
 }
 
-/* 👇 stack vertically on smaller screens */
+
+.sort-container {
+  margin: 1rem 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sort-dropdown {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 9999px;
+  background-color: var(--background);
+  color: var(--text);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border 0.2s, background-color 0.2s;
+}
+
+.sort-dropdown:hover {
+  border-color: #0070f3;
+}
+
+.filters-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* keeps it mobile responsive */
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.sort-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.sort-dropdown {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 9999px;
+  background-color: var(--background);
+  color: var(--text);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border 0.2s, background-color 0.2s;
+}
+
+.sort-dropdown:hover {
+  border-color: #0070f3;
+}
+
+/* Optional: make dropdown look clean in dark mode */
+body.dark .sort-dropdown {
+  border-color: #444;
+  background-color: #222;
+  color: #f5f5f5;
+}
+
+
 @media (max-width: 768px) {
-.upcomingRegistrations,
-.upcomingRaces {
+  /* Improve text size and spacing for smaller screens */
+  h1, h2, h3 {
+    font-size: 1.2rem;
+  }
+
+  /* stack cardsvertically on smaller screens */
+  .upcomingRegistrations,
+  .upcomingRaces {
     flex: 1 1 100%;
     min-width: 100%;
     margin-right: 10px;
     margin-left: 10px;
+  }
+}
+
+/* ===== FOOTER STYLES ===== */
+.site-footer {
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
+  padding: 2rem 1rem;
+  border-top: 1px solid var(--footer-border);
+  margin-top: 3rem;
+  font-size: 0.95rem;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  margin: 0 auto;
+  gap: 2rem;
+}
+
+.footer-section {
+  justify-content: center;
+}
+.footer-section h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--footer-accent);
+}
+
+.footer-section a {
+  display: block;
+  color: var(--footer-text);
+  text-decoration: none;
+  margin: 0.25rem 0;
+  transition: color 0.2s ease;
+}
+
+.footer-section a:hover {
+  color: var(--footer-accent);
+}
+
+.footer-bottom {
+  text-align: center;
+  border-top: 1px solid var(--footer-border);
+  margin-top: 2rem;
+  padding-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--footer-muted);
+  line-height: 1.4;
+}
+
+/* Light/Dark mode color variables */
+:root {
+  --footer-bg: #f9f9f9;
+  --footer-text: #222;
+  --footer-accent: #0070f3;
+  --footer-border: #ddd;
+  --footer-muted: #555;
+}
+
+.footer a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.footer-section-socials{
+  display:flex;
+  flex-direction: row;
+}
+
+.footer-icon {
+  width: 1.5rem;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.footer-left,
+.footer-right {
+  flex: 1;
+}
+
+.footer-right {
+  text-align: right;
+}
+
+.footer-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* centers both header and icons horizontally */
+}
+
+.socials-header {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: center;    /* ensures header text is centered */
+}
+
+.footer-section-socials {
+  display: flex;
+  gap: 15px;             /* space between icons */
+}
+
+.footer-section-socials img {
+  width: 1.5rem;
+  transition: transform 0.3s, filter 0.3s;
+  filter: grayscale(100%);
+}
+
+.footer-section-socials:hover img {
+  filter: grayscale(0%);
+  transform: scale(1.1);
+}
+
+/* =====Mobile responsiveness===== */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-section h3 {
+    margin-top: 1rem;
+  }
+
+  .footer {
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .footer-left,
+  .footer-right {
+    flex: none;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .footer-center {
+    position: static;      /* remove absolute */
+    transform: none;
+    margin-bottom: 10px;
+    justify-content: center;
   }
 }

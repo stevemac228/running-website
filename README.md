@@ -1,6 +1,6 @@
 # To-DO
 - **SORT BY**
-  - Distance
+  - ~~Distance~~
 - Date Filtering
     - Date Range Picker (Like when booking a hotel)
 - Results Counter
@@ -39,7 +39,7 @@
   - Add countdown to home page for selected race
 
 ### Optional Features
-- Cartoon Running Puffin Logo?
+- ~~Cartoon Running Puffin Logo?~~
 
 
 npm run dev to start
