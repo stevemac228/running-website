@@ -99,7 +99,6 @@ export default function Races() {
       <Header />
       <main style={{ padding: "1rem" }}>
 
-        <h1>All Races</h1>
         <div class="search-and-filters">
           {/* Search input */}
           <SearchFilter onSearch={setSearchTerm} />

@@ -2,6 +2,7 @@ import Header from "../components/Header";
 import RaceList from "../components/RaceList";
 import races from "../data/races.json";
 import Footer from "../components/Footer";
+import Calendar from "../components/Calendar";
 
 function parseUSDate(dateStr) {
   // expects MM/DD/YYYY
@@ -40,7 +41,11 @@ export default function Home() {
           <h1>Upcoming Registrations</h1>
           <RaceList races={upcomingRegistrations} type="upcoming" />
         </div>
+        <div className="homepage-right">
+        <Calendar />
+        </div>
       </main>
+
       <Footer />
     </div>
   );
