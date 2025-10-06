@@ -565,6 +565,7 @@ body.dark .sort-dropdown {
 .calendar-header h2 {
   margin-left: 3rem;
   margin-right: 3rem;
+  min-width: 12rem;
 }
 
 .calendar-header button {
