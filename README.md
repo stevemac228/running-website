@@ -9,10 +9,10 @@
   - ~~Gitlab~~
   - ~~Buy me a Coffee~~
   - ~~"Not responsible for any incorrect information, please check official race registration websites for the most up to date info."~~
-- Calendar Page
+- ~~Calendar Page~~
   - Also include calendar for the current month on the homepage
-- Navbar Styling
-- Hamburger Menu for mobile once the new pages are added to the navbar.
+- ~~Navbar Styling~~
+- ~~Hamburger Menu for mobile once the new pages are added to the navbar.~~
 - Overall Styling
 - Security
 - Domain Name
@@ -21,7 +21,7 @@
 - ~~Make upcomingRaces only go 3 months ahead~~
 
 ## All Races Page
-- Sorting
+- ~~Sorting~~
   - ~~Distance~~
   - ~~Alphabetical~~
   - ~~Date~~

@@ -77,12 +77,12 @@ export default function UpcomingRaceCard({ race }) {
 
           {/* Medal Icon */}
           {race.medal && (
-            <img src="/icons/medal.svg" alt="Medal available" className="medal-icon" />
+            <img src="/icons/medal.svg" alt="Medal available" className="racecard-icon" />
           )}
 
           {/* Tshirt Icon */}
           {race.shirt && (
-            <img src="/icons/tshirt.svg" alt="Tshirt available" className="tshirt-icon" />
+            <img src="/icons/tshirt.svg" alt="Tshirt available" className="racecard-icon" />
           )}
 
         </h2>

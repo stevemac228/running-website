@@ -1,24 +1,31 @@
-/* Default light theme */
+/* #region Global */
 :root {
   --bg-color: #ffffff;
   --text-color: #111111;
-  --nav-bg: #007bff;
-  --nav-text: #ffffff;
+  --nav-bg: #2e3440;
+  --nav-hover: #005cbf;
+  --badge-road-bg:#1e40af;
+  --badge-trail-bg:#16a34a;
+  --badge-funrun-bg:#f97316;
+  --badge-competitive-bg:#e90619;
+  --badge-track-bg:#8b5cf6;
+  --badge-gravel-bg:#db2777;
+  --footer-bg: #f9f9f9;
+  --footer-text: #222;
+  --footer-accent: #0070f3;
+  --footer-border: #ddd;
+  --footer-muted: #555;
 }
 
-/* Dark theme */
-[data-theme="dark"] {
-  --bg-color: #272727;
-  --text-color: #f0f0f0;
-  --nav-bg: #1f1f1f;
-  --nav-text: #ffffff;
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
 }
+/* #endregion */
 
-/* -------------------*/
-/* Scrollbars */
-/* -------------------*/
-
-/* Apply to the main scroll container */
+/* #region Scrollbar */
 html {
   scrollbar-width: thin; /* thin scrollbar */
   scrollbar-color: rgba(0, 0, 0, 0.3) transparent; /* thumb and track */
@@ -37,23 +44,11 @@ body::-webkit-scrollbar-thumb {
 body::-webkit-scrollbar-track {
   background: transparent;
 }
+/* #endregion */
 
-/* -------------------*/
-/* Global */
-/* -------------------*/
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  transition: background-color 0.3s, color 0.3s;
-  margin: 0;
-  padding: 0;
-}
-
-/* -------------------*/
-/* Navbar / Header */
-/* -------------------*/
+/* #region Header / Navbar */
 header {
-  background-color: #2e3440;
+  background-color: var(--nav-bg);
   color: white;
   padding: 5px;
   display: flex;
@@ -89,11 +84,10 @@ nav {
 
 .nav-link:hover {
   border-radius: 9999px;
-  background-color: #005cbf;
+  background-color: var(--nav-hover);
   transform: scale(1.05);
 }
 
-/* Add this near the bottom of global.css */
 .nav-icon {
   width: 22px; /* set visible size */
   height: 22px;
@@ -112,13 +106,12 @@ nav {
   }
 
   .nav-link:hover {
-    display:none;
+    display: none;
+  }
 }
-}
+/* #endregion */
 
-/* -------------------*/
-/* Race Card */
-/* -------------------*/
+/* #region Race Card */
 .race-card {
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -142,9 +135,13 @@ nav {
   margin: 0.2rem 0;
 }
 
-/*--------------------*/
-/* Race Card Badges */
-/* -------------------*/
+.race-card-collapsed {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+/* #region Badges */
 .race-card .badge {
   display: inline-block;
   padding: 0.2rem 0.5rem;
@@ -155,24 +152,26 @@ nav {
 }
 
 .badge-road {
-  background-color: #1e40af;
+  background-color: var(--badge-road-bg);
 }
 .badge-trail {
-  background-color: #16a34a;
+  background-color: var(--badge-trail-bg);
 }
 .badge-funrun {
-  background-color: #f97316;
+  background-color: var(--badge-funrun-bg);
 }
 .badge-competitive {
-  background-color: #e90619;
+  background-color: var(--badge-competitive-bg);
 }
 .badge-track {
-  background-color: #8b5cf6;
+  background-color: var(--badge-track-bg);
 }
 .badge-gravel {
-  background-color: #db2777;
+  background-color: var(--badge-gravel-bg);
 }
+/* #endregion */
 
+/* #region Expand Button */
 button.toggle {
   margin-top: 0.5rem;
   background: none;
@@ -193,31 +192,17 @@ button.toggle {
   transition: color 0.2s;
 }
 
-.race-card-collapsed {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
 .chevron-toggle {
   justify-content: center;
   align-items: center;
   height: 100%;
 }
+/* #endregion */
 
-/* -------------------*/
-/* Icons */
-/* -------------------*/
+/* #endregion */
 
-.medal-icon {
-  width: 18px;
-  height: 18px;
-  margin-right: 0.25rem;
-  margin-left: 0.25rem;
-  vertical-align: middle;
-}
-
-.tshirt-icon {
+/* #region Icons */
+.racecard-icon {
   width: 18px;
   height: 18px;
   margin-right: 0.25rem;
@@ -245,11 +230,11 @@ button.toggle {
 .dot-icon.Trail {
   color: #16a34a; /* green */
 }
+/* #endregion */
 
-/* -------------------*/
-/* Search and Filters */
-/* -------------------*/
+/* #region Search and Filters */
 
+/* #region Search*/
 .search-and-filters {
   display: flex;
   flex-direction: column;
@@ -274,7 +259,7 @@ button.toggle {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 1px solid #ccc;
   padding: 0.2rem 0.5rem;
-  background-color: #fff;
+  background-color: var(--bg-color)
 }
 
 /* Input inside the wrapper */
@@ -304,6 +289,68 @@ button.toggle {
   margin-left: 0.5rem;
 }
 
+/* #endregion */
+
+.filters-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* keeps it mobile responsive */
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* #region Filter Chip*/
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-chip {
+  margin: 0.25rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 9999px;
+  border: 1px solid #ccc;
+  background-color: var(--bg-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-chip.active {
+  border: 2px solid #0070f3;
+  background-color: #E6F0FF;
+}
+/* #endregion */
+
+/* #region Sort Dropdown*/
+.sort-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.sort-dropdown {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 9999px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border 0.2s, background-color 0.2s;
+}
+
+.sort-dropdown:hover,
+.filter-chip:hover {
+  border-color: #0070f3;
+}
+/* #endregion */
+
+/* #endregion */
+
+/* #region Homepage*/
 .homepage {
   display: flex;
   justify-content: center;
@@ -321,54 +368,14 @@ button.toggle {
   min-width: 300px; /* ensures decent width on desktop */
   margin-right: 5px;
   margin-left: 5px;
-}
-
-.sort-dropdown:hover {
-  border-color: #0070f3;
-}
-
-.filters-row {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap; /* keeps it mobile responsive */
-  gap: 0.75rem;
-  margin-top: 1rem;
+  flex-direction: column;
 }
 
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.sort-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-shrink: 0;
-}
-
-.sort-dropdown {
-  padding: 0.4rem 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 9999px;
-  background-color: var(--background);
-  color: var(--text);
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: border 0.2s, background-color 0.2s;
-}
-
-.sort-dropdown:hover {
-  border-color: #0070f3;
-}
-
-/* Optional: make dropdown look clean in dark mode */
-body.dark .sort-dropdown {
-  border-color: #444;
-  background-color: #222;
-  color: #f5f5f5;
+.upcomingRaces h1,
+.upcomingRegistrations h1 {
+  text-align: center; /* ensures header text is centered */
+  margin-bottom: 20px;
 }
 
 @media (max-width: 768px) {
@@ -387,32 +394,18 @@ body.dark .sort-dropdown {
     margin-right: 10px;
     margin-left: 10px;
   }
-}
 
-.upcomingRaces,
-.upcomingRegistrations {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* centers all children horizontally */
-  margin-bottom: 40px;
-}
+  .homepage-container {
+    flex-direction: column;
+  }
 
-.upcomingRaces h1,
-.upcomingRegistrations h1 {
-  text-align: center; /* ensures header text is centered */
-  margin-bottom: 20px;
+  .homepage-right {
+    display: none; /* hide small calendar, navigate to full page instead */
+  }
 }
+/* #endregion */
 
-/* Optional: ensure RaceList itself doesn’t stretch and keeps cards centered */
-.upcomingRaces .raceList,
-.upcomingRegistrations .raceList {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center; /* centers the cards horizontally */
-  gap: 20px; /* spacing between cards */
-}
-
-/* ===== FOOTER STYLES ===== */
+/* #region Footer*/
 .site-footer {
   background-color: var(--footer-bg);
   color: var(--footer-text);
@@ -434,6 +427,7 @@ body.dark .sort-dropdown {
 .footer-section {
   justify-content: center;
 }
+
 .footer-section h3 {
   font-size: 1rem;
   margin-bottom: 0.5rem;
@@ -460,15 +454,6 @@ body.dark .sort-dropdown {
   font-size: 0.85rem;
   color: var(--footer-muted);
   line-height: 1.4;
-}
-
-/* Light/Dark mode color variables */
-:root {
-  --footer-bg: #f9f9f9;
-  --footer-text: #222;
-  --footer-accent: #0070f3;
-  --footer-border: #ddd;
-  --footer-muted: #555;
 }
 
 .footer a {
@@ -529,57 +514,46 @@ body.dark .sort-dropdown {
   transform: scale(1.1);
 }
 
-.calendar-container {
-  border: 1px solid #ccc;
-  padding: 10px;
-  width: 250px; /* small calendar for right column */
-  text-align: center;
-  border-radius: 5px;
-  background-color: #fff;
-}
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 
-/* Make input full width */
-.calendar-input {
-  width: 100%;
-  padding: 5px;
-  margin-top: 10px;
-  font-size: 1rem;
-  border-radius: 4px;
-  border: 1px solid #aaa;
-}
+  .footer-section h3 {
+    margin-top: 1rem;
+  }
 
-.homepage {
-  display: flex;
-  align-items: flex-start;
-}
+  .footer {
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+  }
 
-/* Left column takes most of the space */
-.homepage-left {
-  flex: 3;
+  .footer-left,
+  .footer-right {
+    flex: none;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .footer-center {
+    position: static; /* remove absolute */
+    transform: none;
+    margin-bottom: 10px;
+    justify-content: center;
+  }
+}
+/* #endregion*/
+
+/* #region Calendar*/
+.calendar-page {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
-
-/* Right column is for the calendar */
-.homepage-right {
-  flex: 1;
-  margin-right: 1rem;
-}
-
-/* Mobile: stack content */
-@media (max-width: 768px) {
-  .homepage-container {
-    flex-direction: column;
-  }
-
-  .homepage-right {
-    display: none; /* hide small calendar, navigate to full page instead */
-  }
-}
-
-/* ===================== */
-/* Calendar */
-/* ===================== */
 
 .month-calendar {
   width: 100%;
@@ -588,6 +562,13 @@ body.dark .sort-dropdown {
   margin-right: 1rem;
 }
 
+@media (max-width: 768px) {
+  .calendar-container {
+    display: none; /* hidden in home page right column on mobile */
+  }
+}
+
+/* #region Calendar-Header*/
 .calendar-header {
   display: flex;
   justify-content: center;
@@ -605,16 +586,18 @@ body.dark .sort-dropdown {
   padding: 0.4rem 0.8rem;
   border-radius: 10px;
   border: 1px solid #ccc;
-  background-color: #fff;
+  background-color: var(--bg-color);
   cursor: pointer;
 }
 
 .calendar-header button:hover {
-  border: "2px solid #0070f3";
-  background-color: "#E6F0FF";
-  cursor: "pointer";
+  border: 1px solid var(--nav-hover);
+  background-color: var(--bg-color);
+  cursor: pointer;
 }
+/* #endregion */
 
+/* #region Calendar-Days*/
 .calendar-day-name {
   font-weight: bold;
 }
@@ -649,8 +632,15 @@ body.dark .sort-dropdown {
   box-sizing: border-box;
   border-radius: 4px;
   font-size: 12px;
+  overflow-x: hidden;
 }
 
+.today {
+  border: #0b3af5 thin solid;
+}
+/* #endregion */
+
+/* #region Calendar-Racechip*/
 .race-chip {
   display: inline-flex;
   align-items: center;
@@ -678,51 +668,6 @@ body.dark .sort-dropdown {
 .race-distance {
   margin-left: 2px;
 }
+/* #endregion*/
 
-.calendar-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.today {
-  border: #0b3af5 thin solid;
-}
-
-/* =====Mobile responsiveness===== */
-@media (max-width: 768px) {
-  .footer-content {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .footer-section h3 {
-    margin-top: 1rem;
-  }
-
-  .footer {
-    flex-direction: column;
-    justify-content: center;
-    padding: 20px;
-  }
-
-  .footer-left,
-  .footer-right {
-    flex: none;
-    width: 100%;
-    text-align: center;
-    margin-bottom: 10px;
-  }
-
-  .footer-center {
-    position: static; /* remove absolute */
-    transform: none;
-    margin-bottom: 10px;
-    justify-content: center;
-  }
-
-  .calendar-container {
-    display: none; /* hidden in home page right column on mobile */
-  }
-}
+/* #endregion */

@@ -1,8 +1,17 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import races from "../data/races";
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize(); // set initially
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const startOfMonth = new Date(
     currentDate.getFullYear(),
@@ -124,11 +133,17 @@ export default function Calendar() {
                     <circle cx="6" cy="6" r="6" fill="currentColor" />
                   </svg>
                   <div className="race-text">
-                    <span className="race-time">
-                      {formatTimeShort(race.startTime)}
-                    </span>
-                    <span className="race-name">{race.name}</span> -
-                    <span className="race-distance">{race.distance}k</span>
+                    {isMobile ? (
+                      <span className="race-name">{race.name}</span>
+                    ) : (
+                      <>
+                        <span className="race-time">
+                          {formatTimeShort(race.startTime)}
+                        </span>{" "}
+                        <span className="race-name">{race.name}</span> -{" "}
+                        <span className="race-distance">{race.distance}k</span>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}
