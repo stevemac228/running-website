@@ -238,7 +238,7 @@ button.toggle {
 .search-and-filters {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   margin-bottom: 1rem;
 }
 
@@ -293,19 +293,20 @@ button.toggle {
 
 .filters-row {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
   align-items: center;
-  flex-wrap: wrap; /* keeps it mobile responsive */
-  gap: 0.75rem;
-  margin-top: 1rem;
+}
+
+.sort-and-date {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
 }
 
 /* #region Filter Chip*/
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
 
 .filter-chip {
   margin: 0.25rem;
@@ -321,32 +322,209 @@ button.toggle {
   border: 2px solid #0070f3;
   background-color: #E6F0FF;
 }
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
 /* #endregion */
 
-/* #region Sort Dropdown*/
-.sort-container {
+/* Sort dropdown styling */
+.sort-dropdown {
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+/* DateRangeSelector styling */
+.date-range-selector {
+  display: flex;
+  gap: 0.25rem;
+}
+
+/* Calendar grid inside DateRangeSelector */
+.date-range-selector .date-range-selector-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 2rem);
+}
+
+/* Calendar days */
+.date-range-selector .date-range-selector-calendar-day {
+  width: 2rem;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  flex-shrink: 0;
-}
-
-.sort-dropdown {
-  padding: 0.4rem 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 9999px;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  font-size: 0.9rem;
+  justify-content: center;
   cursor: pointer;
-  transition: border 0.2s, background-color 0.2s;
+  border-radius: 50%;
+  user-select: none;
+  font-size: 0.75rem;
+  transition: background-color 0.2s, color 0.2s;
+  border: 1px solid transparent;
 }
 
-.sort-dropdown:hover,
-.filter-chip:hover {
-  border-color: #0070f3;
+/* Hover effect */
+.date-range-selector .date-range-selector-calendar-day:hover {
+  background-color: #e0e0e0;
+}
+
+/* Selected start/end date */
+.date-range-selector .date-range-selector-calendar-day.selected {
+  background-color: #0070f3;
+  color: white;
+  border: none;
+}
+
+/* Dates between start and end */
+.date-range-selector .date-range-selector-calendar-day.in-range {
+  background-color: #cce4ff;
+  color: black;
+}
+
+/* Empty cells */
+.date-range-selector .date-range-selector-calendar-day.empty {
+  background-color: transparent;
+  cursor: default;
+  border: none;
 }
 /* #endregion */
+
+.select-date-btn {
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.date-range-modal {
+  position: absolute;
+  top: 2.5rem;
+  left: 0;
+  z-index: 50;
+  width: 12rem;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: sans-serif;
+}
+
+.date-range-modal .date-range-selector-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1.5rem);
+  gap: 4px;
+  justify-items: center;
+}
+
+.date-range-modal .date-range-selector-calendar-day {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.date-range-modal .date-range-selector-calendar-day:hover {
+  background-color: #e0e0e0;
+}
+
+.date-range-modal .date-range-selector-calendar-day.selected {
+  background-color: #0070f3;
+  color: white;
+}
+
+.date-range-modal .date-range-selector-calendar-day.in-range {
+  background-color: #cce4ff;
+  color: black;
+}
+
+.date-range-selector-btn {
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.date-range-selector-modal {
+  position: absolute;
+  top: 2.5rem;
+  left: 0;
+  z-index: 50;
+  width: 12rem;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: sans-serif;
+}
+
+.date-range-selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  padding-bottom: 2px;
+  border-bottom: #111111 thin solid;
+}
+
+.date-range-selector-header button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.date-range-selector-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1.5rem);
+  gap: 4px;
+  justify-items: center;
+}
+
+.date-range-selector-calendar-day {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.75rem;
+  border-radius: 50%;
+  user-select: none;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Days in between start and end */
+.date-range-selector-calendar-day.in-range {
+  background-color: #cce4ff;
+  color: black;
+}
+
+/* Selected start or end */
+.date-range-selector-calendar-day.selected {
+  background-color: #0070f3;
+  color: white;
+}
+
+/* Hover effect for unselected days */
+.date-range-selector-calendar-day:not(.selected):hover {
+  background-color: #e0e0e0;
+}
+
+
 
 /* #endregion */
 
