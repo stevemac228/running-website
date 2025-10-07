@@ -1,4 +1,8 @@
 # To-DO
+
+# IMPORTANT
+- REGISTRATION STRAT DATE FORMATING
+
 ## General
 - Website/Facebook links and make sure all info is up to date
   - Make the name clickable to go to the website?
