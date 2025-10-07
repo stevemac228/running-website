@@ -66,22 +66,54 @@ header h1 {
   font-size: 1.5rem;
 }
 
-nav a {
-  color: white;
-  margin-left: 1rem;
-  text-decoration: none;
-  padding: 6px;
-}
-
-nav a:hover {
-  border-radius: 9999px; /* fully rounded oval */
-  background-color: #005cbf; /* blue background */
-}
-
 .nav_left {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  color: white;
+  margin-left: 1rem;
+  text-decoration: none;
+  padding: 6px;
+  gap: 6px; /* space between text and icon */
+}
+
+.nav-link:hover {
+  border-radius: 9999px;
+  background-color: #005cbf;
+  transform: scale(1.05);
+}
+
+/* Add this near the bottom of global.css */
+.nav-icon {
+  width: 22px; /* set visible size */
+  height: 22px;
+  flex-shrink: 0; /* prevents collapsing */
+}
+
+/* Show icons and hide text on mobile */
+@media (max-width: 768px) {
+  .nav-text {
+    display: none;
+  }
+
+  .nav-link {
+    margin-left: 0.5rem;
+    padding: 10px;
+  }
+
+  .nav-link:hover {
+    display:none;
+}
 }
 
 /* -------------------*/
@@ -203,7 +235,7 @@ button.toggle {
   width: 9px;
   height: 9px;
   color: #2d2d2d; /* default color */
-  vertical-align: middle; /* aligns to middle of text */    /* ensures the SVG doesn’t have extra descender space */
+  vertical-align: middle; /* aligns to middle of text */ /* ensures the SVG doesn’t have extra descender space */
 }
 
 .dot-icon.Road {
@@ -573,14 +605,14 @@ body.dark .sort-dropdown {
   padding: 0.4rem 0.8rem;
   border-radius: 10px;
   border: 1px solid #ccc;
-  background-color:#fff;
-  cursor: pointer
+  background-color: #fff;
+  cursor: pointer;
 }
 
 .calendar-header button:hover {
-  border:"2px solid #0070f3";
-  background-color:"#E6F0FF";
-  cursor: "pointer"
+  border: "2px solid #0070f3";
+  background-color: "#E6F0FF";
+  cursor: "pointer";
 }
 
 .calendar-day-name {
@@ -629,8 +661,8 @@ body.dark .sort-dropdown {
 
 .race-text {
   display: flex;
-  align-items: center;   /* centers all text spans vertically */
-  line-height: 1;        /* ensures text aligns with SVG */
+  align-items: center; /* centers all text spans vertically */
+  line-height: 1; /* ensures text aligns with SVG */
 }
 
 .race-time {
@@ -647,7 +679,6 @@ body.dark .sort-dropdown {
   margin-left: 2px;
 }
 
-
 .calendar-page {
   display: flex;
   flex-direction: column;
@@ -655,7 +686,7 @@ body.dark .sort-dropdown {
 }
 
 .today {
-  border:#0b3af5 thin solid;
+  border: #0b3af5 thin solid;
 }
 
 /* =====Mobile responsiveness===== */

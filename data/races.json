@@ -1,6 +1,7 @@
 [
   {
     "name": "Shamrockin' 5K",
+    "nickName" : "Shamrock",
     "day": "Sun",
     "date": "03/16/2025",
     "startTime": "11:00 AM",
@@ -23,6 +24,7 @@
   },
   {
     "name": "Boston Pizza Flat Out 5K",
+    "nickName" : "Flat Out 5k",
     "day": "Sun",
     "date": "04/17/2025",
     "startTime": "8:00 AM",
@@ -45,6 +47,7 @@
   },
   {
     "name": "Cinco de Mayo",
+    "nickName" : "Cinco de Mayo",
     "day": "Sun",
     "date": "05/04/2025",
     "startTime": "11:00 AM",
@@ -67,6 +70,7 @@
   },
   {
     "name": "LiveBy Wealth Mundy Pond 5K",
+    "nickName" : "Mundy 5k",
     "day": "Sun",
     "date": "05/11/2025",
     "startTime": "8:00 AM",
@@ -89,6 +93,7 @@
   },
   {
     "name": "Paradise Backyard Ultra",
+    "nickName" : "PBU",
     "day": "Sat",
     "date": "05/22/2026",
     "startTime": "12:00 PM",
@@ -111,6 +116,7 @@
   },
   {
     "name": "Kicking Pancreas",
+    "nickName" : "Kicking Pancreas",
     "day": "Sat",
     "date": "05/31/2025",
     "startTime": "6:30 PM",
@@ -133,6 +139,7 @@
   },
   {
     "name": "Banished Brewing Five & Dime Road Race",
+    "nickName" : "Five & Dime",
     "day": "Sun",
     "date": "06/01/2025",
     "startTime": "8:00 AM",
@@ -155,6 +162,7 @@
   },
   {
     "name": "Banished Brewing Five & Dime Road Race",
+    "nickName" : "Five & Dime",
     "day": "Sun",
     "date": "06/01/2025",
     "startTime": "9:00 AM",
@@ -177,6 +185,7 @@
   },
   {
     "name": "Run for Beer",
+    "nickName" : "Run for Beer",
     "day": "Sat",
     "date": "06/07/2025",
     "startTime": "8:30 AM",
@@ -199,6 +208,7 @@
   },
   {
     "name": "TrailRacer for ECTA",
+    "nickName" : "TrailRacer",
     "day": "Sat",
     "date": "06/07/2025",
     "startTime": "",
@@ -221,6 +231,7 @@
   },
   {
     "name": "Mews Memorial 8K",
+    "nickName" : "Mews",
     "day": "Sun",
     "date": "06/08/2025",
     "startTime": "8:00 AM",
@@ -243,6 +254,7 @@
   },
   {
     "name": "SDM Run for Women",
+    "nickName" : "Run for Women",
     "day": "Sat",
     "date": "06/14/2025",
     "startTime": "9:30 AM",
@@ -265,6 +277,7 @@
   },
   {
     "name": "SDM Run for Women",
+    "nickName" : "Run for Women",
     "day": "Sat",
     "date": "06/14/2025",
     "startTime": "9:15 AM",
@@ -287,6 +300,7 @@
   },
   {
     "name": "Tely 10",
+    "nickName" : "Tely 10",
     "day": "Sun",
     "date": "06/22/2025",
     "startTime": "8:00 AM",
@@ -309,6 +323,7 @@
   },
   {
     "name": "Seaside Showdown Series: Deadman's Bay Path",
+    "nickName" : "Seaside Deadmans",
     "day": "Sat",
     "date": "06/28/2025",
     "startTime": "",
@@ -331,6 +346,7 @@
   },
   {
     "name": "Outpost 8k",
+    "nickName" : "Outpost 8k",
     "day": "Sat",
     "date": "07/05/2025",
     "startTime": "9:00 AM",
@@ -353,6 +369,7 @@
   },
   {
     "name": "Kelligrews Soiree 8K Road Race",
+    "nickName" : "Kelligrews Soiree 8k",
     "day": "Sat",
     "date": "07/05/2025",
     "startTime": "8:00 AM",
@@ -375,6 +392,7 @@
   },
   {
     "name": "8K Roody Road Race",
+    "nickName" : "Roody Road Race",
     "day": "Sat",
     "date": "07/19/2025",
     "startTime": "8:00 AM",
@@ -397,6 +415,7 @@
   },
   {
     "name": "Seaside Showdown Series: Sugarloaf Path",
+    "nickName" : "Seaside Sugarloaf",
     "day": "Sat",
     "date": "07/19/2025",
     "startTime": "",
@@ -419,6 +438,7 @@
   },
   {
     "name": "Pride Fun Run",
+    "nickName" : "Pride Fun Run",
     "day": "Sun",
     "date": "07/20/2025",
     "startTime": "",
@@ -441,6 +461,7 @@
   },
   {
     "name": "Endurotrack 12hr",
+    "nickName" : "Endurotrack 12hr",
     "day": "Sat",
     "date": "07/26/2025",
     "startTime": "8:00 AM",
@@ -463,6 +484,7 @@
   },
   {
     "name": "Endurotrack 24hr",
+    "nickName" : "Endurotrack 24hr",
     "day": "Sat",
     "date": "07/26/2025",
     "startTime": "8:00 AM",
@@ -485,6 +507,7 @@
   },
   {
     "name": "Pharmasave Figure 8 Trail Race",
+    "nickName" : "Figure 8",
     "day": "Sun",
     "date": "07/27/2025",
     "startTime": "8:00 AM",
@@ -507,6 +530,7 @@
   },
   {
     "name": "Seaside Showdown Series: Mickeleens Path",
+    "nickName" : "Seaside Mickeleens",
     "day": "Sat",
     "date": "08/02/2025",
     "startTime": "",
@@ -529,6 +553,7 @@
   },
   {
     "name": "Seaside Showdown Series: Cape Spear Path",
+    "nickName" : "Seaside Cape Spear",
     "day": "Sat",
     "date": "08/16/2025",
     "startTime": "",
@@ -551,6 +576,7 @@
   },
   {
     "name": "NL Sun Run",
+    "nickName" : "Sun Run",
     "day": "Sun",
     "date": "08/17/2025",
     "startTime": "10:00 AM",
@@ -573,6 +599,7 @@
   },
   {
     "name": "Torbay 5K Fun Run/Walk",
+    "nickName" : "Torbay 5K",
     "day": "Sun",
     "date": "08/24/2025",
     "startTime": "9:00 AM",
@@ -595,6 +622,7 @@
   },
   {
     "name": "Steep Ultra",
+    "nickName" : "Steep Ultra",
     "day": "Sat",
     "date": "09/06/2025",
     "startTime": "",
@@ -617,6 +645,7 @@
   },
   {
     "name": "Steep Ultra",
+    "nickName" : "Steep Ultra",
     "day": "Sat",
     "date": "09/06/2025",
     "startTime": "",
@@ -639,6 +668,7 @@
   },
   {
     "name": "Uniformed Services Run",
+    "nickName" : "USR Marathon",
     "day": "Sun",
     "date": "09/07/2025",
     "startTime": "8:00 AM",
@@ -661,6 +691,7 @@
   },
   {
     "name": "Uniformed Services Run",
+    "nickName" : "USR Half",
     "day": "Sun",
     "date": "09/07/2025",
     "startTime": "8:00 AM",
@@ -683,6 +714,7 @@
   },
   {
     "name": "Uniformed Services Run",
+    "nickName" : "USR 10k",
     "day": "Sun",
     "date": "09/07/2025",
     "startTime": "8:00 AM",
@@ -705,6 +737,7 @@
   },
   {
     "name": "Damnable Trail Coastal Ridge Challenge",
+    "nickName" : "Damnable Trail",
     "day": "Sat",
     "date": "09/20/2025",
     "startTime": "8:00 AM",
@@ -727,6 +760,7 @@
   },
   {
     "name": "T’Railway Trek Half Marathon",
+    "nickName" : "T’Railway Trek",
     "day": "Sun",
     "date": "09/21/2025",
     "startTime": "8:00 AM",
@@ -749,6 +783,7 @@
   },
   {
     "name": "Candlelighters Go Gold",
+    "nickName" : "Candlelighters Go Gold",
     "day": "Sun",
     "date": "09/21/2025",
     "startTime": "11:00 AM",
@@ -771,6 +806,7 @@
   },
   {
     "name": "Carved by the Sea",
+    "nickName" : "Carved by the Sea",
     "day": "Sun",
     "date": "09/21/2025",
     "startTime": "8:00 AM",
@@ -793,6 +829,7 @@
   },
   {
     "name": "Trinity Fort to Forge",
+    "nickName" : "Fort to Forge 5k",
     "day": "Sat",
     "date": "09/27/2025",
     "startTime": "10:00 AM",
@@ -815,6 +852,7 @@
   },
   {
     "name": "Trinity Fort to Forge",
+    "nickName" : "Fort to Forge 10k",
     "day": "Sat",
     "date": "09/27/2025",
     "startTime": "10:00 AM",
@@ -837,6 +875,7 @@
   },
   {
     "name": "Rockcut 50k",
+    "nickName" : "Rockcut 50k",
     "day": "Sat",
     "date": "09/27/2025",
     "startTime": "",
@@ -859,6 +898,7 @@
   },
   {
     "name": "Rockcut Half Marathon",
+    "nickName" : "Rockcut Half",
     "day": "Sat",
     "date": "09/27/2025",
     "startTime": "",
@@ -881,6 +921,7 @@
   },
   {
     "name": "Rockcur 9k",
+    "nickName" : "Rockcut 9k",
     "day": "Sat",
     "date": "09/27/2025",
     "startTime": "",
@@ -903,6 +944,7 @@
   },
   {
     "name": "Run Walk Stroll and Roll",
+    "nickName" : "Stroll and Roll 2k",
     "day": "Sun",
     "date": "09/28/2025",
     "startTime": "2:00 PM",
@@ -925,6 +967,7 @@
   },
   {
     "name": "Run Walk Stroll and Roll",
+    "nickName" : "Stroll and Roll 5k",
     "day": "Sun",
     "date": "09/28/2025",
     "startTime": "2:00 PM",
@@ -947,6 +990,7 @@
   },
   {
     "name": "ECT 15",
+    "nickName" : "ECT 15",
     "day": "Sat",
     "date": "10/04/2025",
     "startTime": "9:00 AM",
@@ -969,6 +1013,7 @@
   },
   {
     "name": "Turkey Tea",
+    "nickName" : "Turkey Tea",
     "day": "Sun",
     "date": "10/05/2025",
     "startTime": "8:00 AM",
@@ -991,6 +1036,7 @@
   },
   {
     "name": "CIBC Run for the Cure",
+    "nickName" : "Run for the Cure",
     "day": "Sun",
     "date": "10/05/2025",
     "startTime": "",
@@ -1013,6 +1059,7 @@
   },
   {
     "name": "RBC Race for the Kids",
+    "nickName" : "Race for the Kids",
     "day": "Sat",
     "date": "10/11/2025",
     "startTime": "10:00 AM",
@@ -1035,6 +1082,7 @@
   },
   {
     "name": "ECT 50%",
+    "nickName" : "ECT 50%",
     "day": "Sat",
     "date": "10/11/2025",
     "startTime": "9:00 AM",
@@ -1057,6 +1105,7 @@
   },
   {
     "name": "Trapline Marathon",
+    "nickName" : "Trapline 5k",
     "day": "Sun",
     "date": "10/12/2025",
     "startTime": "",
@@ -1079,6 +1128,7 @@
   },
   {
     "name": "Trapline Marathon",
+    "nickName" : "Trapline 10k",
     "day": "Sun",
     "date": "10/12/2025",
     "startTime": "",
@@ -1101,6 +1151,7 @@
   },
   {
     "name": "Trapline Marathon",
+    "nickName" : "Trapline Half",
     "day": "Sun",
     "date": "10/12/2025",
     "startTime": "",
@@ -1123,6 +1174,7 @@
   },
   {
     "name": "Trapline Marathon",
+    "nickName" : "Trapline Marathon",
     "day": "Sun",
     "date": "10/12/2025",
     "startTime": "",
@@ -1145,6 +1197,7 @@
   },
   {
     "name": "Cape to Cabot",
+    "nickName" : "Cape to Cabot",
     "day": "Sun",
     "date": "10/19/2025",
     "startTime": "8:00 AM",
@@ -1167,6 +1220,7 @@
   },
   {
     "name": "ECT 50",
+    "nickName" : "ECT 50",
     "day": "Sat",
     "date": "10/25/2025",
     "startTime": "7:35 AM",
@@ -1189,6 +1243,7 @@
   },
   {
     "name": "Spooky Sprint",
+    "nickName" : "Spooky Sprint",
     "day": "Sun",
     "date": "10/26/2025",
     "startTime": "11:00 AM",
@@ -1211,6 +1266,7 @@
   },
   {
     "name": "Giv'er on the River Fun Run",
+    "nickName" : "Giv'er on the River",
     "day": "Sun",
     "date": "10/26/2025",
     "startTime": "",
@@ -1233,6 +1289,7 @@
   },
   {
     "name": "Run to Remember",
+    "nickName" : "Run to Remember",
     "day": "Tue",
     "date": "11/11/2025",
     "startTime": "8:00 AM",
@@ -1255,6 +1312,7 @@
   },
   {
     "name": "Mummers Run",
+    "nickName" : "Mummers Run",
     "day": "Sat",
     "date": "11/15/2025",
     "startTime": "10:00 AM",
@@ -1277,6 +1335,7 @@
   },
   {
     "name": "Joy Run",
+    "nickName" : "Joy Run",
     "day": "Sat",
     "date": "11/15/2025",
     "startTime": "",
@@ -1299,6 +1358,7 @@
   },
   {
     "name": "Santa Shuffle Fun Run & Elf Walk 2025",
+    "nickName" : "Santa Shuffle",
     "day": "Sat",
     "date": "12/06/2025",
     "startTime": "10:00 AM",
