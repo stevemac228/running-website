@@ -1,25 +1,63 @@
 /* #region Global */
 :root {
-  --bg-color: #ffffff;
-  --text-color: #111111;
-  --nav-bg: #2e3440;
-  --nav-hover: #005cbf;
-  --badge-road-bg:#1e40af;
-  --badge-trail-bg:#16a34a;
-  --badge-funrun-bg:#f97316;
-  --badge-competitive-bg:#e90619;
-  --badge-track-bg:#8b5cf6;
-  --badge-gravel-bg:#db2777;
+  /* #region Standard Colors */
+  --runnl-dark-text:#232323;
+  --runnl-light-text:#ffffff;
+  --runnl-background:#ffffff;
+  --runnl-border:#ccc;
+
+  --runnl-dark-grey:#2e3440;
+  --runnl-light-grey: #5E6A82;
+
+  --runnl-dark-green:#0f5c5b;
+  --runnl-light-green: #1dafad;
+
+  --runnl-light-orange:#ff4d00;
+  --runnl-dark-orange:#e83200;
+
+  --runnl-dark-blue:#006aac;
+  --runnl-light-blue: #3aaff8;
+
+  --runnl-dark-pink:#BA2C73;
+  --runnl-light-pink:#d85a99;
+
+  --runnl-dark-red:#b10000;
+  --runnl-light-red:#ff6161;
+
+  --runnl-dark-purple:#8332AC;
+  --runnl-light-purple:#A351CD;
+  /* #endregion */
+
+  /* #region Badge Colors */
+  --badge-road:#2c2c2c;
+  --badge-trail:#688f4e;
+  --badge-track:#d11;
+  --badge-gravel:#646065;
+  --badge-funrun:#ef470b;
+  --badge-competitive:#006aac;
+  /* #endregion */
+
+  /* #region Footer */
   --footer-bg: #f9f9f9;
   --footer-text: #222;
   --footer-accent: #0070f3;
   --footer-border: #ddd;
   --footer-muted: #555;
+  /* #endregion */
+
+  /* #region Puffin */
+  --puffin-orange: #ff6f00;
+  --puffin-yellow: #ffc059;
+  --puffin-dark-blue: #214cdc;
+  --puffin-green: #0f5c5b;
+  --puffin-teal: #189897;
+  --puffin-gray: #282828;
+  /* #endregion */
 }
 
 body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
+  background-color: var(--runnl-backgorund);
+  color: var(--runnl-dark-text);
   margin: 0;
   padding: 0;
 }
@@ -48,8 +86,8 @@ body::-webkit-scrollbar-track {
 
 /* #region Header / Navbar */
 header {
-  background-color: var(--nav-bg);
-  color: white;
+  background-color: var(--runnl-dark-grey);
+  color: var(--runnl-light-text);
   padding: 5px;
   display: flex;
   justify-content: space-between;
@@ -75,7 +113,7 @@ nav {
 .nav-link {
   display: inline-flex;
   align-items: center;
-  color: white;
+  color: var(--runnl-light-text);
   margin-left: 1rem;
   text-decoration: none;
   padding: 6px;
@@ -84,7 +122,7 @@ nav {
 
 .nav-link:hover {
   border-radius: 9999px;
-  background-color: var(--nav-hover);
+  background-color: var(--runnl-dark-blue);
   transform: scale(1.05);
 }
 
@@ -115,7 +153,7 @@ nav {
 .race-card {
   border: 1px solid #ddd;
   border-radius: 8px;
-  background-color: var(--bg-color);
+  background-color: var(--runnl-background);
   padding: 1rem;
   margin: 1rem 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -145,42 +183,35 @@ nav {
 .race-card .badge {
   display: inline-block;
   padding: 0.2rem 0.5rem;
-  color: white;
+  color: var(--runnl-light-text);
   border-radius: 6px;
   font-size: 0.8rem;
   margin-right: 0.1rem;
 }
 
 .badge-road {
-  background-color: var(--badge-road-bg);
+  background-color:var(--badge-road);
 }
 .badge-trail {
-  background-color: var(--badge-trail-bg);
-}
-.badge-funrun {
-  background-color: var(--badge-funrun-bg);
-}
-.badge-competitive {
-  background-color: var(--badge-competitive-bg);
+  background-color:var(--badge-trail);
 }
 .badge-track {
-  background-color: var(--badge-track-bg);
+  background-color:var(--badge-track);
 }
 .badge-gravel {
-  background-color: var(--badge-gravel-bg);
+  background-color:var(--badge-gravel);
 }
+
+.badge-funrun {
+  background-color:var(--badge-funrun);
+}
+.badge-competitive {
+  background-color:var(--badge-competitive);
+}
+
 /* #endregion */
 
 /* #region Expand Button */
-button.toggle {
-  margin-top: 0.5rem;
-  background: none;
-  border: none;
-  color: #1e40af;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
 .chevron-toggle {
   background: none; /* removes background */
   border: none; /* removes border */
@@ -188,7 +219,7 @@ button.toggle {
   padding: 0; /* optional: remove extra space */
   display: inline-flex;
   align-items: center;
-  color: #1e40af; /* same as your theme */
+  color: var(--runnl-dark-grey); /* same as your theme */
   transition: color 0.2s;
 }
 
@@ -219,16 +250,16 @@ button.toggle {
 .dot-icon {
   width: 9px;
   height: 9px;
-  color: #2d2d2d; /* default color */
+  color: var(--runnl-dark-grey); /* default color */
   vertical-align: middle; /* aligns to middle of text */ /* ensures the SVG doesn’t have extra descender space */
 }
 
 .dot-icon.Road {
-  color: #1945d4; /* blue */
+  color: var(--badge-road);
 }
 
 .dot-icon.Trail {
-  color: #16a34a; /* green */
+  color: var(--badge-trail);
 }
 /* #endregion */
 
@@ -259,7 +290,7 @@ button.toggle {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 1px solid #ccc;
   padding: 0.2rem 0.5rem;
-  background-color: var(--bg-color)
+  background-color: var(--runnl-background)
 }
 
 /* Input inside the wrapper */
@@ -274,7 +305,7 @@ button.toggle {
 
 /* Optional: search icon */
 .search-wrapper svg {
-  fill: #888;
+  fill: var(--runnl-light-grey);
   height: 24px;
   width: 24px;
 }
@@ -284,7 +315,7 @@ button.toggle {
   border: none;
   background: transparent;
   cursor: pointer;
-  color: #888;
+  color: var(--runnl-light-grey);
   font-size: 1.2rem;
   margin-left: 0.5rem;
 }
@@ -312,14 +343,14 @@ button.toggle {
   margin: 0.25rem;
   padding: 0.4rem 0.8rem;
   border-radius: 9999px;
-  border: 1px solid #ccc;
-  background-color: var(--bg-color);
+  border: 1px solid var(--runnl-border);
+  background-color: var(--runnl-background);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .filter-chip.active {
-  border: 2px solid #0070f3;
+  border: 2px solid var(--runnl-dark-blue);
   background-color: #E6F0FF;
 }
 
@@ -334,8 +365,8 @@ button.toggle {
 .sort-dropdown {
   padding: 0.4rem 0.6rem;
   border-radius: 6px;
-  border: 1px solid #ccc;
-  background-color: #fff;
+  border: 1px solid var(--runnl-border);
+  background-color: var(--runnl-background);;
   font-size: 0.875rem;
   cursor: pointer;
 }
