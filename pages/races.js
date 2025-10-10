@@ -3,8 +3,8 @@ import races from "../data/races.json";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import SearchFilter from "../components/SearchFilter";
-import FilterChip from "../components/FilterChip";
-import RaceList from "../components/RaceList";
+import FilterSidebar from "../components/FilterSidebar";
+import CompactRaceCard from "../components/CompactRaceCard";
 import DateRangeSelector from "../components/DateRangeSelector";
 
 function parseUSDate(dateStr) {
@@ -42,6 +42,7 @@ export default function Races() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("date-asc");
   const [dateRange, setDateRange] = useState({ start: null, end: null });
+  const [distanceRange, setDistanceRange] = useState({ min: 0, max: 999 });
 
   const toggleFilter = (key) => {
     setActiveFilters((prev) =>
@@ -56,6 +57,11 @@ export default function Races() {
       // Date range filter
       if (dateRange.start && raceDate < dateRange.start) return false;
       if (dateRange.end && raceDate > dateRange.end) return false;
+
+      // Distance range filter (custom slider)
+      if (race.distance < distanceRange.min || race.distance > distanceRange.max) {
+        return false;
+      }
 
       // Other filters
       if (activeFilters.includes("medal") && !race.medal) return false;
@@ -124,45 +130,50 @@ export default function Races() {
   return (
     <div>
       <Header />
-      <main style={{ padding: "1rem" }}>
-        <div className="search-and-filters">
-          {/* Search input */}
+      <main className="races-page-container">
+        {/* Search Bar - Centered */}
+        <div className="races-search-bar">
           <SearchFilter onSearch={setSearchTerm} />
-
-          {/* Filter chips */}
-          <div className="filters-row">
-            <div className="chips">
-              {filterOptions.map((opt) => (
-                <FilterChip
-                  key={opt.key}
-                  label={opt.label}
-                  active={activeFilters.includes(opt.key)}
-                  onClick={() => toggleFilter(opt.key)}
-                />
-              ))}
-            </div>
-
-            {/* Sort + Date Range */}
-            <div className="sort-and-date">
-              <DateRangeSelector onChange={setDateRange} />
-              <select
-                className="sort-dropdown"
-                value={sortOption}
-                onChange={(e) => setSortOption(e.target.value)}
-              >
-                <option value="date-asc">Date (Soonest)</option>
-                <option value="date-desc">Date (Latest)</option>
-                <option value="distance-asc">Distance (Shortest)</option>
-                <option value="distance-desc">Distance (Longest)</option>
-                <option value="name-asc">Name (A–Z)</option>
-                <option value="name-desc">Name (Z–A)</option>
-              </select>
-            </div>
-          </div>
         </div>
 
-        {/* Race list */}
-        <RaceList races={filteredRaces} type="all" />
+        {/* Two-column layout: Sidebar + Content */}
+        <div className="races-content-wrapper">
+          {/* Left Sidebar */}
+          <FilterSidebar
+            filterOptions={filterOptions}
+            activeFilters={activeFilters}
+            onToggleFilter={toggleFilter}
+            onDistanceRangeChange={setDistanceRange}
+          />
+
+          {/* Right Content */}
+          <div className="races-list-container">
+            {/* Races count and sorting on same line */}
+            <div className="races-header-bar">
+              <div className="races-count">
+                {filteredRaces.length} race{filteredRaces.length !== 1 ? "s" : ""} found
+              </div>
+              <div className="races-controls">
+                <DateRangeSelector onChange={setDateRange} />
+                <select
+                  className="sort-dropdown"
+                  value={sortOption}
+                  onChange={(e) => setSortOption(e.target.value)}
+                >
+                  <option value="date-asc">Date (Soonest)</option>
+                  <option value="date-desc">Date (Latest)</option>
+                  <option value="distance-asc">Distance (Shortest)</option>
+                  <option value="distance-desc">Distance (Longest)</option>
+                  <option value="name-asc">Name (A–Z)</option>
+                  <option value="name-desc">Name (Z–A)</option>
+                </select>
+              </div>
+            </div>
+            {filteredRaces.map((race, index) => (
+              <CompactRaceCard key={index} race={race} />
+            ))}
+          </div>
+        </div>
       </main>
       <Footer />
     </div>
