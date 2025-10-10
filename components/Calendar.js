@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import races from "../data/races";
+import React, { useState, useEffect, useMemo } from "react";
+import races from "../data/races.json";
+import { getRaceId } from "../utils/getRaceId";
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -74,18 +75,31 @@ export default function Calendar() {
     return timeStr.toUpperCase();
   };
 
+  // build a quick lookup map once per dataset
+  const dateMap = useMemo(() => {
+    const map = Object.create(null);
+    if (!Array.isArray(races)) return map;
+    for (const r of races) {
+      if (!r?.date) continue;
+      const key = String(r.date).trim(); // expect "YYYY-MM-DD"
+      if (!map[key]) map[key] = [];
+      map[key].push(r);
+    }
+    return map;
+  }, []);
+
   // Returns all races for a given day
   const getRacesForDay = (date) => {
-    if (!date || !races) return [];
-
+    if (!date) return [];
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
-
-    const isoStr = `${year}-${month}-${day}`; // "2025-04-24"
-
-    return races.filter((race) => race.date === isoStr);
+    const isoStr = `${year}-${month}-${day}`;
+    return dateMap[isoStr] || [];
   };
+
+  const titleCase = (s) =>
+    s ? String(s).charAt(0).toUpperCase() + String(s).slice(1).toLowerCase() : s;
 
   const monthName = currentDate.toLocaleString("default", { month: "long" });
   const year = currentDate.getFullYear();
@@ -125,9 +139,9 @@ export default function Calendar() {
             >
               {day ? day.getDate() : ""}
               {getRacesForDay(day).map((race) => (
-                <div key={race.id} className="race-chip">
+                <div key={getRaceId(race)} className="race-chip">
                   <svg
-                    className={`dot-icon ${race.terrain || "default"}`}
+                    className={`dot-icon ${titleCase(race.terrain) || "default"}`}
                     width="12"
                     height="12"
                     viewBox="0 0 12 12"

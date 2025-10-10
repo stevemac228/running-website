@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
   return (
@@ -21,6 +22,20 @@ export default function Header() {
         <Link href="/calendar" className="nav-link">
           <img src="/icons/calendar.svg" alt="Calendar" className="nav-icon" />
           <span className="nav-text">Calendar</span>
+        </Link>
+        {/* Maps link with SVG icon */}
+        <Link href="/maps" className="nav-link" aria-label="Maps">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="nav-icon"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="currentColor"
+          >
+            <path d="M20.5 3l-5 2-5-2-6 2v15l6-2 5 2 6-2V3zM9 5.2l4 1.6v11.9l-4-1.6V5.2zM7 5.9v11.8L3.5 18V6.2L7 5.9zM21 17.8l-3.5 1.2V7.1L21 5.9v11.9z" />
+          </svg>
+          <span className="nav-text">Maps</span>
         </Link>
         <Link href="/races" className="nav-link">
           <img src="/icons/list.svg" alt="All Races" className="nav-icon" />

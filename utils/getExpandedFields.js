@@ -1,7 +1,6 @@
 import { formatDate } from "../utils/formatDate";
 
 export function getExpandedFields(race, cardType) {
-  //Set labels for the fields in the expanded section
   const fieldLabels = {
     earlyBirdDeadline: "Early Bird Deadline",
     earlyBirdCost: "Early Bird Cost",
@@ -11,7 +10,7 @@ export function getExpandedFields(race, cardType) {
     startLinelocation: "Start Line Location",
     organization: "Organization",
     nLAACertified: "N.L.A.A Certified",
-    website: "Website"
+    website: "Website",
   };
 
   const registrationFieldLabels = {
@@ -20,49 +19,40 @@ export function getExpandedFields(race, cardType) {
     startLinelocation: "Start Line Location",
     organization: "Organization",
     nLAACertified: "N.L.A.A Certified",
-    website: "Website"
+    website: "Website",
   };
 
   const formatFieldView = (field, value) => {
-    if (field === "website") { //if its a website, open in new tab
+    if (field === "website" && value) {
+      const href = String(value).trim();
       return (
-        <a href={value} target="_blank" rel="noopener noreferrer">
-          {value}
+        <a href={href} target="_blank" rel="noopener noreferrer">
+          {href}
         </a>
       );
     }
-    if (typeof value === "boolean") { // if its a boolean format from true/false to Yes/No
+
+    if (typeof value === "boolean") {
       return value ? "Yes" : "No";
     }
+
     if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
       return formatDate(value, "registration");
     }
+
     return value;
   };
 
-  //If the field matches any of the expanded fields set above and is not blank return the data and the formatted label
-  if(cardType == "registration"){
-    return Object.entries(registrationFieldLabels)
-      .filter(([field]) => {
-        const value = race[field];
-        return value !== null && value !== undefined && value !== "";
-      })
-      .map(([field, label]) => ({
-        label,
-        value: formatFieldView(field, race[field]),
-      }));
-  }else {
-    return Object.entries(fieldLabels)
-      .filter(([field]) => {
-        const value = race[field];
-        return value !== null && value !== undefined && value !== "";
-      })
-      .map(([field, label]) => ({
-        label,
-        value: formatFieldView(field, race[field]),
-      }));
-  }
+  const labels =
+    cardType === "registration" ? registrationFieldLabels : fieldLabels;
 
-
-
-}
+  return Object.entries(labels)
+    .filter(([field]) => {
+      const value = race?.[field];
+      return value !== null && value !== undefined && value !== "";
+    })
+    .map(([field, label]) => ({
+      label,
+      value: formatFieldView(field, race[field]),
+    }));
+}  

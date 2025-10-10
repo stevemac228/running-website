@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Link from "next/link";
 import { formatDate } from "../utils/formatDate";
 import { getExpandedFields } from "../utils/getExpandedFields";
 import { formatTime } from "../utils/formatTime";
@@ -6,6 +7,7 @@ import {
   getTerrainBadgeClass,
   getFormatBadgeClass,
 } from "../utils/renderBadges";
+import { getRaceId } from "../utils/getRaceId";
 
 export default function UpcomingRegistrationCard({ race }) {
   const [expanded, setExpanded] = useState(false);
@@ -22,8 +24,14 @@ export default function UpcomingRegistrationCard({ race }) {
         <div className="race-card-collapsed">
           <div className="information-section">
             <h2>
-              {/* Title */}
-              {race.name}{" "}
+              {/* Title - link to detail page (use id if available) */}
+              <Link
+                href={`/race/${encodeURIComponent(getRaceId(race))}`}
+                style={{ color: "inherit", textDecoration: "none" }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {race.name}
+              </Link>{" "}
               <span style={{ fontSize: "16px", fontWeight: "1" }}>
                 {" "}
                 {race.distance}km

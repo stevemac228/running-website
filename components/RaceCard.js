@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Link from "next/link";
 import { formatDate } from "../utils/formatDate";
 import { getExpandedFields } from "../utils/getExpandedFields";
 import { formatTime } from "../utils/formatTime";
@@ -6,6 +7,7 @@ import {
   getTerrainBadgeClass,
   getFormatBadgeClass,
 } from "../utils/renderBadges";
+import { getRaceId } from "../utils/getRaceId";
 
 export default function RaceCard({ race }) {
   const [expanded, setExpanded] = useState(false);
@@ -22,8 +24,14 @@ export default function RaceCard({ race }) {
         <div className="race-card-collapsed">
           <div className="information-section">
             <h2>
-              {/* Title */}
-              {race.name}{" "}
+              {/* Title - link by id when available */}
+              <Link
+                href={`/race/${encodeURIComponent(getRaceId(race))}`}
+                style={{ color: "inherit", textDecoration: "none" }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {race.name}
+              </Link>{" "}
               <span style={{ fontSize: "16px" }}> {race.distance}km</span>
               <span style={{ marginRight: "0.5rem" }}></span>
               {/* Terrain Badge */}

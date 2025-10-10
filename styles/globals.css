@@ -56,7 +56,7 @@
 }
 
 body {
-  background-color: var(--runnl-backgorund);
+  background-color: var(--runnl-background);
   color: var(--runnl-dark-text);
   margin: 0;
   padding: 0;
@@ -825,7 +825,6 @@ nav {
 }
 
 .calendar-header button {
-  margin: 0.25rem;
   padding: 0.4rem 0.8rem;
   border-radius: 10px;
   border: 1px solid #ccc;
@@ -834,8 +833,8 @@ nav {
 }
 
 .calendar-header button:hover {
-  border: 1px solid var(--nav-hover);
-  background-color: var(--bg-color);
+  border: 1px solid var(--runnl-dark-blue);
+  background-color: #E6F0FF;
   cursor: pointer;
 }
 /* #endregion */
@@ -914,3 +913,34 @@ nav {
 /* #endregion*/
 
 /* #endregion */
+
+/* Leaflet rendering fixes — prevents marker / icon drifting during zoom/transform */
+.leaflet-container .leaflet-zoom-animated,
+.leaflet-container .leaflet-marker-icon,
+.leaflet-container .leaflet-marker-shadow,
+.leaflet-pane {
+	/* Hint the browser to use compositing for smoother transforms */
+	will-change: transform;
+	-webkit-transform: translateZ(0);
+	transform: translateZ(0);
+	/* Ensure transforms originate from map's top-left for consistent positioning */
+	transform-origin: 0 0;
+	/* Avoid subpixel/backface rendering artifacts */
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+
+/* Ensure marker images don't get unexpected CSS transforms from other rules */
+.leaflet-container img.leaflet-marker-icon,
+.leaflet-container img.leaflet-marker-shadow {
+	/* keep the image rendering stable */
+	-webkit-transform: translateZ(0);
+	transform: translateZ(0);
+}
+
+/* Optionally remove transform on ancestor elements that may interfere (be conservative) */
+header, .nav-left, nav, .nav-link {
+	/* avoid persistent transforms on parent elements that can break Leaflet positioning */
+	-webkit-transform: none;
+	transform: none;
+}

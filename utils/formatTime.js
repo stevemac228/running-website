@@ -2,23 +2,24 @@
 export function formatTime(timeStr) {
   if (!timeStr) return "";
 
-  // Normalize spacing and case (e.g. "12:00 am" → "12:00 AM")
-  const clean = timeStr.trim().toUpperCase();
+  const input = String(timeStr).trim().toUpperCase();
 
-  // Split into [time, period]
-  const [timePart, period] = clean.split(" ");
+  // Match "H", "HH", "H AM", "HH:MMAM", "HH:MM AM", etc.
+  const m = input.match(/^(\d{1,2})(?::(\d{2}))?\s*(AM|PM)?$/i);
+  if (!m) return input; // fallback to original normalized string
 
-  // If no minutes, just return
-  if (!timePart || !period) return clean;
+  const hour = String(parseInt(m[1], 10)); // removes leading zero
+  const minutes = m[2] || "";
+  const period = (m[3] || "").toUpperCase();
 
-  // Separate hour and minute
-  const [hour, minute] = timePart.split(":");
-
-  // If minutes are 00, return only hour + AM/PM
-  if (!minute || minute === "00") {
-    return `${parseInt(hour, 10)}${period}`;
+  if (!period) {
+    // no AM/PM provided, return hour[:minutes]
+    return minutes ? `${hour}:${minutes}` : hour;
   }
 
-  // Otherwise include minutes
-  return `${hour}:${minute}${period}`;
+  if (!minutes || minutes === "00") {
+    return `${hour}${period}`;
+  }
+
+  return `${hour}:${minutes}${period}`;
 }

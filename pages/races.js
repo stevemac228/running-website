@@ -8,9 +8,19 @@ import RaceList from "../components/RaceList";
 import DateRangeSelector from "../components/DateRangeSelector";
 
 function parseUSDate(dateStr) {
-  // expects MM/DD/YYYY
-  const [month, day, year] = dateStr.split("/").map(Number);
-  return new Date(year, month - 1, day); // month is 0-indexed
+  if (!dateStr) return new Date(NaN);
+  const s = String(dateStr).trim();
+  if (s.includes("-")) {
+    // assume ISO YYYY-MM-DD
+    return new Date(s);
+  }
+  // assume MM/DD/YYYY
+  const parts = s.split("/").map(Number);
+  if (parts.length === 3) {
+    const [month, day, year] = parts;
+    return new Date(year, month - 1, day);
+  }
+  return new Date(s); // fallback
 }
 
 export default function Races() {
