@@ -1245,6 +1245,15 @@ header, .nav-left, nav, .nav-link {
   flex-wrap: wrap;
 }
 
+.compact-race-card .badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  color: var(--runnl-light-text);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  margin-right: 0.1rem;
+}
+
 .compact-race-details {
   min-width: 0;
   flex: 1;
