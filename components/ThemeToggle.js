@@ -1,20 +1,16 @@
 import { useState, useEffect } from "react";
 
 export default function ThemeToggle() {
-  // Initialize theme from localStorage to prevent flash
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("theme") || "light";
-    }
-    return "light";
-  });
-  const [mounted, setMounted] = useState(false);
+  const [theme, setTheme] = useState("light");
 
-  // Sync theme attribute on mount
+  // Load saved theme from localStorage
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    setMounted(true);
-  }, [theme]);
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.setAttribute("data-theme", savedTheme);
+    }
+  }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -22,11 +18,6 @@ export default function ThemeToggle() {
     document.documentElement.setAttribute("data-theme", newTheme);
     localStorage.setItem("theme", newTheme);
   };
-
-  // Don't render until mounted to prevent flash
-  if (!mounted) {
-    return null;
-  }
 
   return (
     <button
