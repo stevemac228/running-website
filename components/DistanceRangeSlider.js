@@ -32,7 +32,6 @@ export default function DistanceRangeSlider({ onChange }) {
           value={minDistance}
           onChange={handleMinChange}
           className="range-slider range-slider-min"
-          style={{ zIndex: minDistance > maxDistance - 1 ? 5 : 3 }}
         />
         <input
           type="range"
@@ -41,7 +40,6 @@ export default function DistanceRangeSlider({ onChange }) {
           value={maxDistance}
           onChange={handleMaxChange}
           className="range-slider range-slider-max"
-          style={{ zIndex: maxDistance < minDistance + 1 ? 5 : 4 }}
         />
       </div>
     </div>
