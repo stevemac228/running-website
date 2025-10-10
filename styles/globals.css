@@ -1068,6 +1068,8 @@ header, .nav-left, nav, .nav-link {
   position: relative;
   height: 30px;
   margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
 }
 
 .range-slider {
@@ -1077,8 +1079,8 @@ header, .nav-left, nav, .nav-link {
   appearance: none;
   background: transparent;
   pointer-events: none;
-  top: 50%;
-  transform: translateY(-50%);
+  margin: 0;
+  padding: 0;
 }
 
 .range-slider-min {
@@ -1102,7 +1104,7 @@ header, .nav-left, nav, .nav-link {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
   transition: transform 0.2s ease;
   position: relative;
-  z-index: 4;
+  margin-top: -7px;
 }
 
 .range-slider::-webkit-slider-thumb:hover {
@@ -1120,7 +1122,6 @@ header, .nav-left, nav, .nav-link {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
   transition: transform 0.2s ease;
   position: relative;
-  z-index: 4;
 }
 
 .range-slider::-moz-range-thumb:hover {
