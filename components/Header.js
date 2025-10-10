@@ -41,6 +41,7 @@ export default function Header() {
           <img src="/icons/list.svg" alt="All Races" className="nav-icon" />
           <span className="nav-text">All Races</span>
         </Link>
+        <ThemeToggle />
       </nav>
     </header>
   );
