@@ -1,16 +1,14 @@
 import "../styles/globals.css";
-// Temporarily disabled due to network issues
-// import { Roboto } from "next/font/google";
+import { Roboto } from "next/font/google";
 
-// const roboto = Roboto({
-//   subsets: ["latin"],
-//   weight: ["400", "500", "700"], // choose weights you need
-// });
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"], // choose weights you need
+});
 
 export default function MyApp({ Component, pageProps }) {
   return (
-    // <div className={roboto.className}>
-    <div>
+    <div className={roboto.className}>
       <Component {...pageProps} />
     </div>
   );
