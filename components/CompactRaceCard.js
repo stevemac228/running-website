@@ -64,12 +64,12 @@ export default function CompactRaceCard({ race }) {
           </div>
           <div className="compact-race-badges">
             {race.terrain && (
-              <span className={`badge ${getTerrainBadgeClass(race.terrain)}`}>
+              <span className={getTerrainBadgeClass(race.terrain)}>
                 {race.terrain}
               </span>
             )}
             {race.format && (
-              <span className={`badge ${getFormatBadgeClass(race.format)}`}>
+              <span className={getFormatBadgeClass(race.format)}>
                 {race.format}
               </span>
             )}

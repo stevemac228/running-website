@@ -42,7 +42,7 @@ export default function Races() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("date-asc");
   const [dateRange, setDateRange] = useState({ start: null, end: null });
-  const [distanceRange, setDistanceRange] = useState({ min: 0, max: 100 });
+  const [distanceRange, setDistanceRange] = useState({ min: 0, max: 999 });
 
   const toggleFilter = (key) => {
     setActiveFilters((prev) =>
@@ -131,24 +131,9 @@ export default function Races() {
     <div>
       <Header />
       <main className="races-page-container">
-        {/* Search and Sort Bar */}
-        <div className="races-top-bar">
+        {/* Search Bar - Centered */}
+        <div className="races-search-bar">
           <SearchFilter onSearch={setSearchTerm} />
-          <div className="races-top-bar-controls">
-            <DateRangeSelector onChange={setDateRange} />
-            <select
-              className="sort-dropdown"
-              value={sortOption}
-              onChange={(e) => setSortOption(e.target.value)}
-            >
-              <option value="date-asc">Date (Soonest)</option>
-              <option value="date-desc">Date (Latest)</option>
-              <option value="distance-asc">Distance (Shortest)</option>
-              <option value="distance-desc">Distance (Longest)</option>
-              <option value="name-asc">Name (A–Z)</option>
-              <option value="name-desc">Name (Z–A)</option>
-            </select>
-          </div>
         </div>
 
         {/* Two-column layout: Sidebar + Content */}
@@ -163,8 +148,26 @@ export default function Races() {
 
           {/* Right Content */}
           <div className="races-list-container">
-            <div className="races-count">
-              {filteredRaces.length} race{filteredRaces.length !== 1 ? "s" : ""} found
+            {/* Races count and sorting on same line */}
+            <div className="races-header-bar">
+              <div className="races-count">
+                {filteredRaces.length} race{filteredRaces.length !== 1 ? "s" : ""} found
+              </div>
+              <div className="races-controls">
+                <DateRangeSelector onChange={setDateRange} />
+                <select
+                  className="sort-dropdown"
+                  value={sortOption}
+                  onChange={(e) => setSortOption(e.target.value)}
+                >
+                  <option value="date-asc">Date (Soonest)</option>
+                  <option value="date-desc">Date (Latest)</option>
+                  <option value="distance-asc">Distance (Shortest)</option>
+                  <option value="distance-desc">Distance (Longest)</option>
+                  <option value="name-asc">Name (A–Z)</option>
+                  <option value="name-desc">Name (Z–A)</option>
+                </select>
+              </div>
             </div>
             {filteredRaces.map((race, index) => (
               <CompactRaceCard key={index} race={race} />

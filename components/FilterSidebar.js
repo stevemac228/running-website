@@ -25,15 +25,11 @@ export default function FilterSidebar({
     <div className="filter-sidebar">
       <h2 className="sidebar-title">Filters</h2>
 
-      {/* Distance Range Slider */}
+      {/* Distance Section - Combined slider and categories */}
       <div className="filter-section">
+        <label className="filter-section-label">Distance</label>
         <DistanceRangeSlider onChange={onDistanceRangeChange} />
-      </div>
-
-      {/* Distance Categories */}
-      <div className="filter-section">
-        <label className="filter-section-label">Distance Categories</label>
-        <div className="filter-chips-vertical">
+        <div className="filter-chips-vertical" style={{ marginTop: "1rem" }}>
           {distanceFilters.map((opt) => (
             <FilterChip
               key={opt.key}
