@@ -69,12 +69,6 @@ svg, img {
   will-change: auto;
 }
 
-/* Prevent alt text flash for icon images */
-.nav-icon, .racecard-icon, .puffin-icon {
-  font-size: 0;
-  line-height: 0;
-}
-
 /* Ensure icons render without flash */
 .nav-icon, .racecard-icon, .dot-icon {
   backface-visibility: hidden;
