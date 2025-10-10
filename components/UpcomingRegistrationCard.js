@@ -7,10 +7,10 @@ import {
   getFormatBadgeClass,
 } from "../utils/renderBadges";
 
-export default function UpcomingRaceCard({ race }) {
+export default function UpcomingRegistrationCard({ race }) {
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = () => setExpanded(!expanded);
-  const expandedFields = getExpandedFields(race);
+  const expandedFields = getExpandedFields(race, "registration");
 
   return (
     <div
@@ -24,7 +24,10 @@ export default function UpcomingRaceCard({ race }) {
             <h2>
               {/* Title */}
               {race.name}{" "}
-              <span style={{ fontSize: "16px", fontWeight: "1"}}> {race.distance}km</span>
+              <span style={{ fontSize: "16px", fontWeight: "1" }}>
+                {" "}
+                {race.distance}km
+              </span>
               <span style={{ marginRight: "0.5rem" }}></span>
               {/* Terrain Badge */}
               {race.terrain && (
@@ -77,9 +80,62 @@ export default function UpcomingRaceCard({ race }) {
 
             {/* Additional Information */}
             <p>
-              {race.location} - {formatDate(race.date)}
-              {race.startTime ? ` @ ${formatTime(race.startTime)}` : ""}
+              <span style={{ fontWeight: "500" }}>Race Date:</span>{" "}
+              {formatDate(race.date)}
             </p>
+            {/* Early Bird Info */}
+            {race.earlyBirdCost && (
+              <p>
+                <span style={{ fontWeight: "500" }}>
+                  Early Bird Registration:
+                </span>{" "}
+                <span style={{ color: "green" }}>{race.earlyBirdCost}</span>{" "}
+                {formatDate(race.registrationStart, "registration") || "N/A"}{" "}
+                <img
+                  src="/icons/right-arrow.svg"
+                  alt="to"
+                  style={{
+                    width: "16px",
+                    height: "16px",
+                    verticalAlign: "middle",
+                    margin: "0 0.25rem",
+                  }}
+                />{" "}
+                {formatDate(race.earlyBirdDeadline, "registration") || "N/A"}
+              </p>
+            )}
+            {/* Registration Info */}
+            {(race.registrationStart || race.registrationDeadline) && (
+              <p>
+                <span style={{ fontWeight: "500" }}>
+                  General Price Registration:
+                </span>{" "}
+                <span style={{ color: "green" }}>{race.registrationCost}</span>{" "}
+                <span>
+                  {formatDate(
+                    new Date(
+                      new Date(race.earlyBirdDeadline).setDate(
+                        new Date(race.earlyBirdDeadline).getDate() + 1
+                      )
+                    )
+                      .toISOString()
+                      .split("T")[0],
+                    "registration"
+                  )}{" "}
+                  <img
+                    src="/icons/right-arrow.svg"
+                    alt="to"
+                    style={{
+                      width: "16px",
+                      height: "16px",
+                      verticalAlign: "middle",
+                      margin: "0 0.25rem",
+                    }}
+                  />
+                </span>
+                {formatDate(race.registrationDeadline, "registration") || "N/A"}
+              </p>
+            )}
           </div>
 
           <div className="chevron-container">

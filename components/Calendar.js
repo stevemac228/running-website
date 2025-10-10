@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import races from "../data/races";
 
 export default function Calendar() {
@@ -77,11 +77,14 @@ export default function Calendar() {
   // Returns all races for a given day
   const getRacesForDay = (date) => {
     if (!date || !races) return [];
+
+    const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
-    const year = date.getFullYear();
-    const formattedDate = `${month}/${day}/${year}`;
-    return races.filter((race) => race.date === formattedDate);
+
+    const isoStr = `${year}-${month}-${day}`; // "2025-04-24"
+
+    return races.filter((race) => race.date === isoStr);
   };
 
   const monthName = currentDate.toLocaleString("default", { month: "long" });

@@ -1,44 +1,16 @@
 import { useState } from "react";
+import { formatDate } from "../utils/formatDate";
+import { getExpandedFields } from "../utils/getExpandedFields";
+import { formatTime } from "../utils/formatTime";
+import {
+  getTerrainBadgeClass,
+  getFormatBadgeClass,
+} from "../utils/renderBadges";
 
 export default function RaceCard({ race }) {
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = () => setExpanded(!expanded);
-
-  const keyFields = [
-    "Location",
-    "Kms",
-    "Date",
-    "registrationStart",
-    "registrationDeadline",
-    "Terrain",
-  ];
-  const extraFields = Object.keys(race).filter(
-    (f) => !["id", "name", ...keyFields].includes(f)
-  );
-  const fieldLabels = {
-    earlyBirdDeadline: "Early Bird Deadline",
-    earlyBirdCost: "Early Bird Cost",
-    registrationCost: "Registration Cost",
-    fundraiser: "Fundraiser",
-    reception: "Reception",
-    location: "Location",
-    startLinelocation: "Start Line Location",
-    organization: "Organization",
-    nLAACertified: "N.L.A.A Certified",
-  };
-
-  const dateTimeStr = `${race.date} ${race.startTime}`; // "12/06/2025 10:00 AM"
-  const raceDate = new Date(dateTimeStr);
-  const displayDate =
-    raceDate.toLocaleDateString("en-US", {
-      month: "long", // full month name
-      day: "numeric",
-      year: "numeric",
-    }) +
-    ` @ ${raceDate.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: undefined,
-    })}`;
+  const expandedFields = getExpandedFields(race);
 
   return (
     <div
@@ -56,65 +28,58 @@ export default function RaceCard({ race }) {
               <span style={{ marginRight: "0.5rem" }}></span>
               {/* Terrain Badge */}
               {race.terrain && (
-                <span
-                  className={
-                    race.terrain.toLowerCase() === "road"
-                      ? "badge badge-road"
-                      : race.terrain.toLowerCase() === "trail"
-                      ? "badge badge-trail"
-                      : race.terrain.toLowerCase() === "track"
-                      ? "badge badge-track"
-                      : race.terrain.toLowerCase() === "gravel"
-                      ? "badge badge-gravel"
-                      : "badge"
-                  }
-                >
+                <span className={getTerrainBadgeClass(race.terrain)}>
                   {race.terrain}
                 </span>
               )}
               {/* Format Badge */}
               {race.format && (
-                <span
-                  className={
-                    race.format.toLowerCase() === "competitive"
-                      ? "badge badge-competitive"
-                      : race.format.toLowerCase() === "fun"
-                      ? "badge badge-funrun"
-                      : "badge"
-                  }
-                  style={{ marginLeft: "0.5rem" }} // small spacing between badges
-                >
+                <span className={getFormatBadgeClass(race.format)}>
                   {race.format}
                 </span>
               )}
               {/* Medal Icon */}
               {race.medal && (
-                <img
-                  src="/icons/medal.svg"
-                  alt="Medal available"
-                  className="racecard-icon"
-                />
+                <div className="tooltip-container">
+                  <img
+                    src="/icons/medal.svg"
+                    alt="Medal available"
+                    className="racecard-icon"
+                  />
+                  <span className="tooltip-text">This race has a medal!</span>
+                </div>
               )}
               {/* Tshirt Icon */}
               {race.shirt && (
-                <img
-                  src="/icons/tshirt.svg"
-                  alt="Tshirt available"
-                  className="racecard-icon"
-                />
+                <div className="tooltip-container">
+                  <img
+                    src="/icons/tshirt.svg"
+                    alt="Medal available"
+                    className="racecard-icon"
+                  />
+                  <span className="tooltip-text">This race has a tshirt!</span>
+                </div>
+              )}
+              {/* reception Icon */}
+              {race.reception && (
+                <div className="tooltip-container">
+                  <img
+                    src="/icons/reception.svg"
+                    alt="Medal available"
+                    className="racecard-icon"
+                  />
+                  <span className="tooltip-text">
+                    This race has a reception!
+                  </span>
+                </div>
               )}
             </h2>
 
             {/* Additional Information */}
             <p>
-              {race.location} - {race.day}, {displayDate}{" "}
+              {race.location} - {formatDate(race.date)}
+              {race.startTime ? ` @ ${formatTime(race.startTime)}` : ""}
             </p>
-            {(race.registrationStart || race.registrationDeadline) && (
-              <p>
-                Registration: {race.registrationStart || "N/A"} →{" "}
-                {race.registrationDeadline || "N/A"}
-              </p>
-            )}
           </div>
 
           <div className="chevron-container">
@@ -141,27 +106,11 @@ export default function RaceCard({ race }) {
 
         {expanded && (
           <div style={{ marginTop: "0.5rem" }}>
-            {extraFields
-              .filter((field) => fieldLabels[field]) // keep only fields with a label
-              .filter((field) => {
-                const value =
-                  typeof race[field] === "boolean" ? race[field] : race[field];
-                return value !== null && value !== undefined && value !== "";
-              }) // remove fields with no value
-              .map((field) => {
-                const value =
-                  typeof race[field] === "boolean"
-                    ? race[field]
-                      ? "Yes"
-                      : "No"
-                    : race[field];
-
-                return (
-                  <p key={field}>
-                    <strong>{fieldLabels[field]}:</strong> {value}
-                  </p>
-                );
-              })}
+            {expandedFields.map(({ label, value }) => (
+              <p key={label}>
+                <strong>{label}:</strong> {value}
+              </p>
+            ))}
           </div>
         )}
       </div>

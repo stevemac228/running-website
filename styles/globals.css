@@ -203,9 +203,11 @@ nav {
 }
 
 .badge-funrun {
+  margin-left: .5rem;
   background-color:var(--badge-funrun);
 }
 .badge-competitive {
+  margin-left: .5rem;
   background-color:var(--badge-competitive);
 }
 
@@ -228,6 +230,7 @@ nav {
   align-items: center;
   height: 100%;
 }
+
 /* #endregion */
 
 /* #endregion */
@@ -240,6 +243,36 @@ nav {
   margin-left: 0.25rem;
   vertical-align: middle;
 }
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  width: max-content;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 4px 8px;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%; /* show above the icon */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
 
 .puffin-icon {
   width: 50px;
@@ -423,6 +456,7 @@ nav {
 }
 /* #endregion */
 
+/* #region datePicker */
 .select-date-btn {
   padding: 0.4rem 0.6rem;
   border-radius: 6px;
