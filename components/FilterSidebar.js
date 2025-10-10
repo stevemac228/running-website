@@ -1,13 +1,11 @@
 import FilterChip from "./FilterChip";
 import DistanceRangeSlider from "./DistanceRangeSlider";
-import DateRangeSelector from "./DateRangeSelector";
 
 export default function FilterSidebar({
   filterOptions,
   activeFilters,
   onToggleFilter,
   onDistanceRangeChange,
-  onDateRangeChange,
 }) {
   // Group filters by category
   const distanceFilters = filterOptions.filter((opt) =>
@@ -90,12 +88,6 @@ export default function FilterSidebar({
             />
           ))}
         </div>
-      </div>
-
-      {/* Date Range */}
-      <div className="filter-section">
-        <label className="filter-section-label">Date Range</label>
-        <DateRangeSelector onChange={onDateRangeChange} />
       </div>
     </div>
   );

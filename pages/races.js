@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import SearchFilter from "../components/SearchFilter";
 import FilterSidebar from "../components/FilterSidebar";
 import CompactRaceCard from "../components/CompactRaceCard";
+import DateRangeSelector from "../components/DateRangeSelector";
 
 function parseUSDate(dateStr) {
   if (!dateStr) return new Date(NaN);
@@ -133,18 +134,21 @@ export default function Races() {
         {/* Search and Sort Bar */}
         <div className="races-top-bar">
           <SearchFilter onSearch={setSearchTerm} />
-          <select
-            className="sort-dropdown"
-            value={sortOption}
-            onChange={(e) => setSortOption(e.target.value)}
-          >
-            <option value="date-asc">Date (Soonest)</option>
-            <option value="date-desc">Date (Latest)</option>
-            <option value="distance-asc">Distance (Shortest)</option>
-            <option value="distance-desc">Distance (Longest)</option>
-            <option value="name-asc">Name (A–Z)</option>
-            <option value="name-desc">Name (Z–A)</option>
-          </select>
+          <div className="races-top-bar-controls">
+            <DateRangeSelector onChange={setDateRange} />
+            <select
+              className="sort-dropdown"
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+            >
+              <option value="date-asc">Date (Soonest)</option>
+              <option value="date-desc">Date (Latest)</option>
+              <option value="distance-asc">Distance (Shortest)</option>
+              <option value="distance-desc">Distance (Longest)</option>
+              <option value="name-asc">Name (A–Z)</option>
+              <option value="name-desc">Name (Z–A)</option>
+            </select>
+          </div>
         </div>
 
         {/* Two-column layout: Sidebar + Content */}
@@ -155,7 +159,6 @@ export default function Races() {
             activeFilters={activeFilters}
             onToggleFilter={toggleFilter}
             onDistanceRangeChange={setDistanceRange}
-            onDateRangeChange={setDateRange}
           />
 
           {/* Right Content */}

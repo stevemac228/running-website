@@ -949,7 +949,8 @@ header, .nav-left, nav, .nav-link {
 /* Main container for races page */
 .races-page-container {
   padding: 1rem;
-  max-width: 1400px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -960,12 +961,20 @@ header, .nav-left, nav, .nav-link {
   align-items: center;
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .races-top-bar .search-container {
   flex: 1;
   min-width: 300px;
   margin-bottom: 0;
+}
+
+.races-top-bar-controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .races-top-bar .sort-dropdown {
@@ -978,30 +987,39 @@ header, .nav-left, nav, .nav-link {
   grid-template-columns: 280px 1fr;
   gap: 2rem;
   align-items: start;
+  width: 100%;
 }
 
-/* Filter Sidebar */
+/* Filter Sidebar - Material UI inspired */
 .filter-sidebar {
   background-color: var(--runnl-background);
-  border: 1px solid var(--runnl-border);
-  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
   padding: 1.5rem;
   position: sticky;
   top: 1rem;
   max-height: calc(100vh - 2rem);
   overflow-y: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+.filter-sidebar:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .sidebar-title {
   margin: 0 0 1.5rem 0;
   font-size: 1.5rem;
+  font-weight: 700;
   color: var(--runnl-dark-text);
+  letter-spacing: -0.5px;
 }
 
 .filter-section {
   margin-bottom: 1.5rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--runnl-border);
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .filter-section:last-child {
@@ -1014,8 +1032,10 @@ header, .nav-left, nav, .nav-link {
   display: block;
   font-weight: 600;
   margin-bottom: 0.75rem;
-  color: var(--runnl-dark-text);
+  color: var(--runnl-dark-grey);
   font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .filter-chips-vertical {
@@ -1029,6 +1049,20 @@ header, .nav-left, nav, .nav-link {
   margin: 0;
   text-align: left;
   justify-content: flex-start;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.filter-chips-vertical .filter-chip:hover {
+  background-color: #f5f5f5;
+  transform: translateX(2px);
+}
+
+.filter-chips-vertical .filter-chip.active {
+  background-color: #e3f2fd;
+  border-color: var(--runnl-dark-blue);
+  box-shadow: 0 2px 4px rgba(0, 106, 172, 0.15);
 }
 
 /* Distance Range Slider */
@@ -1042,6 +1076,7 @@ header, .nav-left, nav, .nav-link {
   margin-bottom: 0.5rem;
   font-size: 0.85rem;
   color: var(--runnl-dark-grey);
+  font-weight: 500;
 }
 
 .slider-container {
@@ -1062,51 +1097,62 @@ header, .nav-left, nav, .nav-link {
 .range-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--runnl-dark-blue);
   cursor: pointer;
   pointer-events: all;
-  border: 2px solid var(--runnl-background);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 3px solid var(--runnl-background);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease;
+}
+
+.range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
 }
 
 .range-slider::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--runnl-dark-blue);
   cursor: pointer;
   pointer-events: all;
-  border: 2px solid var(--runnl-background);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 3px solid var(--runnl-background);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease;
+}
+
+.range-slider::-moz-range-thumb:hover {
+  transform: scale(1.15);
 }
 
 .range-slider::-webkit-slider-runnable-track {
   width: 100%;
-  height: 4px;
+  height: 6px;
   background: linear-gradient(to right, #ddd 0%, var(--runnl-light-blue) 0%, var(--runnl-light-blue) 100%, #ddd 100%);
-  border-radius: 2px;
+  border-radius: 3px;
 }
 
 .range-slider::-moz-range-track {
   width: 100%;
-  height: 4px;
+  height: 6px;
   background: #ddd;
-  border-radius: 2px;
+  border-radius: 3px;
 }
 
 /* Races List Container */
 .races-list-container {
   min-width: 0;
+  width: 100%;
 }
 
 .races-count {
   font-size: 0.9rem;
   color: var(--runnl-light-grey);
   margin-bottom: 1rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* Compact Race Card */
@@ -1127,18 +1173,19 @@ header, .nav-left, nav, .nav-link {
 
 .compact-race-card-main {
   display: grid;
-  grid-template-columns: 2fr 1.5fr auto;
-  gap: 1rem;
+  grid-template-columns: 450px 1fr auto;
+  gap: 1.5rem;
   align-items: center;
 }
 
 .compact-race-info {
-  min-width: 0;
+  min-width: 450px;
+  max-width: 450px;
 }
 
 .compact-race-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
   flex-wrap: wrap;
@@ -1160,6 +1207,14 @@ header, .nav-left, nav, .nav-link {
   font-size: 0.9rem;
   color: var(--runnl-light-grey);
   font-weight: 500;
+  white-space: nowrap;
+}
+
+.compact-race-icons-inline {
+  display: inline-flex;
+  gap: 0.25rem;
+  align-items: center;
+  margin-left: 0.25rem;
 }
 
 .compact-race-badges {
@@ -1168,8 +1223,13 @@ header, .nav-left, nav, .nav-link {
   flex-wrap: wrap;
 }
 
+.compact-race-badges .badge {
+  color: var(--runnl-light-text);
+}
+
 .compact-race-details {
   min-width: 0;
+  flex: 1;
 }
 
 .compact-race-location {
@@ -1187,13 +1247,7 @@ header, .nav-left, nav, .nav-link {
 .compact-race-actions {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-}
-
-.compact-race-icons {
-  display: flex;
-  gap: 0.25rem;
-  align-items: center;
+  justify-content: flex-end;
 }
 
 .compact-race-expanded {
@@ -1216,6 +1270,17 @@ header, .nav-left, nav, .nav-link {
 }
 
 /* Responsive layout */
+@media (max-width: 1200px) {
+  .compact-race-card-main {
+    grid-template-columns: 400px 1fr auto;
+  }
+  
+  .compact-race-info {
+    min-width: 400px;
+    max-width: 400px;
+  }
+}
+
 @media (max-width: 1024px) {
   .races-content-wrapper {
     grid-template-columns: 240px 1fr;
@@ -1226,6 +1291,11 @@ header, .nav-left, nav, .nav-link {
     grid-template-columns: 1fr;
     gap: 0.75rem;
   }
+  
+  .compact-race-info {
+    min-width: 0;
+    max-width: none;
+  }
 
   .compact-race-actions {
     justify-content: space-between;
@@ -1233,6 +1303,10 @@ header, .nav-left, nav, .nav-link {
 }
 
 @media (max-width: 768px) {
+  .races-page-container {
+    padding: 0.5rem;
+  }
+
   .races-content-wrapper {
     grid-template-columns: 1fr;
   }
@@ -1245,10 +1319,16 @@ header, .nav-left, nav, .nav-link {
 
   .races-top-bar {
     flex-direction: column;
+    align-items: stretch;
   }
 
   .races-top-bar .search-container {
     width: 100%;
+  }
+
+  .races-top-bar-controls {
+    width: 100%;
+    flex-direction: column;
   }
 
   .races-top-bar .sort-dropdown {

@@ -17,7 +17,7 @@ export default function CompactRaceCard({ race }) {
   return (
     <div className="compact-race-card" onClick={toggleExpanded}>
       <div className="compact-race-card-main">
-        {/* Left section - Name and badges */}
+        {/* Left section - Name, distance, icons, and badges */}
         <div className="compact-race-info">
           <div className="compact-race-header">
             <Link
@@ -28,15 +28,48 @@ export default function CompactRaceCard({ race }) {
               {race.name}
             </Link>
             <span className="compact-race-distance">{race.distance}km</span>
+            {/* Icons moved here after name and distance */}
+            <div className="compact-race-icons-inline">
+              {race.medal && (
+                <div className="tooltip-container">
+                  <img
+                    src="/icons/medal.svg"
+                    alt="Medal"
+                    className="racecard-icon"
+                  />
+                  <span className="tooltip-text">Medal available</span>
+                </div>
+              )}
+              {race.shirt && (
+                <div className="tooltip-container">
+                  <img
+                    src="/icons/tshirt.svg"
+                    alt="T-Shirt"
+                    className="racecard-icon"
+                  />
+                  <span className="tooltip-text">T-Shirt available</span>
+                </div>
+              )}
+              {race.reception && (
+                <div className="tooltip-container">
+                  <img
+                    src="/icons/reception.svg"
+                    alt="Reception"
+                    className="racecard-icon"
+                  />
+                  <span className="tooltip-text">Reception available</span>
+                </div>
+              )}
+            </div>
           </div>
           <div className="compact-race-badges">
             {race.terrain && (
-              <span className={getTerrainBadgeClass(race.terrain)}>
+              <span className={`badge ${getTerrainBadgeClass(race.terrain)}`}>
                 {race.terrain}
               </span>
             )}
             {race.format && (
-              <span className={getFormatBadgeClass(race.format)}>
+              <span className={`badge ${getFormatBadgeClass(race.format)}`}>
                 {race.format}
               </span>
             )}
@@ -52,40 +85,8 @@ export default function CompactRaceCard({ race }) {
           </div>
         </div>
 
-        {/* Right section - Icons and chevron */}
+        {/* Right section - Chevron only */}
         <div className="compact-race-actions">
-          <div className="compact-race-icons">
-            {race.medal && (
-              <div className="tooltip-container">
-                <img
-                  src="/icons/medal.svg"
-                  alt="Medal"
-                  className="racecard-icon"
-                />
-                <span className="tooltip-text">Medal available</span>
-              </div>
-            )}
-            {race.shirt && (
-              <div className="tooltip-container">
-                <img
-                  src="/icons/tshirt.svg"
-                  alt="T-Shirt"
-                  className="racecard-icon"
-                />
-                <span className="tooltip-text">T-Shirt available</span>
-              </div>
-            )}
-            {race.reception && (
-              <div className="tooltip-container">
-                <img
-                  src="/icons/reception.svg"
-                  alt="Reception"
-                  className="racecard-icon"
-                />
-                <span className="tooltip-text">Reception available</span>
-              </div>
-            )}
-          </div>
           <button
             className="chevron-toggle"
             aria-label={expanded ? "Hide details" : "Show details"}
