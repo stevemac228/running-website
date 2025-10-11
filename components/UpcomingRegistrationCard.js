@@ -16,9 +16,8 @@ export default function UpcomingRegistrationCard({ race }) {
 
   return (
     <div
-      className="race-card"
+      className="race-card race-card-clickable"
       onClick={toggleExpanded}
-      style={{ cursor: "pointer" }}
     >
       <div>
         <div className="race-card-collapsed">
@@ -27,16 +26,16 @@ export default function UpcomingRegistrationCard({ race }) {
               {/* Title - link to detail page (use id if available) */}
               <Link
                 href={`/race/${encodeURIComponent(getRaceId(race))}`}
-                style={{ color: "inherit", textDecoration: "none" }}
+                className="race-card-link"
                 onClick={(e) => e.stopPropagation()}
               >
                 {race.name}
               </Link>{" "}
-              <span style={{ fontSize: "16px", fontWeight: "1" }}>
+              <span className="race-card-distance-weight">
                 {" "}
                 {race.distance}km
               </span>
-              <span style={{ marginRight: "0.5rem" }}></span>
+              <span className="race-card-spacer"></span>
               {/* Terrain Badge */}
               {race.terrain && (
                 <span className={getTerrainBadgeClass(race.terrain)}>
@@ -112,16 +111,16 @@ export default function UpcomingRegistrationCard({ race }) {
 
             {/* Additional Information */}
             <p>
-              <span style={{ fontWeight: "500" }}>Race Date:</span>{" "}
+              <span className="race-card-registration-label">Race Date:</span>{" "}
               {formatDate(race.date)}
             </p>
             {/* Early Bird Info */}
             {race.earlyBirdCost && (
               <p>
-                <span style={{ fontWeight: "500" }}>
+                <span className="race-card-registration-label">
                   Early Bird Registration:
                 </span>{" "}
-                <span style={{ color: "green" }}>{race.earlyBirdCost}</span>{" "}
+                <span className="race-card-registration-cost">{race.earlyBirdCost}</span>{" "}
                 {formatDate(race.registrationStart, "registration") || "N/A"}{" "}
                 <svg
                   width="16"
@@ -129,10 +128,7 @@ export default function UpcomingRegistrationCard({ race }) {
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  style={{
-                    verticalAlign: "middle",
-                    margin: "0 0.25rem",
-                  }}
+                  className="race-card-arrow-icon"
                 >
                   <path
                     fillRule="evenodd"
@@ -147,10 +143,10 @@ export default function UpcomingRegistrationCard({ race }) {
             {/* Registration Info */}
             {(race.registrationStart || race.registrationDeadline) && (
               <p>
-                <span style={{ fontWeight: "500" }}>
+                <span className="race-card-registration-label">
                   General Price Registration:
                 </span>{" "}
-                <span style={{ color: "green" }}>{race.registrationCost}</span>{" "}
+                <span className="race-card-registration-cost">{race.registrationCost}</span>{" "}
                 <span>
                   {(() => {
                     let iso = null;
@@ -172,10 +168,7 @@ export default function UpcomingRegistrationCard({ race }) {
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  style={{
-                    verticalAlign: "middle",
-                    margin: "0 0.25rem",
-                  }}
+                  className="race-card-arrow-icon"
                 >
                   <path
                     fillRule="evenodd"
@@ -200,10 +193,7 @@ export default function UpcomingRegistrationCard({ race }) {
                 width="32"
                 height="32"
                 viewBox="0 0 24 24"
-                style={{
-                  transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
-                  transition: "transform 0.3s",
-                }}
+                className={`race-card-chevron-svg ${expanded ? 'race-card-chevron-expanded' : 'race-card-chevron-collapsed'}`}
               >
                 <path fill="currentColor" d="M7 10l5 5 5-5z" />
               </svg>
@@ -212,7 +202,7 @@ export default function UpcomingRegistrationCard({ race }) {
         </div>
 
         {expanded && (
-          <div style={{ marginTop: "0.5rem" }}>
+          <div className="race-card-expanded-content">
             {expandedFields.map(({ label, value }) => (
               <p key={label}>
                 <strong>{label}:</strong> {value}
