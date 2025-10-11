@@ -61,6 +61,22 @@ body {
   margin: 0;
   padding: 0;
 }
+
+/* Prevent SVG flashing on page load/reload */
+svg, img {
+  opacity: 1;
+  transition: none;
+  will-change: auto;
+}
+
+/* Ensure icons render without flash */
+.nav-icon, .racecard-icon, .dot-icon {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
 /* #endregion */
 
 /* #region Scrollbar */
@@ -130,6 +146,10 @@ nav {
   width: 22px; /* set visible size */
   height: 22px;
   flex-shrink: 0; /* prevents collapsing */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 /* Show icons and hide text on mobile */
@@ -242,6 +262,10 @@ nav {
   margin-right: 0.25rem;
   margin-left: 0.25rem;
   vertical-align: middle;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .tooltip-container {
