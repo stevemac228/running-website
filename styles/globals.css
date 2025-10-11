@@ -1694,31 +1694,31 @@ header, .nav-left, nav, .nav-link {
   margin: 0 0.25rem;
 }
 
-/* Horizontal Registration Card Styles */
-.registration-card-horizontal {
+/* Vertical Registration Card Styles for Carousel */
+.registration-card-vertical-carousel {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   border: 1px solid #ddd;
   border-radius: 12px;
   background-color: var(--runnl-background);
-  margin: 1rem 0;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
+  width: 100%;
   text-decoration: none;
   color: inherit;
-  min-height: 160px;
+  height: 100%;
 }
 
-.registration-card-horizontal:hover {
-  transform: translateY(-2px);
+.registration-card-vertical-carousel:hover {
+  transform: translateY(-4px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
-.registration-card-image-container {
+.registration-card-image-wrapper {
   position: relative;
-  flex-shrink: 0;
-  width: 280px;
+  width: 100%;
+  height: 180px;
 }
 
 .registration-card-image {
@@ -1735,8 +1735,8 @@ header, .nav-left, nav, .nav-link {
   object-fit: cover;
 }
 
-/* Badges overlay on image */
-.registration-card-image-badges {
+/* Badges overlay on image - top left */
+.registration-card-image-badges-vertical {
   position: absolute;
   top: 0.75rem;
   left: 0.75rem;
@@ -1746,100 +1746,183 @@ header, .nav-left, nav, .nav-link {
   align-items: flex-start;
 }
 
-.registration-card-content-horizontal {
+.registration-card-content-vertical {
   padding: 1.25rem;
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-width: 0;
 }
 
-.registration-card-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  gap: 1rem;
-}
-
-.registration-card-title-horizontal {
-  margin: 0;
-  font-size: 1.3rem;
+.registration-card-title-vertical {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.2rem;
   font-weight: 600;
   line-height: 1.3;
   color: var(--runnl-text);
   display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
-.registration-card-distance-inline {
-  font-size: 1rem;
+.registration-card-distance-vertical {
+  font-size: 0.95rem;
   font-weight: 400;
   color: var(--runnl-dark-grey);
 }
 
-.registration-card-icons-inline {
+.registration-card-icons-vertical {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
   align-items: center;
-  flex-shrink: 0;
 }
 
-.registration-card-info-horizontal {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  font-size: 0.95rem;
-}
-
-.registration-card-race-date-horizontal,
-.registration-card-price-horizontal {
-  margin: 0;
-  line-height: 1.5;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.registration-card-race-date-horizontal strong,
-.registration-card-price-horizontal strong {
-  font-weight: 600;
-  color: var(--runnl-text);
-}
-
-.registration-card-dates {
-  color: var(--runnl-grey);
+.registration-card-info-vertical {
+  flex: 1;
   font-size: 0.9rem;
 }
 
-/* Responsive adjustments for registration cards */
-@media (max-width: 768px) {
-  .registration-card-horizontal {
-    flex-direction: column;
+.registration-card-info-vertical p {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+.registration-card-race-date-vertical {
+  color: var(--runnl-dark-grey);
+  margin-bottom: 0.5rem !important;
+}
+
+.registration-card-price-vertical {
+  margin: 0.4rem 0;
+}
+
+.registration-card-price-vertical strong {
+  color: var(--runnl-text);
+  font-weight: 600;
+}
+
+.registration-card-price-vertical small {
+  color: var(--runnl-grey);
+  font-size: 0.8rem;
+  display: block;
+  margin-top: 0.2rem;
+}
+
+/* Carousel Styles */
+.registration-carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 60px;
+}
+
+.registration-carousel-viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+.registration-carousel-track {
+  display: flex;
+  transition: transform 0.4s ease-in-out;
+  gap: 1.5rem;
+}
+
+.registration-carousel-item {
+  flex: 0 0 calc(33.333% - 1rem);
+  min-width: 0;
+}
+
+.carousel-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--runnl-background);
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 10;
+  color: var(--runnl-dark-grey);
+}
+
+.carousel-nav-btn:hover:not(:disabled) {
+  background-color: var(--runnl-primary);
+  border-color: var(--runnl-primary);
+  color: white;
+}
+
+.carousel-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.carousel-nav-prev {
+  left: 0;
+}
+
+.carousel-nav-next {
+  right: 0;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.carousel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background-color: #ddd;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  padding: 0;
+}
+
+.carousel-dot:hover {
+  background-color: #bbb;
+}
+
+.carousel-dot.active {
+  background-color: var(--runnl-primary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .registration-carousel-item {
+    flex: 0 0 calc(50% - 0.75rem);
   }
   
-  .registration-card-image-container {
-    width: 100%;
-    height: 180px;
-  }
-  
-  .registration-card-header {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-  
-  .registration-card-icons-inline {
-    align-self: flex-start;
+  .registration-carousel-container {
+    padding: 0 50px;
   }
 }
 
-@media (max-width: 1024px) {
-  .registration-card-image-container {
-    width: 220px;
+@media (max-width: 768px) {
+  .registration-carousel-item {
+    flex: 0 0 100%;
+  }
+  
+  .registration-carousel-container {
+    padding: 0 40px;
+  }
+  
+  .carousel-nav-btn {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .registration-card-image-wrapper {
+    height: 160px;
   }
 }
 
