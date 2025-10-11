@@ -1117,11 +1117,11 @@ header, .nav-left, nav, .nav-link {
 }
 
 .range-slider-min {
-  z-index: 3;
+  z-index: 2;
 }
 
 .range-slider-max {
-  z-index: 2;
+  z-index: 3;
 }
 
 /* Boost z-index when slider is hovered or active */
