@@ -90,14 +90,44 @@ export default function Calendar() {
     return map;
   }, []);
 
-  // Returns all races for a given day
+  // Helper function to parse time string to minutes since midnight for sorting
+  const parseTimeToMinutes = (timeStr) => {
+    if (!timeStr) return Infinity; // null/empty times go to the bottom
+    
+    const input = String(timeStr).trim().toUpperCase();
+    // Match "H:MM AM/PM", "HH:MM AM/PM", "H AM/PM", etc.
+    const match = input.match(/^(\d{1,2})(?::(\d{2}))?\s*(AM|PM)?$/i);
+    
+    if (!match) return Infinity; // unparseable times go to the bottom
+    
+    let hour = parseInt(match[1], 10);
+    const minutes = match[2] ? parseInt(match[2], 10) : 0;
+    const period = match[3] ? match[3].toUpperCase() : null;
+    
+    if (period === "PM" && hour !== 12) {
+      hour += 12;
+    } else if (period === "AM" && hour === 12) {
+      hour = 0;
+    }
+    
+    return hour * 60 + minutes;
+  };
+
+  // Returns all races for a given day, sorted by start time
   const getRacesForDay = (date) => {
     if (!date) return [];
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
     const isoStr = `${year}-${month}-${day}`;
-    return dateMap[isoStr] || [];
+    const racesForDay = dateMap[isoStr] || [];
+    
+    // Sort races by start time (races without start time go to the bottom)
+    return [...racesForDay].sort((a, b) => {
+      const timeA = parseTimeToMinutes(a.startTime);
+      const timeB = parseTimeToMinutes(b.startTime);
+      return timeA - timeB;
+    });
   };
 
   const titleCase = (s) =>
