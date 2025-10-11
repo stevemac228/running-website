@@ -1121,7 +1121,18 @@ header, .nav-left, nav, .nav-link {
 }
 
 .range-slider-max {
-  z-index: 4;
+  z-index: 2;
+}
+
+/* Boost z-index when slider is hovered or active */
+.range-slider-min:hover,
+.range-slider-min:active {
+  z-index: 5;
+}
+
+.range-slider-max:hover,
+.range-slider-max:active {
+  z-index: 5;
 }
 
 .range-slider::-webkit-slider-thumb {
