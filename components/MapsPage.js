@@ -10,6 +10,58 @@ export default function MapsPage() {
 	const [loading, setLoading] = useState(true);
 	const [layersInfo, setLayersInfo] = useState([]); // { id, name, visible, elevInfo, distanceKm, raceSlug }
 
+	// Helper function to create formatted popup content
+	const createPopupContent = (name, distanceKm, elevInfo, raceId, startLatLng) => {
+		const distanceText = distanceKm ? (typeof distanceKm === "number" ? `${distanceKm}km` : distanceKm) : null;
+		const elevGainText = elevInfo?.gain != null ? `${Math.round(elevInfo.gain)}m ↑` : null;
+		const elevLossText = elevInfo?.loss != null ? `${Math.round(elevInfo.loss)}m ↓` : null;
+		const elevText = [elevGainText, elevLossText].filter(Boolean).join(" ");
+		
+		const googleMapsLink = startLatLng ? 
+			`<a href="https://www.google.com/maps?q=${startLatLng.lat},${startLatLng.lng}" 
+				target="_blank" 
+				rel="noopener noreferrer"
+				style="
+					display: block;
+					padding: 8px 12px;
+					background-color: #f0f0f0;
+					color: #222;
+					border: 1px solid #ddd;
+					border-radius: 4px;
+					text-decoration: none;
+					text-align: center;
+					font-size: 14px;
+					font-weight: 500;
+					transition: background-color 0.2s;
+				" onmouseover="this.style.backgroundColor='#e0e0e0'" onmouseout="this.style.backgroundColor='#f0f0f0'">
+				📍 Open in Google Maps
+			</a>` : '';
+		
+		return `
+			<div style="min-width: 200px; font-family: inherit;">
+				<div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #222;">${name}</div>
+				${distanceText ? `<div style="margin-bottom: 4px; color: #555;">📏 ${distanceText}</div>` : ''}
+				${elevText ? `<div style="margin-bottom: 8px; color: #555;">⛰️ ${elevText}</div>` : ''}
+				<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 10px;">
+					<button data-rid="${raceId}" style="
+						padding: 8px 12px;
+						background-color: #0070f3;
+						color: white;
+						border: none;
+						border-radius: 4px;
+						cursor: pointer;
+						font-size: 14px;
+						font-weight: 500;
+						transition: background-color 0.2s;
+					" onmouseover="this.style.backgroundColor='#0051cc'" onmouseout="this.style.backgroundColor='#0070f3'">
+						Show track
+					</button>
+					${googleMapsLink}
+				</div>
+			</div>
+		`;
+	};
+
 	useEffect(() => {
 		let mounted = true;
 
@@ -439,58 +491,6 @@ export default function MapsPage() {
 			});
 		};
 	}, []);
-
-	// Helper function to create formatted popup content
-	const createPopupContent = (name, distanceKm, elevInfo, raceId, startLatLng) => {
-		const distanceText = distanceKm ? (typeof distanceKm === "number" ? `${distanceKm}km` : distanceKm) : null;
-		const elevGainText = elevInfo?.gain != null ? `${Math.round(elevInfo.gain)}m ↑` : null;
-		const elevLossText = elevInfo?.loss != null ? `${Math.round(elevInfo.loss)}m ↓` : null;
-		const elevText = [elevGainText, elevLossText].filter(Boolean).join(" ");
-		
-		const googleMapsLink = startLatLng ? 
-			`<a href="https://www.google.com/maps?q=${startLatLng.lat},${startLatLng.lng}" 
-				target="_blank" 
-				rel="noopener noreferrer"
-				style="
-					display: block;
-					padding: 8px 12px;
-					background-color: #f0f0f0;
-					color: #222;
-					border: 1px solid #ddd;
-					border-radius: 4px;
-					text-decoration: none;
-					text-align: center;
-					font-size: 14px;
-					font-weight: 500;
-					transition: background-color 0.2s;
-				" onmouseover="this.style.backgroundColor='#e0e0e0'" onmouseout="this.style.backgroundColor='#f0f0f0'">
-				📍 Open in Google Maps
-			</a>` : '';
-		
-		return `
-			<div style="min-width: 200px; font-family: inherit;">
-				<div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #222;">${name}</div>
-				${distanceText ? `<div style="margin-bottom: 4px; color: #555;">📏 ${distanceText}</div>` : ''}
-				${elevText ? `<div style="margin-bottom: 8px; color: #555;">⛰️ ${elevText}</div>` : ''}
-				<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 10px;">
-					<button data-rid="${raceId}" style="
-						padding: 8px 12px;
-						background-color: #0070f3;
-						color: white;
-						border: none;
-						border-radius: 4px;
-						cursor: pointer;
-						font-size: 14px;
-						font-weight: 500;
-						transition: background-color 0.2s;
-					" onmouseover="this.style.backgroundColor='#0051cc'" onmouseout="this.style.backgroundColor='#0070f3'">
-						Show track
-					</button>
-					${googleMapsLink}
-				</div>
-			</div>
-		`;
-	};
 
 	// toggle either from sidebar or popup button — create GPX layer on demand
 	function toggleLayer(id) {
