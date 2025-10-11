@@ -10,58 +10,6 @@ export default function MapsPage() {
 	const [loading, setLoading] = useState(true);
 	const [layersInfo, setLayersInfo] = useState([]); // { id, name, visible, elevInfo, distanceKm, raceSlug }
 
-	// Helper function to create formatted popup content
-	function createPopupContent(name, distanceKm, elevInfo, raceId, startLatLng) {
-		const distanceText = distanceKm ? (typeof distanceKm === "number" ? `${distanceKm}km` : distanceKm) : null;
-		const elevGainText = elevInfo?.gain != null ? `${Math.round(elevInfo.gain)}m ↑` : null;
-		const elevLossText = elevInfo?.loss != null ? `${Math.round(elevInfo.loss)}m ↓` : null;
-		const elevText = [elevGainText, elevLossText].filter(Boolean).join(" ");
-		
-		const googleMapsLink = startLatLng ? 
-			`<a href="https://www.google.com/maps?q=${startLatLng.lat},${startLatLng.lng}" 
-				target="_blank" 
-				rel="noopener noreferrer"
-				style="
-					display: block;
-					padding: 8px 12px;
-					background-color: #f0f0f0;
-					color: #222;
-					border: 1px solid #ddd;
-					border-radius: 4px;
-					text-decoration: none;
-					text-align: center;
-					font-size: 14px;
-					font-weight: 500;
-					transition: background-color 0.2s;
-				" onmouseover="this.style.backgroundColor='#e0e0e0'" onmouseout="this.style.backgroundColor='#f0f0f0'">
-				📍 Open in Google Maps
-			</a>` : '';
-		
-		return `
-			<div style="min-width: 200px; font-family: inherit;">
-				<div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #222;">${name}</div>
-				${distanceText ? `<div style="margin-bottom: 4px; color: #555;">📏 ${distanceText}</div>` : ''}
-				${elevText ? `<div style="margin-bottom: 8px; color: #555;">⛰️ ${elevText}</div>` : ''}
-				<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 10px;">
-					<button data-rid="${raceId}" style="
-						padding: 8px 12px;
-						background-color: #0070f3;
-						color: white;
-						border: none;
-						border-radius: 4px;
-						cursor: pointer;
-						font-size: 14px;
-						font-weight: 500;
-						transition: background-color 0.2s;
-					" onmouseover="this.style.backgroundColor='#0051cc'" onmouseout="this.style.backgroundColor='#0070f3'">
-						Show track
-					</button>
-					${googleMapsLink}
-				</div>
-			</div>
-		`;
-	}
-
 	useEffect(() => {
 		let mounted = true;
 
@@ -304,9 +252,8 @@ export default function MapsPage() {
 					}
 
 					// Bind popup to the start marker after it loads
-					const popupContent = createPopupContent(race.name, distanceKm, 
-						elevGainMeters != null || elevLossMeters != null ? { gain: elevGainMeters, loss: elevLossMeters } : null,
-						raceId, startLatLng);
+					const elvText = elevGainMeters != null ? `<br/>Elevation gain: ${Math.round(elevGainMeters)} m` : "";
+					const popupContent = `<strong>${race.name}</strong>${elvText}<br/><button data-rid="${raceId}">Show track</button>`;
 					
 					if (lightLayer) {
 						lightLayer.on("loaded", () => {
@@ -409,7 +356,6 @@ export default function MapsPage() {
 						? { gain: elevGainMeters ?? null, loss: elevLossMeters ?? null, unit: "m" }
 						: null,
 					distanceKm,
-					startLatLng, // Store for Google Maps link in popup
 				};
 				groups.push(group);
 
@@ -532,7 +478,7 @@ export default function MapsPage() {
 						},
 					});
 					layer.on("loaded", () => {
-						const popupContent = createPopupContent(group.name, group.distanceKm, group.elevInfo, group.raceId, group.startLatLng);
+						const popupContent = `<strong>${group.name}</strong>${group.elevInfo ? `<br/>Elevation gain: ${Math.round(group.elevInfo.gain)} m` : ""}<br/><button data-rid="${group.raceId}">Show track</button>`;
 						const children = typeof layer.getLayers === "function" ? layer.getLayers() : [];
 						children.forEach((child) => {
 							if (child instanceof ref.L.Marker) {
