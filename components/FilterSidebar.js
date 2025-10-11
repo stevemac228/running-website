@@ -29,7 +29,7 @@ export default function FilterSidebar({
       <div className="filter-section">
         <label className="filter-section-label">Distance</label>
         <DistanceRangeSlider onChange={onDistanceRangeChange} />
-        <div className="filter-chips-vertical" style={{ marginTop: "1rem" }}>
+        <div className="filter-chips-vertical filter-chips-vertical-spacing">
           {distanceFilters.map((opt) => (
             <FilterChip
               key={opt.key}

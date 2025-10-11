@@ -16,9 +16,8 @@ export default function RaceCard({ race }) {
 
   return (
     <div
-      className="race-card"
+      className="race-card race-card-clickable"
       onClick={toggleExpanded}
-      style={{ cursor: "pointer" }}
     >
       <div>
         <div className="race-card-collapsed">
@@ -27,13 +26,13 @@ export default function RaceCard({ race }) {
               {/* Title - link by id when available */}
               <Link
                 href={`/race/${encodeURIComponent(getRaceId(race))}`}
-                style={{ color: "inherit", textDecoration: "none" }}
+                className="race-card-link"
                 onClick={(e) => e.stopPropagation()}
               >
                 {race.name}
               </Link>{" "}
-              <span style={{ fontSize: "16px" }}> {race.distance}km</span>
-              <span style={{ marginRight: "0.5rem" }}></span>
+              <span className="race-card-distance"> {race.distance}km</span>
+              <span className="race-card-spacer"></span>
               {/* Terrain Badge */}
               {race.terrain && (
                 <span className={getTerrainBadgeClass(race.terrain)}>
@@ -127,10 +126,7 @@ export default function RaceCard({ race }) {
                 width="32"
                 height="32"
                 viewBox="0 0 24 24"
-                style={{
-                  transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
-                  transition: "transform 0.3s",
-                }}
+                className={`race-card-chevron-svg ${expanded ? 'race-card-chevron-expanded' : 'race-card-chevron-collapsed'}`}
               >
                 <path fill="currentColor" d="M7 10l5 5 5-5z" />
               </svg>
@@ -139,7 +135,7 @@ export default function RaceCard({ race }) {
         </div>
 
         {expanded && (
-          <div style={{ marginTop: "0.5rem" }}>
+          <div className="race-card-expanded-content">
             {expandedFields.map(({ label, value }) => (
               <p key={label}>
                 <strong>{label}:</strong> {value}

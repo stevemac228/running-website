@@ -96,10 +96,7 @@ export default function CompactRaceCard({ race }) {
               width="24"
               height="24"
               viewBox="0 0 24 24"
-              style={{
-                transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
-                transition: "transform 0.3s",
-              }}
+              className={`race-card-chevron-svg ${expanded ? 'race-card-chevron-expanded' : 'race-card-chevron-collapsed'}`}
             >
               <path fill="currentColor" d="M7 10l5 5 5-5z" />
             </svg>

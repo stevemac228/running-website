@@ -22,14 +22,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      style={{
-        background: "transparent",
-        border: "none",
-        cursor: "pointer",
-        padding: "0.25rem",
-        display: "flex",
-        alignItems: "center",
-      }}
+      className="theme-toggle-btn"
       aria-label="Toggle dark/light mode"
     >
       {theme === "light" ? (

@@ -288,8 +288,8 @@ export default function RaceDetail() {
     return (
       <div>
         <Header />
-        <main style={{ padding: 24 }}>
-          <h1 style={{ fontSize: 28 }}>Race not found</h1>
+        <main className="race-detail-not-found-main">
+          <h1 className="race-detail-not-found-title">Race not found</h1>
           <p>We couldn't find that race. Please check the link.</p>
         </main>
         <Footer />
@@ -301,83 +301,53 @@ export default function RaceDetail() {
     <div>
       <Header />
 
-      <main style={{ padding: 24 }}>
-        <header style={{ marginBottom: 20 }}>
-          <h1 style={{ fontSize: 36, margin: 0 }}>{race.name}</h1>
-          <div style={{ color: "#666", marginTop: 6 }}>
+      <main className="race-detail-main">
+        <header className="race-detail-header">
+          <h1 className="race-detail-title">{race.name}</h1>
+          <div className="race-detail-subtitle">
             {race.nickName ? <em>{race.nickName}</em> : null}{" "}
             {race.date ? `• ${formatDate(race.date)}` : null}{" "}
             {race.startTime ? `• ${formatTime(race.startTime)}` : null}
           </div>
         </header>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 380px",
-            gap: 24,
-            alignItems: "start",
-          }}
-        >
+        <div className="race-detail-grid">
           <section>
-            <h2 style={{ fontSize: 20, marginBottom: 12 }}>All Race Info</h2>
+            <h2 className="race-detail-section-title">All Race Info</h2>
 
-            <div style={{ display: "grid", gap: 10 }}>
+            <div className="race-detail-info-grid">
               {displayEntries.map(({ key, label, value }) => (
-                <div
-                  key={key}
-                  style={{
-                    display: "flex",
-                    gap: 12,
-                    alignItems: "flex-start",
-                    padding: "8px 0",
-                    borderBottom: "1px solid rgba(0,0,0,0.04)",
-                  }}
-                >
-                  <div style={{ minWidth: 200, fontWeight: 700 }}>{label}</div>
-                  <div style={{ flex: 1 }}>{value}</div>
+                <div key={key} className="race-detail-info-row">
+                  <div className="race-detail-info-label">{label}</div>
+                  <div className="race-detail-info-value">{value}</div>
                 </div>
               ))}
             </div>
           </section>
 
           <aside>
-            <h2 style={{ fontSize: 20, marginBottom: 12 }}>Race Map</h2>
+            <h2 className="race-detail-section-title">Race Map</h2>
 
-            <div
-              style={{
-                width: "100%",
-                height: 320,
-                border: "1px solid #ddd",
-                borderRadius: 8,
-                overflow: "hidden",
-                background: "#f7f7f7",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center",
-                padding: 12,
-              }}
-            >
+            <div className="race-detail-map-container">
               {geoLoading && <p>Finding start location…</p>}
 
               {!geoLoading && geoError && (
                 <div>
-                  <p style={{ margin: 0 }}>{geoError}</p>
-                  <p style={{ marginTop: 8, color: "#666", fontSize: 13 }}>
+                  <p className="race-detail-map-error">{geoError}</p>
+                  <p className="race-detail-map-error-location">
                     {race.startLineLocation || race.location || "No location provided."}
                   </p>
                 </div>
               )}
 
               {!geoLoading && !geoError && coords && (
-                <div ref={mapRef} style={{ width: "100%", height: "100%" }} />
+                <div ref={mapRef} className="race-detail-map" />
               )}
 
               {!geoLoading && !geoError && !coords && (
-                <div style={{ color: "#666" }}>
-                  <p style={{ margin: 0 }}>No start location available.</p>
-                  <p style={{ marginTop: 8, fontSize: 13 }}>
+                <div className="race-detail-map-no-location">
+                  <p>No start location available.</p>
+                  <p>
                     Add a "startLineLocation" or "location" to the race data to enable the map.
                   </p>
                 </div>
@@ -386,23 +356,14 @@ export default function RaceDetail() {
 
             {/* Show coordinates and links when map is loaded */}
             {coords && (
-              <div style={{ marginTop: 8, fontSize: 13, color: "#444" }}>
+              <div className="race-detail-coordinates">
                 Coordinates: {coords.lat.toFixed(5)}, {coords.lon.toFixed(5)}
-                <div style={{ marginTop: 6, display: "flex", gap: 12, flexWrap: "wrap" }}>
+                <div className="race-detail-map-links">
                   <a
                     href={`https://www.google.com/maps?q=${coords.lat},${coords.lon}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{
-                      display: "inline-block",
-                      padding: "6px 12px",
-                      background: "#4285f4",
-                      color: "white",
-                      textDecoration: "none",
-                      borderRadius: 4,
-                      fontSize: 13,
-                      fontWeight: 500,
-                    }}
+                    className="race-detail-map-link race-detail-map-link-google"
                   >
                     Open in Google Maps
                   </a>
@@ -410,16 +371,7 @@ export default function RaceDetail() {
                     href={`https://www.openstreetmap.org/?mlat=${coords.lat}&mlon=${coords.lon}#map=16/${coords.lat}/${coords.lon}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{
-                      display: "inline-block",
-                      padding: "6px 12px",
-                      background: "#7ebc6f",
-                      color: "white",
-                      textDecoration: "none",
-                      borderRadius: 4,
-                      fontSize: 13,
-                      fontWeight: 500,
-                    }}
+                    className="race-detail-map-link race-detail-map-link-osm"
                   >
                     Open in OSM
                   </a>

@@ -1404,3 +1404,278 @@ header, .nav-left, nav, .nav-link {
 }
 
 /* #endregion */
+
+/* #region Race Detail Page */
+.race-detail-main {
+  padding: 24px;
+}
+
+.race-detail-not-found-main {
+  padding: 24px;
+}
+
+.race-detail-not-found-title {
+  font-size: 28px;
+}
+
+.race-detail-header {
+  margin-bottom: 20px;
+}
+
+.race-detail-title {
+  font-size: 36px;
+  margin: 0;
+}
+
+.race-detail-subtitle {
+  color: #666;
+  margin-top: 6px;
+}
+
+.race-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  align-items: start;
+}
+
+.race-detail-section-title {
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.race-detail-info-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.race-detail-info-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.race-detail-info-label {
+  min-width: 200px;
+  font-weight: 700;
+}
+
+.race-detail-info-value {
+  flex: 1;
+}
+
+.race-detail-map-container {
+  width: 100%;
+  height: 320px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f7f7f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 12px;
+}
+
+.race-detail-map {
+  width: 100%;
+  height: 100%;
+}
+
+.race-detail-map-error {
+  margin: 0;
+}
+
+.race-detail-map-error-location {
+  margin-top: 8px;
+  color: #666;
+  font-size: 13px;
+}
+
+.race-detail-map-no-location {
+  color: #666;
+}
+
+.race-detail-map-no-location p {
+  margin: 0;
+}
+
+.race-detail-map-no-location p:last-child {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.race-detail-coordinates {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #444;
+}
+
+.race-detail-map-links {
+  margin-top: 6px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.race-detail-map-link {
+  display: inline-block;
+  padding: 6px 12px;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.race-detail-map-link-google {
+  background: #4285f4;
+}
+
+.race-detail-map-link-osm {
+  background: #7ebc6f;
+}
+/* #endregion */
+
+/* #region RaceCard and UpcomingRaceCard Components */
+.race-card-clickable {
+  cursor: pointer;
+}
+
+.race-card-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.race-card-distance {
+  font-size: 16px;
+}
+
+.race-card-distance-weight {
+  font-size: 16px;
+  font-weight: 1;
+}
+
+.race-card-spacer {
+  margin-right: 0.5rem;
+}
+
+.race-card-chevron-svg {
+  transition: transform 0.3s;
+}
+
+.race-card-chevron-expanded {
+  transform: rotate(180deg);
+}
+
+.race-card-chevron-collapsed {
+  transform: rotate(0deg);
+}
+
+.race-card-expanded-content {
+  margin-top: 0.5rem;
+}
+
+.race-card-registration-label {
+  font-weight: 500;
+}
+
+.race-card-registration-cost {
+  color: green;
+}
+
+.race-card-arrow-icon {
+  vertical-align: middle;
+  margin: 0 0.25rem;
+}
+/* #endregion */
+
+/* #region Maps Page */
+.maps-page-container {
+  padding: 1rem 0;
+}
+
+.maps-page-title {
+  margin: 0;
+}
+
+.maps-page-grid {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 16px;
+}
+
+.maps-page-map-container {
+  min-height: 500px;
+  height: 70vh;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+.maps-page-map {
+  width: 100%;
+  height: 100%;
+}
+
+.maps-page-sidebar {
+  padding: 8px;
+}
+
+.maps-page-sidebar-title {
+  margin-top: 0;
+}
+
+.maps-page-race-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.maps-page-race-item {
+  margin-bottom: 8px;
+}
+
+.maps-page-race-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.maps-page-race-link {
+  color: #222;
+  text-decoration: none;
+}
+
+.maps-page-race-details {
+  margin-left: auto;
+  font-size: 12px;
+  color: #666;
+}
+/* #endregion */
+
+/* #region Miscellaneous */
+.filter-chips-vertical-spacing {
+  margin-top: 1rem;
+}
+
+.date-range-relative {
+  position: relative;
+}
+
+.page-main-padding {
+  padding: 24px;
+}
+
+.theme-toggle-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+/* #endregion */

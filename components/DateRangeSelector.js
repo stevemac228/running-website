@@ -80,7 +80,7 @@ export default function DateRangeSelector({ onChange }) {
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div className="date-range-relative">
       <button
         className="date-range-selector-btn"
         onClick={() => setShowCalendar(!showCalendar)}

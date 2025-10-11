@@ -8,7 +8,7 @@ export default function MapsRoute() {
   return (
     <div>
       <Header />
-      <main style={{ padding: 24 }}>
+      <main className="page-main-padding">
         <MapsPage />
       </main>
       <Footer />

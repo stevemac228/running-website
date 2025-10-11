@@ -437,28 +437,28 @@ export default function MapsPage() {
 
   return (
     <div>
-      <div style={{ padding: "1rem 0" }}>
-        <h1 style={{ margin: 0 }}>Race Map</h1>
+      <div className="maps-page-container">
+        <h1 className="maps-page-title">Race Map</h1>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 260px", gap: 16 }}>
-        <div style={{ minHeight: 500, height: "70vh", borderRadius: 8, overflow: "hidden", border: "1px solid #ddd" }}>
-          <div ref={mapRef} id="map" style={{ width: "100%", height: "100%" }} />
+      <div className="maps-page-grid">
+        <div className="maps-page-map-container">
+          <div ref={mapRef} id="map" className="maps-page-map" />
         </div>
 
-        <aside style={{ padding: 8 }}>
-          <h3 style={{ marginTop: 0 }}>Races</h3>
+        <aside className="maps-page-sidebar">
+          <h3 className="maps-page-sidebar-title">Races</h3>
           {loading && <p>Loading GPX races…</p>}
           {!loading && layersInfo.length === 0 && <p>No GPX files found. Place GPX files in /public/gpx/.</p>}
-          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+          <ul className="maps-page-race-list">
             {layersInfo.map((li) => (
-              <li key={li.id} style={{ marginBottom: 8 }}>
-                <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <li key={li.id} className="maps-page-race-item">
+                <label className="maps-page-race-label">
                   <input type="checkbox" checked={li.visible} onChange={() => toggleLayer(li.id)} />
-                  <a href={`/race/${encodeURIComponent(li.raceSlug || li.name)}`} onClick={(e) => e.stopPropagation()} style={{ color: "#222", textDecoration: "none" }}>
+                  <a href={`/race/${encodeURIComponent(li.raceSlug || li.name)}`} onClick={(e) => e.stopPropagation()} className="maps-page-race-link">
                     {li.name}
                   </a>
-                  <span style={{ marginLeft: "auto", fontSize: 12, color: "#666" }}>
+                  <span className="maps-page-race-details">
                     {formatSideText(li.distanceKm, li.elevInfo)}
                   </span>
                 </label>
