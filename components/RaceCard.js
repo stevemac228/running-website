@@ -31,7 +31,10 @@ export default function RaceCard({ race }) {
               >
                 {race.name}
               </Link>{" "}
-              <span className="race-card-distance"> {race.distance}km</span>
+              <span className="race-card-distance">
+                {" "}
+                {race.distance === "∞" ? race.distance : `${race.distance}km`}
+              </span>
               <span className="race-card-spacer"></span>
               {/* Terrain Badge */}
               {race.terrain && (
