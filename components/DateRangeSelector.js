@@ -79,14 +79,28 @@ export default function DateRangeSelector({ onChange }) {
     return "Select Dates";
   };
 
+  const handleClear = (e) => {
+    e.stopPropagation();
+    setStart(null);
+    setEnd(null);
+    onChange({ start: null, end: null });
+  };
+
   return (
     <div className="date-range-relative">
-      <button
-        className="date-range-selector-btn"
-        onClick={() => setShowCalendar(!showCalendar)}
-      >
-        {formatDisplay()}
-      </button>
+      <div className="date-range-selector-wrapper">
+        <button
+          className="date-range-selector-btn"
+          onClick={() => setShowCalendar(!showCalendar)}
+        >
+          {formatDisplay()}
+        </button>
+        {(start || end) && (
+          <button className="date-clear-btn" onClick={handleClear}>
+            ×
+          </button>
+        )}
+      </div>
 
       {showCalendar && (
         <div className="date-range-selector-modal" ref={modalRef}>

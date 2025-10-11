@@ -544,26 +544,68 @@ nav {
   color: black;
 }
 
-.date-range-selector-btn {
-  padding: 0.4rem 0.6rem;
-  border-radius: 6px;
+/* Wrapper for button and clear button */
+.date-range-selector-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  border-radius: 8px;
   border: 1px solid #ccc;
   background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  min-width: 160px;
+}
+
+.date-range-selector-wrapper:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-color: #999;
+}
+
+.date-range-selector-btn {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background-color: transparent;
   font-size: 0.875rem;
   cursor: pointer;
+  text-align: left;
+  color: var(--runnl-dark-text);
+  transition: background-color 0.2s ease;
+}
+
+.date-range-selector-btn:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Clear button for date selector */
+.date-clear-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--runnl-light-grey);
+  font-size: 1.5rem;
+  padding: 0 0.5rem;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.date-clear-btn:hover {
+  color: var(--runnl-dark-text);
 }
 
 .date-range-selector-modal {
   position: absolute;
-  top: 2.5rem;
+  top: 2.8rem;
   left: 0;
   z-index: 50;
-  width: 12rem;
+  width: 14rem;
   background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 0.75rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
   font-family: sans-serif;
 }
 
@@ -571,53 +613,75 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.25rem;
-  padding-bottom: 2px;
-  border-bottom: #111111 thin solid;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .date-range-selector-header button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  color: var(--runnl-dark-text);
+  transition: background-color 0.2s ease;
+}
+
+.date-range-selector-header button:hover {
+  background-color: #f0f0f0;
+}
+
+.date-range-selector-header span {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--runnl-dark-text);
 }
 
 .date-range-selector-calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1.5rem);
-  gap: 4px;
+  grid-template-columns: repeat(7, 1.75rem);
+  gap: 0.25rem;
   justify-items: center;
+  margin-top: 0.5rem;
 }
 
 .date-range-selector-calendar-day {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.75rem;
+  height: 1.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   border-radius: 50%;
   user-select: none;
-  transition: background-color 0.2s, color 0.2s;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
 }
 
 /* Days in between start and end */
 .date-range-selector-calendar-day.in-range {
-  background-color: #cce4ff;
-  color: black;
+  background-color: #e6f3ff;
+  color: #0070f3;
+  border-color: transparent;
 }
 
 /* Selected start or end */
 .date-range-selector-calendar-day.selected {
   background-color: #0070f3;
   color: white;
+  border-color: #0070f3;
+  font-weight: 600;
+  transform: scale(1.05);
 }
 
 /* Hover effect for unselected days */
 .date-range-selector-calendar-day:not(.selected):hover {
-  background-color: #e0e0e0;
+  background-color: #f5f5f5;
+  border-color: #ccc;
+  transform: scale(1.05);
 }
 
 
