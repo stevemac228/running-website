@@ -149,10 +149,12 @@ export default function MapsPage() {
 					firstEle = null;
 				}
 
-				// compute elevation gain (sum of positive diffs between consecutive ele values across segments)
+				// compute elevation gain (sum of positive diffs) and loss (sum of negative diffs) across segments
 				let elevGainMeters = null;
+				let elevLossMeters = null;
 				try {
 					let gain = 0;
+					let loss = 0;
 					let hadEle = false;
 					for (const seg of segments) {
 						for (let p = 1; p < seg.length; p++) {
@@ -162,14 +164,20 @@ export default function MapsPage() {
 								hadEle = true;
 								const diff = curr.ele - prev.ele;
 								if (diff > 0) gain += diff;
+								else if (diff < 0) loss += -diff;
 							}
 						}
 					}
-					if (hadEle) elevGainMeters = Math.round(gain);
+					if (hadEle) {
+						elevGainMeters = Math.round(gain);
+						elevLossMeters = Math.round(loss);
+					}
 					// if plugin or segments had no ele but first trkpt included ele, use a small fallback
 					if (elevGainMeters == null && firstEle != null) elevGainMeters = 0;
+					if (elevLossMeters == null && firstEle != null) elevLossMeters = 0;
 				} catch (err) {
 					elevGainMeters = null;
+					elevLossMeters = null;
 				}
 				
 				const color = colors[i % colors.length];
@@ -268,7 +276,9 @@ export default function MapsPage() {
 					color,
 					lightMarker,
 					visible: false,
-					elevInfo: elevGainMeters != null ? { gain: elevGainMeters, unit: "m" } : null,
+					elevInfo: (elevGainMeters != null || elevLossMeters != null)
+						? { gain: elevGainMeters ?? null, loss: elevLossMeters ?? null, unit: "m" }
+						: null,
 					distanceKm,
 				};
 				groups.push(group);
@@ -396,18 +406,21 @@ export default function MapsPage() {
 		})));
 	}
 
-	// helper formatting for sidebar: "10k - 41ft elv"
+	// helper formatting for sidebar: "10k - 41ft elv" -> "10km - 90m ↑ 100m ↓"
 	const formatSideText = (distanceKm, elevInfo) => {
 		const parts = [];
-		// distanceKm may be number or string like "∞" or "5"
+		// distance
 		if (typeof distanceKm === "number" && !Number.isNaN(distanceKm)) {
-			parts.push(`${distanceKm % 1 === 0 ? String(distanceKm) : String(distanceKm)}k`);
+			parts.push(`${distanceKm % 1 === 0 ? String(distanceKm) : String(distanceKm)}km`);
 		} else if (typeof distanceKm === "string" && distanceKm.trim() !== "") {
 			parts.push(distanceKm);
 		}
-		if (elevInfo && elevInfo.gain != null) {
-			const feet = Math.round((elevInfo.gain || 0) * 3.28084);
-			parts.push(`${feet}ft elv`);
+		// elevation
+		if (elevInfo && (elevInfo.gain != null || elevInfo.loss != null)) {
+			const up = elevInfo.gain != null ? `${Math.round(elevInfo.gain)}m ↑` : null;
+			const down = elevInfo.loss != null ? `${Math.round(elevInfo.loss)}m ↓` : null;
+			const elevPart = [up, down].filter(Boolean).join(" ");
+			if (elevPart) parts.push(elevPart);
 		}
 		return parts.join(" - ") || "—";
 	};
