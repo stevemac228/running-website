@@ -8,7 +8,7 @@ export default function MapsPage() {
 	const leafletRef = useRef(null);
 	const blobUrlsRef = useRef([]); // track created blob URLs to revoke on unmount
 	const [loading, setLoading] = useState(true);
-	const [layersInfo, setLayersInfo] = useState([]); // { id, name, visible, elevInfo, distanceKm, lightMarker }
+	const [layersInfo, setLayersInfo] = useState([]); // { id, name, visible, elevInfo, distanceKm, raceSlug }
 
 	useEffect(() => {
 		let mounted = true;
