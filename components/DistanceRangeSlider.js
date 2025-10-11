@@ -6,14 +6,16 @@ export default function DistanceRangeSlider({ onChange }) {
 
   const handleMinChange = (e) => {
     const value = parseInt(e.target.value);
-    const newMin = Math.min(value, maxDistance);
+    // Ensure min is always at least 1 less than max
+    const newMin = Math.min(value, maxDistance - 1);
     setMinDistance(newMin);
     onChange({ min: newMin, max: maxDistance >= 50 ? 999 : maxDistance });
   };
 
   const handleMaxChange = (e) => {
     const value = parseInt(e.target.value);
-    const newMax = Math.max(value, minDistance);
+    // Ensure max is always at least 1 more than min
+    const newMax = Math.max(value, minDistance + 1);
     setMaxDistance(newMax);
     onChange({ min: minDistance, max: newMax >= 50 ? 999 : newMax });
   };
@@ -25,6 +27,7 @@ export default function DistanceRangeSlider({ onChange }) {
         <span>{maxDistance >= 50 ? "50+ km" : `${maxDistance}km`}</span>
       </div>
       <div className="slider-container">
+        <div className="slider-track" />
         <input
           type="range"
           min="0"

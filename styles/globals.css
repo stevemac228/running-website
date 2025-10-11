@@ -1169,6 +1169,17 @@ header, .nav-left, nav, .nav-link {
   align-items: center;
 }
 
+/* Visible track element in DOM */
+.slider-track {
+  position: absolute;
+  width: 100%;
+  height: 6px;
+  background: #ddd;
+  border-radius: 3px;
+  z-index: 1;
+  pointer-events: none;
+}
+
 .range-slider {
   position: absolute;
   width: 100%;
@@ -1178,14 +1189,26 @@ header, .nav-left, nav, .nav-link {
   pointer-events: none;
   margin: 0;
   padding: 0;
+  z-index: 3;
 }
 
 .range-slider-min {
-  z-index: 1;
+  z-index: 3;
 }
 
 .range-slider-max {
-  z-index: 2;
+  z-index: 4;
+}
+
+/* Boost z-index when slider is hovered or active */
+.range-slider-min:hover,
+.range-slider-min:active {
+  z-index: 5;
+}
+
+.range-slider-max:hover,
+.range-slider-max:active {
+  z-index: 5;
 }
 
 .range-slider::-webkit-slider-thumb {
@@ -1202,12 +1225,10 @@ header, .nav-left, nav, .nav-link {
   transition: transform 0.2s ease;
   position: relative;
   margin-top: -7px;
-  z-index: 10;
 }
 
 .range-slider::-webkit-slider-thumb:hover {
   transform: scale(1.15);
-  z-index: 11;
 }
 
 .range-slider::-moz-range-thumb {
@@ -1221,30 +1242,25 @@ header, .nav-left, nav, .nav-link {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
   transition: transform 0.2s ease;
   position: relative;
-  z-index: 10;
 }
 
 .range-slider::-moz-range-thumb:hover {
   transform: scale(1.15);
-  z-index: 11;
 }
 
+/* Hide the native track styling */
 .range-slider::-webkit-slider-runnable-track {
   width: 100%;
   height: 6px;
-  background: #ddd;
-  border-radius: 3px;
-  position: relative;
-  z-index: 0;
+  background: transparent;
+  border: none;
 }
 
 .range-slider::-moz-range-track {
   width: 100%;
   height: 6px;
-  background: #ddd;
-  border-radius: 3px;
-  position: relative;
-  z-index: 0;
+  background: transparent;
+  border: none;
 }
 
 /* Races List Container */
