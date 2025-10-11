@@ -985,6 +985,7 @@
     "reception": true,
     "location": "Mount Pearl",
     "startLineLocation": "Donovan's Industrial Park",
+    "startLineCoordinates": [47.51330, -52.83759],
     "organization": "PRC",
     "nLAACertified": true,
     "format": "Competitive",

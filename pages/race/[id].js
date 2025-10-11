@@ -114,6 +114,17 @@ export default function RaceDetail() {
   // Geocode start location (client-side only)
   useEffect(() => {
     if (!race) return;
+    
+    // Check if coordinates are directly provided
+    if (race.startLineCoordinates && Array.isArray(race.startLineCoordinates) && race.startLineCoordinates.length === 2) {
+      const [lat, lon] = race.startLineCoordinates;
+      if (typeof lat === 'number' && typeof lon === 'number') {
+        setCoords({ lat, lon });
+        setGeoLoading(false);
+        return;
+      }
+    }
+    
     // prefer startLineLocation then location
     const parts = [];
     if (race.startLineLocation) parts.push(race.startLineLocation);

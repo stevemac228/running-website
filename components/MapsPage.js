@@ -112,7 +112,18 @@ export default function MapsPage() {
 					// ignore quota issues
 				}
 
-				// parse start point and elevation quickly
+				// Check if race has direct coordinates first
+				let startLatLng = null;
+				let firstEle = null;
+				
+				if (race.startLineCoordinates && Array.isArray(race.startLineCoordinates) && race.startLineCoordinates.length === 2) {
+					const [lat, lon] = race.startLineCoordinates;
+					if (typeof lat === 'number' && typeof lon === 'number') {
+						startLatLng = { lat, lng: lon };
+					}
+				}
+
+				// parse start point and elevation quickly from GPX if no direct coordinates
 				let segments = [];
 				try {
 					segments = parseGpxToSegments(gpxText);
@@ -121,32 +132,31 @@ export default function MapsPage() {
 				}
 				if (!segments || segments.length === 0) continue;
 
-				// Robustly pick the first <trkpt> in the GPX XML (fallback to rtept or wpt)
-				let startLatLng = null;
-				let firstEle = null;
-				try {
-					const parser = new DOMParser();
-					const doc = parser.parseFromString(gpxText, "application/xml");
-					// Prefer trkpt then rtept then wpt
-					const firstPtEl =
-						doc.querySelector("trk trkseg trkpt") ||
-						doc.querySelector("trkpt") ||
-						doc.querySelector("rte rtept") ||
-						doc.querySelector("rtept") ||
-						doc.querySelector("wpt");
-					if (firstPtEl) {
-						const lat = parseFloat(firstPtEl.getAttribute("lat"));
-						const lon = parseFloat(firstPtEl.getAttribute("lon"));
-						const eleEl = firstPtEl.querySelector && firstPtEl.querySelector("ele");
-						const ele = eleEl ? parseFloat(eleEl.textContent) : null;
-						if (Number.isFinite(lat) && Number.isFinite(lon)) {
-							startLatLng = { lat, lng: lon };
-							firstEle = Number.isFinite(ele) ? ele : null;
+				// If no direct coordinates, parse from GPX
+				if (!startLatLng) {
+					try {
+						const parser = new DOMParser();
+						const doc = parser.parseFromString(gpxText, "application/xml");
+						// Prefer trkpt then rtept then wpt
+						const firstPtEl =
+							doc.querySelector("trk trkseg trkpt") ||
+							doc.querySelector("trkpt") ||
+							doc.querySelector("rte rtept") ||
+							doc.querySelector("rtept") ||
+							doc.querySelector("wpt");
+						if (firstPtEl) {
+							const lat = parseFloat(firstPtEl.getAttribute("lat"));
+							const lon = parseFloat(firstPtEl.getAttribute("lon"));
+							const eleEl = firstPtEl.querySelector && firstPtEl.querySelector("ele");
+							const ele = eleEl ? parseFloat(eleEl.textContent) : null;
+							if (Number.isFinite(lat) && Number.isFinite(lon)) {
+								startLatLng = { lat, lng: lon };
+								firstEle = Number.isFinite(ele) ? ele : null;
+							}
 						}
+					} catch (err) {
+						// startLatLng remains null if parsing failed
 					}
-				} catch (err) {
-					startLatLng = null;
-					firstEle = null;
 				}
 
 				// compute elevation gain (sum of positive diffs between consecutive ele values across segments)
