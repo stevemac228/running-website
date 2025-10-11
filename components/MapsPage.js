@@ -11,7 +11,7 @@ export default function MapsPage() {
 	const [layersInfo, setLayersInfo] = useState([]); // { id, name, visible, elevInfo, distanceKm, raceSlug }
 
 	// Helper function to create formatted popup content
-	const createPopupContent = (name, distanceKm, elevInfo, raceId, startLatLng) => {
+	function createPopupContent(name, distanceKm, elevInfo, raceId, startLatLng) {
 		const distanceText = distanceKm ? (typeof distanceKm === "number" ? `${distanceKm}km` : distanceKm) : null;
 		const elevGainText = elevInfo?.gain != null ? `${Math.round(elevInfo.gain)}m ↑` : null;
 		const elevLossText = elevInfo?.loss != null ? `${Math.round(elevInfo.loss)}m ↓` : null;
@@ -60,7 +60,7 @@ export default function MapsPage() {
 				</div>
 			</div>
 		`;
-	};
+	}
 
 	useEffect(() => {
 		let mounted = true;
