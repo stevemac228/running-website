@@ -203,47 +203,20 @@ export default function MapsPage() {
 				const blobUrl = URL.createObjectURL(blob);
 				blobUrlsRef.current.push(blobUrl);
 
-				// Determine which end of the GPX is the actual start line
-				let showStartIcon = ""; // Default to hiding both
-				let showEndIcon = "";
-				
 				// Create lightweight layer with GPX markers but without polylines (visible by default)
 				let lightMarker = null;
 				let lightLayer = null;
 				if (startLatLng) {
 					const iconUrl = buildSmallPin(color);
 					
-					// Determine which end of the GPX is the actual start line
-					// by comparing distances to startLineCoordinates
-					showStartIcon = iconUrl; // Show at first point by default
-					showEndIcon = ""; // Hide end marker by default
-					
-					if (segments && segments.length > 0 && segments[0].length > 0) {
-						// Get first and last points from the GPX
-						const firstSegment = segments[0];
-						const lastSegment = segments[segments.length - 1];
-						const firstPoint = firstSegment[0];
-						const lastPoint = lastSegment[lastSegment.length - 1];
-						
-						// Calculate distance from startLineCoordinates to both ends
-						const distToFirst = haversine(startLatLng, { lat: firstPoint.lat, lng: firstPoint.lon });
-						const distToLast = haversine(startLatLng, { lat: lastPoint.lat, lng: lastPoint.lon });
-						
-						// If last point is closer to startLineCoordinates, swap the icons
-						if (distToLast < distToFirst) {
-							showStartIcon = ""; // Hide start marker (first point)
-							showEndIcon = iconUrl; // Show end marker (last point) as the actual start
-						}
-					}
-					
-					// Create GPX layer with appropriate marker visibility
+					// Create GPX layer with start marker only (no end marker, no polylines)
 					try {
 						lightLayer = new L.GPX(blobUrl, {
 							async: true,
 							polyline_options: { color: color, weight: 0, opacity: 0 }, // Hide polylines
 							marker_options: {
-								startIconUrl: showStartIcon,
-								endIconUrl: showEndIcon,
+								startIconUrl: iconUrl, // Show start marker
+								endIconUrl: "", // Hide end marker until track is selected
 								iconSize: [18, 30],
 								iconAnchor: [9, 30],
 								clickable: true
@@ -306,16 +279,12 @@ export default function MapsPage() {
 														// create L.GPX from blobUrl if not created yet
 														if (!grp.layer) {
 															try {
-																// Use stored marker configuration to show correct start marker
-																const startIcon = grp.markerConfig?.showStartIcon ? buildSmallPin(grp.color) : "";
-																const endIcon = grp.markerConfig?.showEndIcon ? buildSmallPin(grp.color) : "";
-																
 																const layer = new L.GPX(grp.blobUrl || gpxUrl, {
 																	async: true,
 																	polyline_options: { color: grp.color, weight: 3, opacity: 0.9 },
 																	marker_options: { 
-																		startIconUrl: startIcon,
-																		endIconUrl: endIcon,
+																		startIconUrl: buildSmallPin(grp.color), // Show start marker
+																		endIconUrl: buildSmallPin(grp.color), // Show end marker when track is visible
 																		iconSize: [18, 30],
 																		iconAnchor: [9, 30],
 																		clickable: true
@@ -373,7 +342,6 @@ export default function MapsPage() {
 						? { gain: elevGainMeters ?? null, loss: elevLossMeters ?? null, unit: "m" }
 						: null,
 					distanceKm,
-					markerConfig: { showStartIcon, showEndIcon }, // Store which end has the marker
 				};
 				groups.push(group);
 
@@ -480,16 +448,12 @@ export default function MapsPage() {
 						return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
 					};
 					
-					// Use stored marker configuration to show correct start marker
-					const startIcon = group.markerConfig?.showStartIcon ? buildSmallPin(group.color) : "";
-					const endIcon = group.markerConfig?.showEndIcon ? buildSmallPin(group.color) : "";
-					
 					const layer = new ref.L.GPX(group.blobUrl, {
 						async: true,
 						polyline_options: { color: group.color, weight: 3, opacity: 0.9 },
 						marker_options: { 
-							startIconUrl: startIcon,
-							endIconUrl: endIcon,
+							startIconUrl: buildSmallPin(group.color), // Show start marker
+							endIconUrl: buildSmallPin(group.color), // Show end marker when track is visible
 							iconSize: [18, 30],
 							iconAnchor: [9, 30],
 							clickable: true
