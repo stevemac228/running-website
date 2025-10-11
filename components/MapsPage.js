@@ -606,8 +606,12 @@ export default function MapsPage() {
                     checked={li.visible} 
                     onChange={() => toggleLayer(li.id)}
                     className="maps-page-checkbox"
+                    data-color={li.color}
+                    style={{
+                      borderColor: li.color,
+                      backgroundColor: li.visible ? li.color : 'white'
+                    }}
                   />
-                  <span className="maps-page-color-indicator" style={{ backgroundColor: li.color }}></span>
                   <div className="maps-page-race-content">
                     <a href={`/race/${encodeURIComponent(li.raceSlug || li.name)}`} onClick={(e) => e.stopPropagation()} className="maps-page-race-link">
                       {li.name}

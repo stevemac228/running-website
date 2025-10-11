@@ -1745,52 +1745,30 @@ header, .nav-left, nav, .nav-link {
   width: 100%;
 }
 
-/* Custom Checkbox Styling */
+/* Custom Checkbox Styling - Circular with Race Color */
 .maps-page-checkbox {
   appearance: none;
   -webkit-appearance: none;
   width: 20px;
   height: 20px;
-  border: 2px solid var(--runnl-border);
-  border-radius: 4px;
-  background-color: var(--runnl-background);
+  border: 3px solid;
+  border-radius: 50%;
   cursor: pointer;
   position: relative;
   flex-shrink: 0;
   margin-top: 2px;
   transition: all 0.2s ease;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
 
 .maps-page-checkbox:hover {
-  border-color: var(--runnl-dark-blue);
+  transform: scale(1.1);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
-.maps-page-checkbox:checked {
-  background-color: var(--runnl-dark-blue);
-  border-color: var(--runnl-dark-blue);
-}
-
+/* Remove the checkmark - checkbox is filled when checked */
 .maps-page-checkbox:checked::after {
-  content: "";
-  position: absolute;
-  left: 5px;
-  top: 2px;
-  width: 5px;
-  height: 10px;
-  border: solid white;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
-
-/* Color Indicator */
-.maps-page-color-indicator {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  margin-top: 4px;
-  border: 2px solid white;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  content: none;
 }
 
 /* Race Content Container */
