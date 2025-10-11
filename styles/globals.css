@@ -710,6 +710,14 @@ nav {
   flex-direction: column;
 }
 
+/* Center align registration cards for vertical layout */
+.upcomingRegistrations > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
 .upcomingRaces h1,
 .upcomingRegistrations h1 {
   text-align: center; /* ensures header text is centered */
@@ -1671,6 +1679,178 @@ header, .nav-left, nav, .nav-link {
   vertical-align: middle;
   margin: 0 0.25rem;
 }
+
+/* Vertical Registration Card Styles */
+.registration-card-vertical {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: var(--runnl-background);
+  margin: 1rem 0;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  max-width: 350px;
+}
+
+.registration-card-vertical:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.registration-card-image-link {
+  display: block;
+  text-decoration: none;
+}
+
+.registration-card-image {
+  width: 100%;
+  height: 140px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0f5c5b 0%, #1a8785 100%);
+  position: relative;
+}
+
+.registration-card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.registration-card-content {
+  padding: 1rem;
+  cursor: pointer;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.registration-card-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.registration-card-title .race-card-link {
+  color: var(--runnl-text);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.registration-card-title .race-card-link:hover {
+  color: var(--runnl-primary);
+}
+
+.registration-card-distance-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+
+.registration-card-distance {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--runnl-dark-grey);
+}
+
+.registration-card-icons {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+
+.registration-card-info {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.registration-card-info p {
+  margin: 0.4rem 0;
+  line-height: 1.5;
+}
+
+.registration-card-race-date {
+  color: var(--runnl-dark-grey);
+  margin-bottom: 0.5rem !important;
+}
+
+.registration-card-price {
+  margin: 0.3rem 0;
+}
+
+.registration-card-price strong {
+  color: var(--runnl-text);
+  font-weight: 600;
+}
+
+.registration-card-price small {
+  color: var(--runnl-grey);
+  font-size: 0.8rem;
+  display: block;
+  margin-top: 0.2rem;
+}
+
+.registration-card-expand-btn {
+  background: transparent;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.5rem;
+  margin-top: 0.75rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--runnl-dark-grey);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  transition: background-color 0.2s, border-color 0.2s;
+  width: 100%;
+}
+
+.registration-card-expand-btn:hover {
+  background-color: #f5f5f5;
+  border-color: #bbb;
+}
+
+.registration-card-chevron {
+  transition: transform 0.3s;
+}
+
+.registration-card-chevron.expanded {
+  transform: rotate(180deg);
+}
+
+.registration-card-expanded {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #eee;
+  font-size: 0.85rem;
+}
+
+.registration-card-expanded p {
+  margin: 0.4rem 0;
+  line-height: 1.4;
+}
+
+/* Responsive adjustments for registration cards */
+@media (max-width: 768px) {
+  .registration-card-vertical {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 769px) {
+  .upcomingRegistrations > div {
+    align-items: center;
+  }
+}
+
 /* #endregion */
 
 /* #region Maps Page */
