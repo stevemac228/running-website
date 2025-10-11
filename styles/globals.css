@@ -1117,11 +1117,11 @@ header, .nav-left, nav, .nav-link {
 }
 
 .range-slider-min {
-  z-index: 1;
+  z-index: 3;
 }
 
 .range-slider-max {
-  z-index: 2;
+  z-index: 4;
 }
 
 .range-slider::-webkit-slider-thumb {
@@ -1138,12 +1138,10 @@ header, .nav-left, nav, .nav-link {
   transition: transform 0.2s ease;
   position: relative;
   margin-top: -7px;
-  z-index: 10;
 }
 
 .range-slider::-webkit-slider-thumb:hover {
   transform: scale(1.15);
-  z-index: 11;
 }
 
 .range-slider::-moz-range-thumb {
@@ -1157,12 +1155,10 @@ header, .nav-left, nav, .nav-link {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
   transition: transform 0.2s ease;
   position: relative;
-  z-index: 10;
 }
 
 .range-slider::-moz-range-thumb:hover {
   transform: scale(1.15);
-  z-index: 11;
 }
 
 .range-slider::-webkit-slider-runnable-track {
@@ -1170,8 +1166,6 @@ header, .nav-left, nav, .nav-link {
   height: 6px;
   background: #ddd;
   border-radius: 3px;
-  position: relative;
-  z-index: 0;
 }
 
 .range-slider::-moz-range-track {
@@ -1179,8 +1173,6 @@ header, .nav-left, nav, .nav-link {
   height: 6px;
   background: #ddd;
   border-radius: 3px;
-  position: relative;
-  z-index: 0;
 }
 
 /* Races List Container */
