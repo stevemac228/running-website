@@ -214,11 +214,16 @@ export default function MapsPage() {
 						lightLayer = new L.GPX(blobUrl, {
 							async: true,
 							polyline_options: { color: color, weight: 0, opacity: 0 }, // Hide polylines
+							markers: {
+								startIcon: L.icon({
+									iconUrl: iconUrl,
+									iconSize: [18, 30],
+									iconAnchor: [9, 30],
+									popupAnchor: [0, -26],
+								}),
+								endIcon: null, // Don't create end marker at all
+							},
 							marker_options: {
-								startIconUrl: iconUrl, // Show start marker
-								endIconUrl: "", // Hide end marker until track is selected
-								iconSize: [18, 30],
-								iconAnchor: [9, 30],
 								clickable: true
 							},
 						});
@@ -282,11 +287,21 @@ export default function MapsPage() {
 																const layer = new L.GPX(grp.blobUrl || gpxUrl, {
 																	async: true,
 																	polyline_options: { color: grp.color, weight: 3, opacity: 0.9 },
-																	marker_options: { 
-																		startIconUrl: buildSmallPin(grp.color), // Show start marker
-																		endIconUrl: buildSmallPin(grp.color), // Show end marker when track is visible
-																		iconSize: [18, 30],
-																		iconAnchor: [9, 30],
+																	markers: {
+																		startIcon: L.icon({
+																			iconUrl: buildSmallPin(grp.color),
+																			iconSize: [18, 30],
+																			iconAnchor: [9, 30],
+																			popupAnchor: [0, -26],
+																		}),
+																		endIcon: L.icon({
+																			iconUrl: buildSmallPin(grp.color),
+																			iconSize: [18, 30],
+																			iconAnchor: [9, 30],
+																			popupAnchor: [0, -26],
+																		}),
+																	},
+																	marker_options: {
 																		clickable: true
 																	},
 																});
@@ -451,11 +466,21 @@ export default function MapsPage() {
 					const layer = new ref.L.GPX(group.blobUrl, {
 						async: true,
 						polyline_options: { color: group.color, weight: 3, opacity: 0.9 },
-						marker_options: { 
-							startIconUrl: buildSmallPin(group.color), // Show start marker
-							endIconUrl: buildSmallPin(group.color), // Show end marker when track is visible
-							iconSize: [18, 30],
-							iconAnchor: [9, 30],
+						markers: {
+							startIcon: ref.L.icon({
+								iconUrl: buildSmallPin(group.color),
+								iconSize: [18, 30],
+								iconAnchor: [9, 30],
+								popupAnchor: [0, -26],
+							}),
+							endIcon: ref.L.icon({
+								iconUrl: buildSmallPin(group.color),
+								iconSize: [18, 30],
+								iconAnchor: [9, 30],
+								popupAnchor: [0, -26],
+							}),
+						},
+						marker_options: {
 							clickable: true
 						},
 					});
