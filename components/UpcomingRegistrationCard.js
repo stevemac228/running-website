@@ -117,8 +117,8 @@ export default function UpcomingRegistrationCard({ race }) {
             <div className="tooltip-container">
               <svg
                 className="racecard-icon"
-                width="18"
-                height="18"
+                width="14"
+                height="14"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -137,8 +137,8 @@ export default function UpcomingRegistrationCard({ race }) {
             <div className="tooltip-container">
               <svg
                 className="racecard-icon"
-                width="18"
-                height="18"
+                width="14"
+                height="14"
                 viewBox="0 0 470.381 470.381"
                 fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg"
@@ -152,8 +152,8 @@ export default function UpcomingRegistrationCard({ race }) {
             <div className="tooltip-container">
               <svg
                 className="racecard-icon"
-                width="18"
-                height="18"
+                width="14"
+                height="14"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
