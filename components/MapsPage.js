@@ -207,19 +207,18 @@ export default function MapsPage() {
 				let lightMarker = null;
 				let lightLayer = null;
 				if (startLatLng) {
-					const iconUrl = buildSmallPin(color);
-					
 					// Create GPX layer with start marker only (no end marker, no polylines)
+					// Use DivIcon for better stability during zoom/pan
 					try {
 						lightLayer = new L.GPX(blobUrl, {
 							async: true,
 							polyline_options: { color: color, weight: 0, opacity: 0 }, // Hide polylines
 							markers: {
-								startIcon: L.icon({
-									iconUrl: iconUrl,
-									iconSize: [18, 30],
-									iconAnchor: [9, 30],
-									popupAnchor: [0, -26],
+								startIcon: L.divIcon({
+									className: 'custom-div-icon',
+									html: `<div style="background-color: ${color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
+									iconSize: [12, 12],
+									iconAnchor: [6, 6],
 								}),
 								endIcon: null, // Don't create end marker at all
 							},
@@ -288,17 +287,17 @@ export default function MapsPage() {
 																	async: true,
 																	polyline_options: { color: grp.color, weight: 3, opacity: 0.9 },
 																	markers: {
-																		startIcon: L.icon({
-																			iconUrl: buildSmallPin(grp.color),
-																			iconSize: [18, 30],
-																			iconAnchor: [9, 30],
-																			popupAnchor: [0, -26],
+																		startIcon: L.divIcon({
+																			className: 'custom-div-icon',
+																			html: `<div style="background-color: ${grp.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
+																			iconSize: [12, 12],
+																			iconAnchor: [6, 6],
 																		}),
-																		endIcon: L.icon({
-																			iconUrl: buildSmallPin(grp.color),
-																			iconSize: [18, 30],
-																			iconAnchor: [9, 30],
-																			popupAnchor: [0, -26],
+																		endIcon: L.divIcon({
+																			className: 'custom-div-icon',
+																			html: `<div style="background-color: ${grp.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
+																			iconSize: [12, 12],
+																			iconAnchor: [6, 6],
 																		}),
 																	},
 																	marker_options: {
@@ -457,27 +456,21 @@ export default function MapsPage() {
 
 			if (!group.layer) {
 				try {
-					// Build icon for consistency
-					const buildSmallPin = (fillColor) => {
-						const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="30"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="${fillColor}" stroke="#000" stroke-opacity="0.12"/><circle cx="12" cy="9" r="2" fill="#fff"/></svg>`;
-						return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
-					};
-					
 					const layer = new ref.L.GPX(group.blobUrl, {
 						async: true,
 						polyline_options: { color: group.color, weight: 3, opacity: 0.9 },
 						markers: {
-							startIcon: ref.L.icon({
-								iconUrl: buildSmallPin(group.color),
-								iconSize: [18, 30],
-								iconAnchor: [9, 30],
-								popupAnchor: [0, -26],
+							startIcon: ref.L.divIcon({
+								className: 'custom-div-icon',
+								html: `<div style="background-color: ${group.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
+								iconSize: [12, 12],
+								iconAnchor: [6, 6],
 							}),
-							endIcon: ref.L.icon({
-								iconUrl: buildSmallPin(group.color),
-								iconSize: [18, 30],
-								iconAnchor: [9, 30],
-								popupAnchor: [0, -26],
+							endIcon: ref.L.divIcon({
+								className: 'custom-div-icon',
+								html: `<div style="background-color: ${group.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
+								iconSize: [12, 12],
+								iconAnchor: [6, 6],
 							}),
 						},
 						marker_options: {
