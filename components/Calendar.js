@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import races from "../data/races.json";
 import { getRaceId } from "../utils/getRaceId";
+import Link from "next/link";
+
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -99,7 +101,9 @@ export default function Calendar() {
   };
 
   const titleCase = (s) =>
-    s ? String(s).charAt(0).toUpperCase() + String(s).slice(1).toLowerCase() : s;
+    s
+      ? String(s).charAt(0).toUpperCase() + String(s).slice(1).toLowerCase()
+      : s;
 
   const monthName = currentDate.toLocaleString("default", { month: "long" });
   const year = currentDate.getFullYear();
@@ -141,7 +145,9 @@ export default function Calendar() {
               {getRacesForDay(day).map((race) => (
                 <div key={getRaceId(race)} className="race-chip">
                   <svg
-                    className={`dot-icon ${titleCase(race.terrain) || "default"}`}
+                    className={`dot-icon ${
+                      titleCase(race.terrain) || "default"
+                    }`}
                     width="12"
                     height="12"
                     viewBox="0 0 12 12"
@@ -151,13 +157,26 @@ export default function Calendar() {
                   </svg>
                   <div className="race-text">
                     {isMobile ? (
-                      <span className="race-name">{race.name}</span>
+                      <Link
+                        href={`/race/${encodeURIComponent(getRaceId(race))}`}
+                        className="race-name"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {race.name}
+                      </Link>
                     ) : (
                       <>
                         <span className="race-time">
                           {formatTimeShort(race.startTime)}
                         </span>{" "}
-                        <span className="race-name">{race.name}</span> -{" "}
+                        <Link
+                          href={`/race/${encodeURIComponent(getRaceId(race))}`}
+                          className="race-name"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {race.name}
+                        </Link>{" "}
+                        -{" "}
                         <span className="race-distance">{race.distance}k</span>
                       </>
                     )}

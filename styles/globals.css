@@ -936,6 +936,8 @@ nav {
 .race-name {
   font-weight: bold;
   margin-right: 4px;
+  color: var(--runnl-dark-text);
+  text-decoration: none;
 }
 
 .race-distance {

@@ -7,7 +7,7 @@ export function getExpandedFields(race, cardType) {
     registrationCost: "Registration Cost",
     fundraiser: "Fundraiser",
     location: "Location",
-    startLinelocation: "Start Line Location",
+    startLineLocation: "Start Line Location",
     organization: "Organization",
     nLAACertified: "N.L.A.A Certified",
     website: "Website",
@@ -16,7 +16,7 @@ export function getExpandedFields(race, cardType) {
   const registrationFieldLabels = {
     fundraiser: "Fundraiser",
     location: "Location",
-    startLinelocation: "Start Line Location",
+    startLineLocation: "Start Line Location",
     organization: "Organization",
     nLAACertified: "N.L.A.A Certified",
     website: "Website",

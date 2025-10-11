@@ -54,7 +54,7 @@ export default function RaceDetail() {
       "shirt",
       "reception",
       "location",
-      "startLinelocation",
+      "startLineLocation",
       "organization",
       "nLAACertified",
       "format",
@@ -108,9 +108,9 @@ export default function RaceDetail() {
   // Geocode start location (client-side only)
   useEffect(() => {
     if (!race) return;
-    // prefer startLinelocation then location
+    // prefer startLineLocation then location
     const parts = [];
-    if (race.startLinelocation) parts.push(race.startLinelocation);
+    if (race.startLineLocation) parts.push(race.startLineLocation);
     if (race.location) parts.push(race.location);
     const place = parts.join(", ").trim();
     if (!place) return;
@@ -242,7 +242,7 @@ export default function RaceDetail() {
                 <div>
                   <p style={{ margin: 0 }}>{geoError}</p>
                   <p style={{ marginTop: 8, color: "#666", fontSize: 13 }}>
-                    {race.startLinelocation || race.location || "No location provided."}
+                    {race.startLineLocation || race.location || "No location provided."}
                   </p>
                 </div>
               )}
@@ -260,7 +260,7 @@ export default function RaceDetail() {
                 <div style={{ color: "#666" }}>
                   <p style={{ margin: 0 }}>No start location available.</p>
                   <p style={{ marginTop: 8, fontSize: 13 }}>
-                    Add a "startLinelocation" or "location" to the race data to enable the map.
+                    Add a "startLineLocation" or "location" to the race data to enable the map.
                   </p>
                 </div>
               )}
