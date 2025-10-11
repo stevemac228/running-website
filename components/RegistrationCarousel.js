@@ -5,22 +5,35 @@ export default function RegistrationCarousel({ races }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const cardsPerView = 3;
   const totalCards = races.length;
-  const maxIndex = Math.max(0, totalCards - cardsPerView);
 
   const handlePrevious = () => {
-    setCurrentIndex((prev) => Math.max(0, prev - 1));
+    setCurrentIndex((prev) => {
+      if (prev === 0) {
+        // Loop to the end
+        return totalCards - cardsPerView;
+      }
+      return prev - 1;
+    });
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
+    setCurrentIndex((prev) => {
+      if (prev >= totalCards - cardsPerView) {
+        // Loop back to the beginning
+        return 0;
+      }
+      return prev + 1;
+    });
   };
+
+  // Calculate the number of dots based on total cards and cards per view
+  const totalDots = Math.max(1, totalCards - cardsPerView + 1);
 
   return (
     <div className="registration-carousel-container">
       <button
         className="carousel-nav-btn carousel-nav-prev"
         onClick={handlePrevious}
-        disabled={currentIndex === 0}
         aria-label="Previous cards"
       >
         <svg
@@ -58,7 +71,6 @@ export default function RegistrationCarousel({ races }) {
       <button
         className="carousel-nav-btn carousel-nav-next"
         onClick={handleNext}
-        disabled={currentIndex >= maxIndex}
         aria-label="Next cards"
       >
         <svg
@@ -80,7 +92,7 @@ export default function RegistrationCarousel({ races }) {
 
       {/* Dots indicator */}
       <div className="carousel-dots">
-        {Array.from({ length: maxIndex + 1 }).map((_, index) => (
+        {Array.from({ length: totalDots }).map((_, index) => (
           <button
             key={index}
             className={`carousel-dot ${index === currentIndex ? "active" : ""}`}
