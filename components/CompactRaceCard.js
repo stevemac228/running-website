@@ -27,7 +27,9 @@ export default function CompactRaceCard({ race }) {
             >
               {race.name}
             </Link>
-            <span className="compact-race-distance">{race.distance}km</span>
+            <span className="compact-race-distance">
+              {race.distance === "∞" ? race.distance : `${race.distance}km`}
+            </span>
             {/* Icons moved here after name and distance */}
             <div className="compact-race-icons-inline">
               {race.medal && (
