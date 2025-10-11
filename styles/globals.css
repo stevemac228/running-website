@@ -1105,6 +1105,17 @@ header, .nav-left, nav, .nav-link {
   align-items: center;
 }
 
+/* Visible track element in DOM */
+.slider-track {
+  position: absolute;
+  width: 100%;
+  height: 6px;
+  background: #ddd;
+  border-radius: 3px;
+  z-index: 1;
+  pointer-events: none;
+}
+
 .range-slider {
   position: absolute;
   width: 100%;
@@ -1114,14 +1125,15 @@ header, .nav-left, nav, .nav-link {
   pointer-events: none;
   margin: 0;
   padding: 0;
+  z-index: 3;
 }
 
 .range-slider-min {
-  z-index: 2;
+  z-index: 3;
 }
 
 .range-slider-max {
-  z-index: 3;
+  z-index: 4;
 }
 
 /* Boost z-index when slider is hovered or active */
@@ -1172,18 +1184,19 @@ header, .nav-left, nav, .nav-link {
   transform: scale(1.15);
 }
 
+/* Hide the native track styling */
 .range-slider::-webkit-slider-runnable-track {
   width: 100%;
   height: 6px;
-  background: #ddd;
-  border-radius: 3px;
+  background: transparent;
+  border: none;
 }
 
 .range-slider::-moz-range-track {
   width: 100%;
   height: 6px;
-  background: #ddd;
-  border-radius: 3px;
+  background: transparent;
+  border: none;
 }
 
 /* Races List Container */

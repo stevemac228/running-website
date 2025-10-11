@@ -27,6 +27,7 @@ export default function DistanceRangeSlider({ onChange }) {
         <span>{maxDistance >= 50 ? "50+ km" : `${maxDistance}km`}</span>
       </div>
       <div className="slider-container">
+        <div className="slider-track" />
         <input
           type="range"
           min="0"
