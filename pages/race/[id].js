@@ -121,10 +121,36 @@ export default function RaceDetail() {
     const place = parts.join(", ").trim();
     if (!place) return;
 
+    // Fallback coordinates for common Newfoundland locations
+    const locationFallbacks = {
+      "paradise": { lat: 47.5333, lon: -52.8833 },
+      "octagon pond": { lat: 47.5333, lon: -52.8833 },
+      "st.johns": { lat: 47.5615, lon: -52.7126 },
+      "st johns": { lat: 47.5615, lon: -52.7126 },
+      "mount pearl": { lat: 47.5189, lon: -52.8056 },
+      "cbs": { lat: 47.5008, lon: -52.9986 },
+      "conception bay south": { lat: 47.5008, lon: -52.9986 },
+      "flatrock": { lat: 47.6667, lon: -52.7333 },
+      "north west river": { lat: 53.5233, lon: -60.1444 },
+    };
+
     let cancelled = false;
     async function geocode() {
       setGeoLoading(true);
       setGeoError(null);
+      
+      // Check for fallback first
+      const placeLower = place.toLowerCase();
+      for (const [key, coords] of Object.entries(locationFallbacks)) {
+        if (placeLower.includes(key)) {
+          if (!cancelled) {
+            setCoords(coords);
+            setGeoLoading(false);
+          }
+          return;
+        }
+      }
+      
       try {
         const q = encodeURIComponent(place);
         const url = `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`;
