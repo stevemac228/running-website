@@ -334,7 +334,7 @@ export default function MapsPage() {
 																if (!g.startLatLng) return false;
 																return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
 															})
-															.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm, raceSlug: g.raceId }));
+															.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm, raceSlug: g.raceId, color: g.color }));
 														setLayersInfo(filtered);
 													}
 												};
@@ -383,7 +383,8 @@ export default function MapsPage() {
 						visible: g.visible,
 						elevInfo: g.elevInfo,
 						distanceKm: g.distanceKm,
-						raceSlug: g.raceId
+						raceSlug: g.raceId,
+						color: g.color
 					})));
 				}
 			} // end for
@@ -418,7 +419,8 @@ export default function MapsPage() {
 						visible: g.visible,
 						elevInfo: g.elevInfo,
 						distanceKm: g.distanceKm,
-						raceSlug: g.raceId
+						raceSlug: g.raceId,
+						color: g.color
 					}));
 				
 				if (mounted) setLayersInfo(filteredGroups);
@@ -554,7 +556,8 @@ export default function MapsPage() {
 				visible: g.visible,
 				elevInfo: g.elevInfo,
 				distanceKm: g.distanceKm,
-				raceSlug: g.raceId
+				raceSlug: g.raceId,
+				color: g.color
 			}));
 		
 		setLayersInfo(filteredGroups);
@@ -591,20 +594,28 @@ export default function MapsPage() {
         </div>
 
         <aside className="maps-page-sidebar">
-          <h3 className="maps-page-sidebar-title">Races</h3>
+          <h3 className="maps-page-sidebar-title">Races in View</h3>
           {loading && <p>Loading GPX races…</p>}
-          {!loading && layersInfo.length === 0 && <p>No GPX files found. Place GPX files in /public/gpx/.</p>}
+          {!loading && layersInfo.length === 0 && <p>No races in current map view.</p>}
           <ul className="maps-page-race-list">
             {layersInfo.map((li) => (
               <li key={li.id} className="maps-page-race-item">
                 <label className="maps-page-race-label">
-                  <input type="checkbox" checked={li.visible} onChange={() => toggleLayer(li.id)} />
-                  <a href={`/race/${encodeURIComponent(li.raceSlug || li.name)}`} onClick={(e) => e.stopPropagation()} className="maps-page-race-link">
-                    {li.name}
-                  </a>
-                  <span className="maps-page-race-details">
-                    {formatSideText(li.distanceKm, li.elevInfo)}
-                  </span>
+                  <input 
+                    type="checkbox" 
+                    checked={li.visible} 
+                    onChange={() => toggleLayer(li.id)}
+                    className="maps-page-checkbox"
+                  />
+                  <span className="maps-page-color-indicator" style={{ backgroundColor: li.color }}></span>
+                  <div className="maps-page-race-content">
+                    <a href={`/race/${encodeURIComponent(li.raceSlug || li.name)}`} onClick={(e) => e.stopPropagation()} className="maps-page-race-link">
+                      {li.name}
+                    </a>
+                    <span className="maps-page-race-details">
+                      {formatSideText(li.distanceKm, li.elevInfo)}
+                    </span>
+                  </div>
                 </label>
               </li>
             ))}
