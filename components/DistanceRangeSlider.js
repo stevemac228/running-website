@@ -6,16 +6,16 @@ export default function DistanceRangeSlider({ onChange }) {
 
   const handleMinChange = (e) => {
     const value = parseInt(e.target.value);
-    // Ensure min is always at least 1 less than max
-    const newMin = Math.min(value, maxDistance - 1);
+    // Ensure min is always at least 5 less than max
+    const newMin = Math.min(value, maxDistance - 5);
     setMinDistance(newMin);
     onChange({ min: newMin, max: maxDistance >= 50 ? 999 : maxDistance });
   };
 
   const handleMaxChange = (e) => {
     const value = parseInt(e.target.value);
-    // Ensure max is always at least 1 more than min
-    const newMax = Math.max(value, minDistance + 1);
+    // Ensure max is always at least 5 more than min
+    const newMax = Math.max(value, minDistance + 5);
     setMaxDistance(newMax);
     onChange({ min: minDistance, max: newMax >= 50 ? 999 : newMax });
   };
