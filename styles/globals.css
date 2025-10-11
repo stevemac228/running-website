@@ -244,6 +244,13 @@ nav {
   vertical-align: middle;
 }
 
+.reception-icon {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  bottom: 1px;
+}
+
 .tooltip-container {
   position: relative;
   display: inline-block;
@@ -1240,14 +1247,11 @@ header, .nav-left, nav, .nav-link {
 
 .compact-race-icons-inline {
   display: inline-flex;
-  gap: 0.25rem;
   align-items: center;
-  margin-left: 0.25rem;
 }
 
 .compact-race-badges {
   display: flex;
-  gap: 0.5rem;
   flex-wrap: wrap;
 }
 

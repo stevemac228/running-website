@@ -120,16 +120,20 @@ export default function UpcomingRegistrationCard({ race }) {
                 </span>{" "}
                 <span style={{ color: "green" }}>{race.registrationCost}</span>{" "}
                 <span>
-                  {formatDate(
-                    new Date(
-                      new Date(race.earlyBirdDeadline).setDate(
-                        new Date(race.earlyBirdDeadline).getDate() + 1
-                      )
-                    )
-                      .toISOString()
-                      .split("T")[0],
-                    "registration"
-                  )}{" "}
+                  {(() => {
+                    let iso = null;
+                    if (race.earlyBirdDeadline) {
+                      const d = new Date(race.earlyBirdDeadline);
+                      if (!isNaN(d)) {
+                        d.setDate(d.getDate() + 1);
+                        iso = d.toISOString().split("T")[0];
+                      }
+                    }
+                    if (!iso && race.registrationStart) {
+                      iso = String(race.registrationStart);
+                    }
+                    return formatDate(iso, "registration") || "N/A";
+                  })()}{" "}
                   <img
                     src="/icons/right-arrow.svg"
                     alt="to"

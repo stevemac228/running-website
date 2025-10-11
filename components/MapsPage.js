@@ -29,10 +29,18 @@ export default function MapsPage() {
 
 		// compute polyline total length (meters)
 		const computePolyLength = (poly) => {
-			const latlngs = Array.isArray(poly.getLatLngs) ? poly.getLatLngs() : [];
-			// flatten possible nested arrays
-			const flatten = (arr) => arr.flat(Infinity);
-			const pts = flatten(latlngs).filter((p) => p && typeof p.lat === "number");
+			// poly.getLatLngs is a function that returns arrays (possibly nested)
+			const latlngs = typeof poly.getLatLngs === "function" ? poly.getLatLngs() : (poly._latlngs || []);
+			// flatten possible nested arrays safely
+			const flatten = (arr) => {
+				try {
+					return Array.isArray(arr.flat) ? arr.flat(Infinity) : arr.reduce((acc, v) => acc.concat(v), []);
+				} catch (e) {
+					// fallback: attempt a shallow flatten
+					return [].concat(...arr);
+				}
+			};
+			const pts = Array.isArray(latlngs) ? flatten(latlngs).filter((p) => p && typeof p.lat === "number") : [];
 			let sum = 0;
 			for (let i = 1; i < pts.length; i++) {
 				sum += haversine(pts[i - 1], pts[i]);
@@ -272,39 +280,14 @@ export default function MapsPage() {
 				if (mounted) {
 					leafletRef.current = { L, map, groups };
 
-					// Reproject marker icons after zoom/move to avoid visual drift:
-					// Some browsers can show marker drift during animated transforms — forcing markers
-					// to reset their DOM positions after zoom/move prevents that.
-					const reprojectMarkers = () => {
-						try {
-							(groups || []).forEach((g) => {
-								// lightweight marker
-								if (g.lightMarker && g.lightMarker.getLatLng && g.lightMarker.setLatLng) {
-									const ll = g.lightMarker.getLatLng();
-									g.lightMarker.setLatLng(ll);
-								}
-								// plugin markers inside GPX layer (if loaded)
-								if (g.layer && typeof g.layer.getLayers === "function") {
-									const children = g.layer.getLayers();
-									children.forEach((child) => {
-										// reposition any marker-like child
-										if (child && child.getLatLng && child.setLatLng) {
-											const cLL = child.getLatLng();
-											child.setLatLng(cLL);
-										}
-									});
-								}
-							});
-						} catch (err) {
-							// swallow errors; this is a best-effort fix
-						}
-					};
-
-					map.on("zoomend moveend zoom", reprojectMarkers);
-					// also attempt to correct after zoom animation
-					map.on("zoomanim", () => setTimeout(reprojectMarkers, 50));
-					
-					setLayersInfo(groups.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm })));
+					setLayersInfo(groups.map((g) => ({
+						id: g.id,
+						name: g.name,
+						visible: g.visible,
+						elevInfo: g.elevInfo,
+						distanceKm: g.distanceKm,
+						raceSlug: g.raceId
+					})));
 				}
 			} // end for
 
@@ -321,22 +304,17 @@ export default function MapsPage() {
 			// store references
 			leafletRef.current = { L, map, groups };
 
-			// Reproject marker icons after zoom/move to avoid visual drift:
-			// Some browsers can show marker drift during animated transforms — forcing markers
-			// to reset their DOM positions after zoom/move prevents that.
+			// Reproject marker icons after zoom/move to avoid visual drift
 			const reprojectMarkers = () => {
 				try {
 					(groups || []).forEach((g) => {
-						// lightweight marker
 						if (g.lightMarker && g.lightMarker.getLatLng && g.lightMarker.setLatLng) {
 							const ll = g.lightMarker.getLatLng();
 							g.lightMarker.setLatLng(ll);
 						}
-						// plugin markers inside GPX layer (if loaded)
 						if (g.layer && typeof g.layer.getLayers === "function") {
 							const children = g.layer.getLayers();
 							children.forEach((child) => {
-								// reposition any marker-like child
 								if (child && child.getLatLng && child.setLatLng) {
 									const cLL = child.getLatLng();
 									child.setLatLng(cLL);
@@ -344,13 +322,10 @@ export default function MapsPage() {
 							});
 						}
 					});
-				} catch (err) {
-					// swallow errors; this is a best-effort fix
-				}
+				} catch (err) {}
 			};
 
 			map.on("zoomend moveend zoom", reprojectMarkers);
-			// also attempt to correct after zoom animation
 			map.on("zoomanim", () => setTimeout(reprojectMarkers, 50));
 		} // init
 
@@ -411,14 +386,26 @@ export default function MapsPage() {
 				if (b && b.isValid()) ref.map.fitBounds(b.pad(0.1));
 			} catch (err) {}
 		}
-		setLayersInfo(ref.groups.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm })));
+		setLayersInfo(ref.groups.map((g) => ({
+			id: g.id,
+			name: g.name,
+			visible: g.visible,
+			elevInfo: g.elevInfo,
+			distanceKm: g.distanceKm,
+			raceSlug: g.raceId
+		})));
 	}
 
 	// helper formatting for sidebar: "10k - 41ft elv"
 	const formatSideText = (distanceKm, elevInfo) => {
 		const parts = [];
-		if (distanceKm) parts.push(`${Math.round(distanceKm)}k`);
-		if (elevInfo) {
+		// distanceKm may be number or string like "∞" or "5"
+		if (typeof distanceKm === "number" && !Number.isNaN(distanceKm)) {
+			parts.push(`${distanceKm % 1 === 0 ? String(distanceKm) : String(distanceKm)}k`);
+		} else if (typeof distanceKm === "string" && distanceKm.trim() !== "") {
+			parts.push(distanceKm);
+		}
+		if (elevInfo && elevInfo.gain != null) {
 			const feet = Math.round((elevInfo.gain || 0) * 3.28084);
 			parts.push(`${feet}ft elv`);
 		}
@@ -437,15 +424,15 @@ export default function MapsPage() {
         </div>
 
         <aside style={{ padding: 8 }}>
-          <h3 style={{ marginTop: 0 }}>Tracks</h3>
-          {loading && <p>Loading GPX tracks…</p>}
+          <h3 style={{ marginTop: 0 }}>Races</h3>
+          {loading && <p>Loading GPX races…</p>}
           {!loading && layersInfo.length === 0 && <p>No GPX files found. Place GPX files in /public/gpx/.</p>}
           <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
             {layersInfo.map((li) => (
               <li key={li.id} style={{ marginBottom: 8 }}>
                 <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <input type="checkbox" checked={li.visible} onChange={() => toggleLayer(li.id)} />
-                  <a href={`/race/${encodeURIComponent(li.name)}`} onClick={(e) => e.stopPropagation()} style={{ color: "#222", textDecoration: "none" }}>
+                  <a href={`/race/${encodeURIComponent(li.raceSlug || li.name)}`} onClick={(e) => e.stopPropagation()} style={{ color: "#222", textDecoration: "none" }}>
                     {li.name}
                   </a>
                   <span style={{ marginLeft: "auto", fontSize: 12, color: "#666" }}>

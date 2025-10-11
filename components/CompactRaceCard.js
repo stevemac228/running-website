@@ -37,7 +37,7 @@ export default function CompactRaceCard({ race }) {
                     alt="Medal"
                     className="racecard-icon"
                   />
-                  <span className="tooltip-text">Medal available</span>
+                  <span className="tooltip-text">This race has a medal!</span>
                 </div>
               )}
               {race.shirt && (
@@ -47,7 +47,7 @@ export default function CompactRaceCard({ race }) {
                     alt="T-Shirt"
                     className="racecard-icon"
                   />
-                  <span className="tooltip-text">T-Shirt available</span>
+                  <span className="tooltip-text">This race has a tshirt!</span>
                 </div>
               )}
               {race.reception && (
@@ -55,9 +55,9 @@ export default function CompactRaceCard({ race }) {
                   <img
                     src="/icons/reception.svg"
                     alt="Reception"
-                    className="racecard-icon"
+                    className="racecard-icon reception-icon"
                   />
-                  <span className="tooltip-text">Reception available</span>
+                  <span className="tooltip-text">This race has a reception!</span>
                 </div>
               )}
             </div>

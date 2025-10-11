@@ -23,6 +23,14 @@ function parseUSDate(dateStr) {
   return new Date(s); // fallback
 }
 
+// Normalize distance to a number (supports "∞" and string inputs)
+function toDistanceNumber(d) {
+  if (typeof d === "number") return d;
+  if (d === "∞") return Number.POSITIVE_INFINITY;
+  const n = Number(d);
+  return Number.isFinite(n) ? n : 0;
+}
+
 export default function Races() {
   const filterOptions = [
     { key: "5k", label: "5K" },
@@ -59,7 +67,8 @@ export default function Races() {
       if (dateRange.end && raceDate > dateRange.end) return false;
 
       // Distance range filter (custom slider)
-      if (race.distance < distanceRange.min || race.distance > distanceRange.max) {
+      const distVal = toDistanceNumber(race.distance);
+      if (distVal < distanceRange.min || distVal > distanceRange.max) {
         return false;
       }
 
@@ -91,8 +100,9 @@ export default function Races() {
           ultra: 42.3,
         };
         const matchDistance = distanceFilters.some((filter) => {
-          if (filter === "ultra") return race.distance > 42.2;
-          return race.distance === distanceMap[filter];
+          const dv = toDistanceNumber(race.distance);
+          if (filter === "ultra") return dv > 42.2;
+          return Math.abs(dv - distanceMap[filter]) < 1e-9;
         });
         if (!matchDistance) return false;
       }
@@ -115,9 +125,9 @@ export default function Races() {
         case "date-desc":
           return dateB - dateA;
         case "distance-asc":
-          return a.distance - b.distance;
+          return toDistanceNumber(a.distance) - toDistanceNumber(b.distance);
         case "distance-desc":
-          return b.distance - a.distance;
+          return toDistanceNumber(b.distance) - toDistanceNumber(a.distance);
         case "name-asc":
           return a.name.localeCompare(b.name);
         case "name-desc":
