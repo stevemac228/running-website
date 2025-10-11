@@ -608,7 +608,7 @@ export default function MapsPage() {
                     className="maps-page-checkbox"
                     data-color={li.color}
                     style={{
-                      borderColor: li.color,
+                      borderColor: li.visible ? 'white' : li.color,
                       backgroundColor: li.visible ? li.color : 'white'
                     }}
                   />
