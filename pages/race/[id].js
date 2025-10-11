@@ -1,11 +1,12 @@
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import racesData from "../../data/races.json";
 import { formatDate } from "../../utils/formatDate";
 import { formatTime } from "../../utils/formatTime";
 import { getRaceId } from "../../utils/getRaceId";
+import { parseGpxToSegments } from "../../utils/parseGpx";
 
 export default function RaceDetail() {
   const router = useRouter();
@@ -15,6 +16,11 @@ export default function RaceDetail() {
   const [coords, setCoords] = useState(null);
   const [geoLoading, setGeoLoading] = useState(false);
   const [geoError, setGeoError] = useState(null);
+  
+  // map state
+  const mapRef = useRef(null);
+  const mapInstanceRef = useRef(null);
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   // wait for router then find race by id or name slug
   const race = useMemo(() => {
@@ -115,10 +121,36 @@ export default function RaceDetail() {
     const place = parts.join(", ").trim();
     if (!place) return;
 
+    // Fallback coordinates for common Newfoundland locations
+    const locationFallbacks = {
+      "paradise": { lat: 47.5333, lon: -52.8833 },
+      "octagon pond": { lat: 47.5333, lon: -52.8833 },
+      "st.johns": { lat: 47.5615, lon: -52.7126 },
+      "st johns": { lat: 47.5615, lon: -52.7126 },
+      "mount pearl": { lat: 47.5189, lon: -52.8056 },
+      "cbs": { lat: 47.5008, lon: -52.9986 },
+      "conception bay south": { lat: 47.5008, lon: -52.9986 },
+      "flatrock": { lat: 47.6667, lon: -52.7333 },
+      "north west river": { lat: 53.5233, lon: -60.1444 },
+    };
+
     let cancelled = false;
     async function geocode() {
       setGeoLoading(true);
       setGeoError(null);
+      
+      // Check for fallback first
+      const placeLower = place.toLowerCase();
+      for (const [key, coords] of Object.entries(locationFallbacks)) {
+        if (placeLower.includes(key)) {
+          if (!cancelled) {
+            setCoords(coords);
+            setGeoLoading(false);
+          }
+          return;
+        }
+      }
+      
       try {
         const q = encodeURIComponent(place);
         const url = `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`;
@@ -144,6 +176,101 @@ export default function RaceDetail() {
     };
   }, [race]);
 
+  // Initialize Leaflet map with GPX route
+  useEffect(() => {
+    if (!race || !coords || !mapRef.current) return;
+
+    let mounted = true;
+
+    async function initMap() {
+      try {
+        // Load Leaflet
+        const L = (await import("leaflet")).default;
+        
+        // Add Leaflet CSS if not present
+        if (!document.querySelector('link[data-leaflet]')) {
+          const link = document.createElement("link");
+          link.rel = "stylesheet";
+          link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+          link.setAttribute("data-leaflet", "1");
+          document.head.appendChild(link);
+        }
+
+        // Create map centered on start location
+        const map = L.map(mapRef.current).setView([coords.lat, coords.lon], 13);
+        
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "&copy; OpenStreetMap contributors",
+        }).addTo(map);
+
+        // Add start location marker
+        const startIcon = L.icon({
+          iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
+          shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41]
+        });
+
+        const startMarker = L.marker([coords.lat, coords.lon], { icon: startIcon }).addTo(map);
+        startMarker.bindPopup(`<strong>Start Location</strong><br/>${race.name}`);
+
+        // Try to load GPX file if available
+        const raceId = getRaceId(race);
+        const gpxUrl = race.gpx ? `/gpx/${race.gpx}` : `/gpx/${encodeURIComponent(raceId)}.gpx`;
+
+        try {
+          const gpxRes = await fetch(gpxUrl);
+          if (gpxRes.ok) {
+            const gpxText = await gpxRes.text();
+            const segments = parseGpxToSegments(gpxText);
+            
+            if (segments && segments.length > 0) {
+              // Draw the route
+              const allLatLngs = [];
+              segments.forEach((segment) => {
+                const latlngs = segment.map((pt) => [pt.lat, pt.lon]);
+                allLatLngs.push(...latlngs);
+                L.polyline(latlngs, {
+                  color: "#1f78b4",
+                  weight: 4,
+                  opacity: 0.7,
+                }).addTo(map);
+              });
+
+              // Fit map to show entire route
+              if (allLatLngs.length > 0) {
+                const bounds = L.latLngBounds(allLatLngs);
+                map.fitBounds(bounds.pad(0.1));
+              }
+            }
+          }
+        } catch (err) {
+          // GPX file not found or error loading - map will just show start location
+          console.log("GPX not available for this race");
+        }
+
+        if (mounted) {
+          mapInstanceRef.current = map;
+          setMapLoaded(true);
+        }
+      } catch (err) {
+        console.error("Error initializing map:", err);
+      }
+    }
+
+    initMap();
+
+    return () => {
+      mounted = false;
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
+  }, [race, coords]);
+
   if (!router.isReady) return <p>Loading…</p>;
 
   if (!race) {
@@ -158,21 +285,6 @@ export default function RaceDetail() {
       </div>
     );
   }
-
-  // build map iframe when coords are present
-  const mapIframeSrc = coords
-    ? (() => {
-        const lat = coords.lat;
-        const lon = coords.lon;
-        const deltaLon = 0.02;
-        const deltaLat = 0.01;
-        const left = lon - deltaLon;
-        const right = lon + deltaLon;
-        const top = lat + deltaLat;
-        const bottom = lat - deltaLat;
-        return `https://www.openstreetmap.org/export/embed.html?bbox=${left}%2C${bottom}%2C${right}%2C${top}&layer=mapnik&marker=${lat}%2C${lon}`;
-      })()
-    : null;
 
   return (
     <div>
@@ -219,7 +331,7 @@ export default function RaceDetail() {
           </section>
 
           <aside>
-            <h2 style={{ fontSize: 20, marginBottom: 12 }}>Start Location Map</h2>
+            <h2 style={{ fontSize: 20, marginBottom: 12 }}>Race Map</h2>
 
             <div
               style={{
@@ -247,13 +359,8 @@ export default function RaceDetail() {
                 </div>
               )}
 
-              {!geoLoading && !geoError && coords && mapIframeSrc && (
-                <iframe
-                  title="Start location"
-                  src={mapIframeSrc}
-                  style={{ border: 0, width: "100%", height: "100%" }}
-                  loading="lazy"
-                />
+              {!geoLoading && !geoError && coords && (
+                <div ref={mapRef} style={{ width: "100%", height: "100%" }} />
               )}
 
               {!geoLoading && !geoError && !coords && (
@@ -266,15 +373,42 @@ export default function RaceDetail() {
               )}
             </div>
 
-            {/* Optionally show a small text summary of the resolved address */}
+            {/* Show coordinates and links when map is loaded */}
             {coords && (
               <div style={{ marginTop: 8, fontSize: 13, color: "#444" }}>
                 Coordinates: {coords.lat.toFixed(5)}, {coords.lon.toFixed(5)}
-                <div style={{ marginTop: 6 }}>
+                <div style={{ marginTop: 6, display: "flex", gap: 12, flexWrap: "wrap" }}>
+                  <a
+                    href={`https://www.google.com/maps?q=${coords.lat},${coords.lon}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "inline-block",
+                      padding: "6px 12px",
+                      background: "#4285f4",
+                      color: "white",
+                      textDecoration: "none",
+                      borderRadius: 4,
+                      fontSize: 13,
+                      fontWeight: 500,
+                    }}
+                  >
+                    Open in Google Maps
+                  </a>
                   <a
                     href={`https://www.openstreetmap.org/?mlat=${coords.lat}&mlon=${coords.lon}#map=16/${coords.lat}/${coords.lon}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    style={{
+                      display: "inline-block",
+                      padding: "6px 12px",
+                      background: "#7ebc6f",
+                      color: "white",
+                      textDecoration: "none",
+                      borderRadius: 4,
+                      fontSize: 13,
+                      fontWeight: 500,
+                    }}
                   >
                     Open in OSM
                   </a>
