@@ -9,6 +9,7 @@ export default function MapsPage() {
 	const blobUrlsRef = useRef([]); // track created blob URLs to revoke on unmount
 	const [loading, setLoading] = useState(true);
 	const [layersInfo, setLayersInfo] = useState([]); // { id, name, visible, elevInfo, distanceKm, raceSlug }
+	const [mapBounds, setMapBounds] = useState(null); // track current map viewport bounds
 
 	useEffect(() => {
 		let mounted = true;
@@ -326,7 +327,16 @@ export default function MapsPage() {
 															if (b && b.isValid()) map.fitBounds(b.pad(0.1));
 														} catch (_) {}
 													}
-													if (mounted) setLayersInfo(groups.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm })));
+													if (mounted) {
+														const bounds = map.getBounds();
+														const filtered = groups
+															.filter((g) => {
+																if (!g.startLatLng) return false;
+																return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
+															})
+															.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm, raceSlug: g.raceId }));
+														setLayersInfo(filtered);
+													}
 												};
 											}
 										});
@@ -356,6 +366,7 @@ export default function MapsPage() {
 						? { gain: elevGainMeters ?? null, loss: elevLossMeters ?? null, unit: "m" }
 						: null,
 					distanceKm,
+					startLatLng, // store start coordinates for filtering
 				};
 				groups.push(group);
 
@@ -389,6 +400,38 @@ export default function MapsPage() {
 
 			// store references
 			leafletRef.current = { L, map, groups };
+
+			// Function to update the race list based on current map bounds
+			const updateVisibleRaces = () => {
+				const bounds = map.getBounds();
+				setMapBounds(bounds);
+				
+				// Filter races whose start points are within the viewport
+				const filteredGroups = groups
+					.filter((g) => {
+						if (!g.startLatLng) return false;
+						return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
+					})
+					.map((g) => ({
+						id: g.id,
+						name: g.name,
+						visible: g.visible,
+						elevInfo: g.elevInfo,
+						distanceKm: g.distanceKm,
+						raceSlug: g.raceId
+					}));
+				
+				if (mounted) setLayersInfo(filteredGroups);
+			};
+
+			// Add event listeners to update race list when map view changes
+			map.on("moveend", updateVisibleRaces);
+			map.on("zoomend", updateVisibleRaces);
+
+			// Initial update after map is fitted
+			setTimeout(() => {
+				updateVisibleRaces();
+			}, 300);
 
 			// Reproject marker icons after zoom/move to avoid visual drift
 			// Note: With GPX plugin markers, this should no longer be necessary,
@@ -497,14 +540,24 @@ export default function MapsPage() {
 				if (b && b.isValid()) ref.map.fitBounds(b.pad(0.1));
 			} catch (err) {}
 		}
-		setLayersInfo(ref.groups.map((g) => ({
-			id: g.id,
-			name: g.name,
-			visible: g.visible,
-			elevInfo: g.elevInfo,
-			distanceKm: g.distanceKm,
-			raceSlug: g.raceId
-		})));
+		
+		// Update race list based on current map bounds
+		const bounds = ref.map.getBounds();
+		const filteredGroups = ref.groups
+			.filter((g) => {
+				if (!g.startLatLng) return false;
+				return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
+			})
+			.map((g) => ({
+				id: g.id,
+				name: g.name,
+				visible: g.visible,
+				elevInfo: g.elevInfo,
+				distanceKm: g.distanceKm,
+				raceSlug: g.raceId
+			}));
+		
+		setLayersInfo(filteredGroups);
 	}
 
 	// helper formatting for sidebar: "10k - 41ft elv" -> "10km - 90m ↑ 100m ↓"
