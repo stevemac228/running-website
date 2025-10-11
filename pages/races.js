@@ -68,7 +68,10 @@ export default function Races() {
 
       // Distance range filter (custom slider)
       const distVal = toDistanceNumber(race.distance);
-      if (distVal < distanceRange.min || distVal > distanceRange.max) {
+      // Infinity distances should always pass through the range filter
+      if (!Number.isFinite(distVal)) {
+        // Keep infinity races visible
+      } else if (distVal < distanceRange.min || distVal > distanceRange.max) {
         return false;
       }
 
