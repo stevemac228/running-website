@@ -192,7 +192,7 @@ export default function Calendar() {
                         className="race-name"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        {race.name}
+                        {race.nickName}
                       </Link>
                     ) : (
                       <>
@@ -204,7 +204,7 @@ export default function Calendar() {
                           className="race-name"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          {race.name}
+                          {race.nickName}
                         </Link>{" "}
                         -{" "}
                         <span className="race-distance">{race.distance}k</span>
