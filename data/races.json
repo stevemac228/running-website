@@ -47,15 +47,15 @@
   {
     "name": "Cinco de Mayo",
     "nickName": "Cinco de Mayo",
-    "date": "2025-05-04",
-    "startTime": "11:00 AM",
+    "date": "2026-05-03",
+    "startTime": "10:00 AM",
     "distance": 5,
-    "registrationStart": "2025-01-14",
-    "earlyBirdDeadline": "2025-03-15",
-    "earlyBirdCost": "$40.11",
-    "registrationDeadline": "2025-05-01",
-    "registrationCost": "$50.91",
-    "fundraiser": false,
+    "registrationStart": "2025-10-16",
+    "earlyBirdDeadline": "2026-03-17",
+    "earlyBirdCost": "$35.74",
+    "registrationDeadline": "2025-04-30",
+    "registrationCost": "$46.89",
+    "fundraiser": true,
     "medal": true,
     "shirt": false,
     "reception": false,
@@ -64,7 +64,8 @@
     "organization": "Running Room / NL Events",
     "nLAACertified": false,
     "format": "Fun",
-    "terrain": "Road"
+    "terrain": "Gravel",
+    "website": "https://raceroster.com/events/2026/111451/cinco-de-mayo-2026"
   },
   {
     "name": "LiveBy Wealth Mundy Pond 5K",
@@ -1239,10 +1240,10 @@
     "date": "2025-11-11",
     "startTime": "8:00 AM",
     "distance": 11,
-    "registrationStart": null,
+    "registrationStart": "2025-10-16",
     "earlyBirdDeadline": null,
     "earlyBirdCost": null,
-    "registrationDeadline": null,
+    "registrationDeadline": "2025-11-07",
     "registrationCost": "$40.25",
     "fundraiser": false,
     "medal": false,
@@ -1253,7 +1254,8 @@
     "organization": "Stride Running NL",
     "nLAACertified": true,
     "format": "Competitive",
-    "terrain": "Road"
+    "terrain": "Road",
+    "website": "https://striderunningnl.ca/run-to-remember/"
   },
   {
     "name": "Mummers Run",
