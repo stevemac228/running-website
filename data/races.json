@@ -99,7 +99,7 @@
     "registrationStart": "2025-10-23",
     "earlyBirdDeadline": null,
     "earlyBirdCost": null,
-    "registrationDeadline": null,
+    "registrationDeadline": "Minutes After",
     "registrationCost": "$75.00",
     "fundraiser": false,
     "medal": true,
