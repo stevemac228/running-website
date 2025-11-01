@@ -42,14 +42,14 @@ export default function Home() {
   return (
     <div>
       <Header />
-      <main className="homepage">
-        <div className="upcomingRaces">
-          <h1>Upcoming Races</h1>
-          <RaceList races={upcomingRaces} type="upcomingRaces" />
-        </div>
-        <div className="upcomingRegistrations">
+      <main className="homepage homepage-stacked">
+        <div className="upcomingRegistrations upcomingRegistrations-wide">
           <h1>Current Registrations</h1>
           <RaceList races={upcomingRegistrations} type="upcomingRegistrations" />
+        </div>
+        <div className="upcomingRaces upcomingRaces-full">
+          <h1>Upcoming Races</h1>
+          <RaceList races={upcomingRaces} type="upcomingRaces" />
         </div>
       </main>
       <Footer />
