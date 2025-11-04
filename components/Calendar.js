@@ -37,7 +37,29 @@ export default function Calendar() {
     currentDay.setDate(currentDay.getDate() + 1);
   }
 
-  // Note: Auto-scroll to today removed to keep header visible on mobile
+  // Scroll to today on mobile when component mounts
+  useEffect(() => {
+    if (isMobile && todayRef.current) {
+      // Wait for the DOM to be fully rendered, then scroll
+      const timer = setTimeout(() => {
+        if (todayRef.current) {
+          // Get the header height dynamically
+          const header = document.querySelector('header');
+          const headerHeight = header ? header.offsetHeight : 60;
+          
+          const elementPosition = todayRef.current.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+        }
+      }, 300);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isMobile]); // Only run when isMobile changes
 
   const startOfMonth = new Date(
     currentDate.getFullYear(),
