@@ -253,8 +253,10 @@ export default function MapsPage() {
 					}
 
 					// Bind popup to the start marker after it loads
+					const distanceKm = typeof race.distance === "number" ? +(race.distance) : (race.distance ? String(race.distance) : null);
+					const distText = distanceKm != null ? `<br/>Distance: ${typeof distanceKm === "number" ? `${distanceKm}km` : distanceKm}` : "";
 					const elvText = elevGainMeters != null ? `<br/>Elevation gain: ${Math.round(elevGainMeters)} m` : "";
-					const popupContent = `<strong>${race.name}</strong>${elvText}<br/><button data-rid="${raceId}">Show track</button>`;
+					const popupContent = `<strong>${race.name}</strong>${distText}${elvText}<br/><button data-rid="${raceId}">Show track</button>`;
 					
 					if (lightLayer) {
 						lightLayer.on("loaded", () => {
@@ -264,6 +266,83 @@ export default function MapsPage() {
 								if (child instanceof L.Marker) {
 									try {
 										child.bindPopup(popupContent);
+										
+										// Add click handler to marker to automatically show route and focus in list
+										child.on("click", () => {
+											const grp = groups.find((g) => g.raceId === raceId);
+											if (!grp || grp.visible) return; // Only toggle if not already visible
+											
+											// Automatically show the route when marker is clicked
+											// Remove lightweight layer
+											if (grp.lightLayer && map.hasLayer(grp.lightLayer)) map.removeLayer(grp.lightLayer);
+											
+											// Create full plugin layer if needed
+											if (!grp.layer) {
+												try {
+													const layer = new L.GPX(grp.blobUrl || gpxUrl, {
+														async: true,
+														polyline_options: { color: grp.color, weight: 3, opacity: 0.9 },
+														markers: {
+															startIcon: L.divIcon({
+																className: 'custom-div-icon',
+																html: `<div style="background-color: ${grp.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
+																iconSize: [12, 12],
+																iconAnchor: [6, 6],
+															}),
+															endIcon: L.divIcon({
+																className: 'custom-div-icon',
+																html: `<div style="background-color: ${grp.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
+																iconSize: [12, 12],
+																iconAnchor: [6, 6],
+															}),
+														},
+														marker_options: {
+															clickable: true
+														},
+													});
+													layer.on("loaded", () => {
+														const popupContent2 = `<strong>${race.name}</strong>${distText}${elvText}<br/><button data-rid="${raceId}">Hide track</button>`;
+														const children2 = typeof layer.getLayers === "function" ? layer.getLayers() : [];
+														children2.forEach((child2) => {
+															if (child2 instanceof L.Marker) {
+																try { child2.bindPopup(popupContent2); } catch (_) {}
+															}
+														});
+													});
+													grp.layer = layer;
+												} catch (_) { grp.layer = null; }
+											}
+											
+											if (grp.layer) grp.layer.addTo(map);
+											grp.visible = true;
+											
+											// Fit bounds to the route
+											try {
+												const b = grp.layer.getBounds && grp.layer.getBounds();
+												if (b && b.isValid()) map.fitBounds(b.pad(0.1));
+											} catch (_) {}
+											
+											// Update the layersInfo state to reflect the change
+											if (mounted) {
+												const bounds = map.getBounds();
+												const filtered = groups
+													.filter((g) => {
+														if (!g.startLatLng) return false;
+														return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
+													})
+													.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm, raceSlug: g.raceId, color: g.color }));
+												setLayersInfo(filtered);
+											}
+											
+											// Scroll to race in sidebar list
+											setTimeout(() => {
+												const listItem = document.querySelector(`input[type="checkbox"][data-color="${grp.color}"]`)?.closest('.maps-page-race-item');
+												if (listItem) {
+													listItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+												}
+											}, 100);
+										});
+										
 										child.on("popupopen", () => {
 											const btn = document.querySelector(`button[data-rid="${raceId}"]`);
 											if (btn) {
@@ -523,7 +602,8 @@ export default function MapsPage() {
 						},
 					});
 					layer.on("loaded", () => {
-						const popupContent = `<strong>${group.name}</strong>${group.elevInfo ? `<br/>Elevation gain: ${Math.round(group.elevInfo.gain)} m` : ""}<br/><button data-rid="${group.raceId}">Show track</button>`;
+						const distText = group.distanceKm != null ? `<br/>Distance: ${typeof group.distanceKm === "number" ? `${group.distanceKm}km` : group.distanceKm}` : "";
+						const popupContent = `<strong>${group.name}</strong>${distText}${group.elevInfo ? `<br/>Elevation gain: ${Math.round(group.elevInfo.gain)} m` : ""}<br/><button data-rid="${group.raceId}">Show track</button>`;
 						const children = typeof layer.getLayers === "function" ? layer.getLayers() : [];
 						children.forEach((child) => {
 							if (child instanceof ref.L.Marker) {
