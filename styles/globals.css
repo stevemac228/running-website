@@ -904,7 +904,146 @@ nav {
   .calendar-container {
     display: none; /* hidden in home page right column on mobile */
   }
+  
+  .month-calendar {
+    display: none; /* hide desktop calendar on mobile */
+  }
 }
+
+/* #region Mobile Calendar */
+.mobile-calendar {
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+}
+
+.mobile-calendar-header {
+  text-align: center;
+  padding: 1rem;
+  background-color: var(--runnl-dark-grey);
+  color: var(--runnl-light-text);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.mobile-calendar-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.mobile-calendar-list {
+  padding: 0.5rem;
+}
+
+.mobile-calendar-day {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem;
+  background-color: var(--runnl-background);
+}
+
+.mobile-calendar-day.weekend {
+  background-color: #f5f5f5;
+}
+
+.mobile-calendar-day.today {
+  border: 2px solid #0b3af5;
+  box-shadow: 0 2px 8px rgba(11, 58, 245, 0.2);
+}
+
+.mobile-day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.mobile-day-date {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mobile-day-name {
+  font-weight: 600;
+  color: var(--runnl-dark-grey);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.mobile-day-number {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--runnl-dark-text);
+}
+
+.mobile-month-name {
+  font-size: 0.9rem;
+  color: var(--runnl-light-grey);
+  text-transform: uppercase;
+}
+
+.today-badge {
+  background-color: #0b3af5;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.mobile-races-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mobile-race-chip {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 6px;
+}
+
+.mobile-race-chip .dot-icon {
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+}
+
+.mobile-race-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mobile-race-info .race-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--runnl-dark-text);
+  text-decoration: none;
+}
+
+.mobile-race-info .race-name:hover {
+  color: var(--runnl-dark-blue);
+  text-decoration: underline;
+}
+
+.mobile-race-details {
+  font-size: 0.85rem;
+  color: var(--runnl-light-grey);
+}
+
+.mobile-race-details .race-time,
+.mobile-race-details .race-distance {
+  font-weight: 500;
+}
+/* #endregion */
 
 /* #region Calendar-Header*/
 .calendar-header {

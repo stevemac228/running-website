@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import races from "../data/races.json";
 import { getRaceId } from "../utils/getRaceId";
 import Link from "next/link";
@@ -8,6 +8,7 @@ export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const [isMobile, setIsMobile] = useState(false);
+  const todayRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -15,6 +16,47 @@ export default function Calendar() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // For mobile vertical view: generate days from 3 months ago to 6 months ahead
+  const today = new Date();
+  const mobileStartDate = new Date(today);
+  mobileStartDate.setMonth(mobileStartDate.getMonth() - 3);
+  mobileStartDate.setDate(1); // Start from the 1st of the month
+  
+  const mobileEndDate = new Date(today);
+  mobileEndDate.setMonth(mobileEndDate.getMonth() + 6);
+  mobileEndDate.setDate(1);
+  mobileEndDate.setMonth(mobileEndDate.getMonth() + 1);
+  mobileEndDate.setDate(0); // Last day of the month
+  
+  // Generate all days for mobile view
+  const mobileDays = [];
+  let currentDay = new Date(mobileStartDate);
+  while (currentDay <= mobileEndDate) {
+    mobileDays.push(new Date(currentDay));
+    currentDay.setDate(currentDay.getDate() + 1);
+  }
+
+  // Scroll to today on mobile when component mounts
+  useEffect(() => {
+    if (isMobile && todayRef.current) {
+      // Wait for the DOM to be fully rendered, then scroll
+      const timer = setTimeout(() => {
+        if (todayRef.current) {
+          const headerOffset = 60; // Account for sticky header
+          const elementPosition = todayRef.current.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "auto"
+          });
+        }
+      }, 200);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isMobile]); // Only run when isMobile changes
 
   const startOfMonth = new Date(
     currentDate.getFullYear(),
@@ -29,8 +71,6 @@ export default function Calendar() {
 
   const daysInMonth = [];
   const firstDayOfWeek = startOfMonth.getDay(); // 0 = Sunday
-
-  const today = new Date(); // actual today
 
   // Fill empty days before the 1st
   for (let i = 0; i < firstDayOfWeek; i++) {
@@ -138,6 +178,96 @@ export default function Calendar() {
   const monthName = currentDate.toLocaleString("default", { month: "long" });
   const year = currentDate.getFullYear();
 
+  // Helper to check if a date is today
+  const isToday = (day) => {
+    return (
+      day &&
+      day.getDate() === today.getDate() &&
+      day.getMonth() === today.getMonth() &&
+      day.getFullYear() === today.getFullYear()
+    );
+  };
+
+  // Format date for mobile view
+  const formatDateHeader = (date) => {
+    const dayName = date.toLocaleDateString("en-US", { weekday: "short" });
+    const monthName = date.toLocaleDateString("en-US", { month: "short" });
+    const day = date.getDate();
+    return { dayName, monthName, day };
+  };
+
+  // Mobile vertical view
+  if (isMobile) {
+    return (
+      <div className="mobile-calendar">
+        <div className="mobile-calendar-header">
+          <h2>Race Calendar</h2>
+        </div>
+        <div className="mobile-calendar-list">
+          {mobileDays.map((day, index) => {
+            const racesForDay = getRacesForDay(day);
+            const isTodayDate = isToday(day);
+            const { dayName, monthName, day: dayNum } = formatDateHeader(day);
+
+            return (
+              <div
+                key={index}
+                className={`mobile-calendar-day ${isWeekend(day) ? "weekend" : ""} ${
+                  isTodayDate ? "today" : ""
+                }`}
+                ref={isTodayDate ? todayRef : null}
+              >
+                <div className="mobile-day-header">
+                  <div className="mobile-day-date">
+                    <span className="mobile-day-name">{dayName}</span>
+                    <span className="mobile-day-number">{dayNum}</span>
+                    <span className="mobile-month-name">{monthName}</span>
+                  </div>
+                  {isTodayDate && <span className="today-badge">Today</span>}
+                </div>
+                {racesForDay.length > 0 && (
+                  <div className="mobile-races-container">
+                    {racesForDay.map((race) => (
+                      <div key={getRaceId(race)} className="mobile-race-chip">
+                        <svg
+                          className={`dot-icon ${
+                            titleCase(race.terrain) || "default"
+                          }`}
+                          width="12"
+                          height="12"
+                          viewBox="0 0 12 12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle cx="6" cy="6" r="6" fill="currentColor" />
+                        </svg>
+                        <div className="mobile-race-info">
+                          <Link
+                            href={`/race/${encodeURIComponent(getRaceId(race))}`}
+                            className="race-name"
+                          >
+                            {race.nickName}
+                          </Link>
+                          <div className="mobile-race-details">
+                            <span className="race-time">
+                              {formatTimeShort(race.startTime)}
+                            </span>
+                            {" • "}
+                            <span className="race-distance">{race.distance}k</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  // Desktop grid view
   return (
     <div className="month-calendar">
       <div className="calendar-header">
@@ -156,11 +286,7 @@ export default function Calendar() {
       </div>
       <div className="calendar-grid">
         {daysInMonth.map((day, index) => {
-          const isToday =
-            day &&
-            day.getDate() === today.getDate() &&
-            day.getMonth() === today.getMonth() &&
-            day.getFullYear() === today.getFullYear() &&
+          const isTodayDate = isToday(day) &&
             day.getMonth() === currentDate.getMonth() &&
             day.getFullYear() === currentDate.getFullYear();
 
@@ -168,7 +294,7 @@ export default function Calendar() {
             <div
               key={index}
               className={`calendar-day ${isWeekend(day) ? "weekend" : ""} ${
-                isToday ? "today" : ""
+                isTodayDate ? "today" : ""
               }`}
             >
               {day ? day.getDate() : ""}
