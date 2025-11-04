@@ -37,7 +37,7 @@ export default function Calendar() {
     currentDay.setDate(currentDay.getDate() + 1);
   }
 
-  // Scroll to today on mobile when component mounts
+  // Scroll to today on mobile when component mounts (centered in viewport)
   useEffect(() => {
     if (isMobile && todayRef.current) {
       // Wait for the DOM to be fully rendered, then scroll
@@ -47,8 +47,13 @@ export default function Calendar() {
           const header = document.querySelector('header');
           const headerHeight = header ? header.offsetHeight : 60;
           
+          // Calculate position to center the element in viewport
           const elementPosition = todayRef.current.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+          const elementHeight = todayRef.current.offsetHeight;
+          const viewportHeight = window.innerHeight;
+          
+          // Center the element: position - (viewport/2) + (element/2) + header
+          const offsetPosition = elementPosition + window.pageYOffset - (viewportHeight / 2) + (elementHeight / 2) + headerHeight;
           
           window.scrollTo({
             top: offsetPosition,
