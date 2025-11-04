@@ -267,6 +267,11 @@ export default function MapsPage() {
 									try {
 										child.bindPopup(popupContent);
 										
+										// Explicitly open popup when marker is clicked
+										child.on("click", () => {
+											child.openPopup();
+										});
+										
 										child.on("popupopen", () => {
 											// Automatically show the route when popup opens (if not already visible)
 											const grp = groups.find((g) => g.raceId === raceId);
@@ -302,7 +307,13 @@ export default function MapsPage() {
 															const children2 = typeof layer.getLayers === "function" ? layer.getLayers() : [];
 															children2.forEach((child2) => {
 																if (child2 instanceof L.Marker) {
-																	try { child2.bindPopup(popupContent2); } catch (_) {}
+																	try { 
+																		child2.bindPopup(popupContent2);
+																		// Explicitly open popup when marker is clicked
+																		child2.on("click", () => {
+																			child2.openPopup();
+																		});
+																	} catch (_) {}
 																}
 															});
 														});
@@ -386,6 +397,10 @@ export default function MapsPage() {
 																		if (child instanceof L.Marker) {
 																			try {
 																				child.bindPopup(popupContent);
+																				// Explicitly open popup when marker is clicked
+																				child.on("click", () => {
+																					child.openPopup();
+																				});
 																			} catch (err) {}
 																		}
 																	});
@@ -602,7 +617,13 @@ export default function MapsPage() {
 						const children = typeof layer.getLayers === "function" ? layer.getLayers() : [];
 						children.forEach((child) => {
 							if (child instanceof ref.L.Marker) {
-								try { child.bindPopup(popupContent); } catch (_) {}
+								try { 
+									child.bindPopup(popupContent);
+									// Explicitly open popup when marker is clicked
+									child.on("click", () => {
+										child.openPopup();
+									});
+								} catch (_) {}
 							}
 						});
 					});
