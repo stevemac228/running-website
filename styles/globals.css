@@ -136,10 +136,13 @@ nav {
   gap: 6px; /* space between text and icon */
 }
 
-.nav-link:hover {
-  border-radius: 9999px;
-  background-color: var(--runnl-dark-blue);
-  transform: scale(1.05);
+/* Only apply hover effects on devices with hover capability (not touch devices) */
+@media (hover: hover) {
+  .nav-link:hover {
+    border-radius: 9999px;
+    background-color: var(--runnl-dark-blue);
+    transform: scale(1.05);
+  }
 }
 
 .nav-icon {
@@ -161,10 +164,6 @@ nav {
   .nav-link {
     margin-left: 0.5rem;
     padding: 10px;
-  }
-
-  .nav-link:hover {
-    display: none;
   }
 }
 /* #endregion */
