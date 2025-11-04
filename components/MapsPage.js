@@ -204,12 +204,155 @@ export default function MapsPage() {
 				const blobUrl = URL.createObjectURL(blob);
 				blobUrlsRef.current.push(blobUrl);
 
+				// Prepare popup content
+				const distanceKm = typeof race.distance === "number" ? +(race.distance) : (race.distance ? String(race.distance) : null);
+				const distText = distanceKm != null ? `<br/>Distance: ${typeof distanceKm === "number" ? `${distanceKm}km` : distanceKm}` : "";
+				const elvText = elevGainMeters != null ? `<br/>Elevation gain: ${Math.round(elevGainMeters)} m` : "";
+				const popupContentShow = `<strong>${race.name}</strong>${distText}${elvText}<br/><button data-rid="${raceId}">Show track</button>`;
+				const popupContentHide = `<strong>${race.name}</strong>${distText}${elvText}<br/><button data-rid="${raceId}">Hide track</button>`;
+
+				// Helper function to setup marker with popup
+				const setupMarkerPopup = (marker, content, isFullLayer = false) => {
+					if (!(marker instanceof L.Marker)) return;
+					
+					try {
+						// Bind popup with autoClose and closeOnClick disabled so manual control works better
+						marker.bindPopup(content, {
+							closeButton: true,
+							autoClose: true,
+							closeOnClick: false
+						});
+						
+						// Add click handler to ensure popup opens
+						marker.off("click"); // Remove any existing handlers
+						marker.on("click", (e) => {
+							L.DomEvent.stopPropagation(e);
+							marker.openPopup();
+						});
+						
+						// Handle popup open event
+						marker.on("popupopen", () => {
+							const grp = groups.find((g) => g.raceId === raceId);
+							if (!grp) return;
+							
+							// Setup button handler
+							const btn = document.querySelector(`button[data-rid="${raceId}"]`);
+							if (btn) {
+								btn.onclick = (ev) => {
+									ev.preventDefault();
+									toggleRouteDisplay(grp, marker);
+								};
+							}
+							
+							// Auto-show route if this is a lightweight marker and route isn't visible
+							if (!isFullLayer && !grp.visible) {
+								toggleRouteDisplay(grp, marker);
+							}
+						});
+					} catch (err) {
+						console.error("Error setting up marker popup:", err);
+					}
+				};
+
+				// Helper function to toggle route display
+				const toggleRouteDisplay = (grp, marker) => {
+					if (!grp || !mounted) return;
+					
+					if (grp.visible) {
+						// Hide full GPX layer and re-show lightweight layer
+						if (map.hasLayer(grp.layer)) map.removeLayer(grp.layer);
+						grp.visible = false;
+						if (grp.lightLayer && !map.hasLayer(grp.lightLayer)) grp.lightLayer.addTo(map);
+						
+						// Update popup content
+						if (marker) {
+							marker.setPopupContent(popupContentShow);
+						}
+					} else {
+						// Show full GPX layer
+						if (grp.lightLayer && map.hasLayer(grp.lightLayer)) map.removeLayer(grp.lightLayer);
+						
+						// Create full layer if needed
+						if (!grp.layer) {
+							try {
+								const layer = new L.GPX(grp.blobUrl || gpxUrl, {
+									async: true,
+									polyline_options: { color: grp.color, weight: 3, opacity: 0.9 },
+									markers: {
+										startIcon: L.divIcon({
+											className: 'custom-div-icon',
+											html: `<div style="background-color: ${grp.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
+											iconSize: [12, 12],
+											iconAnchor: [6, 6],
+										}),
+										endIcon: L.divIcon({
+											className: 'custom-div-icon',
+											html: `<div style="background-color: ${grp.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
+											iconSize: [12, 12],
+											iconAnchor: [6, 6],
+										}),
+									},
+									marker_options: {
+										clickable: true
+									},
+								});
+								
+								layer.on("loaded", () => {
+									const children = typeof layer.getLayers === "function" ? layer.getLayers() : [];
+									children.forEach((child) => {
+										setupMarkerPopup(child, popupContentHide, true);
+									});
+								});
+								
+								grp.layer = layer;
+							} catch (err) {
+								console.error("Error creating full layer:", err);
+								grp.layer = null;
+							}
+						}
+						
+						if (grp.layer) {
+							grp.layer.addTo(map);
+							grp.visible = true;
+							
+							// Fit bounds
+							try {
+								const b = grp.layer.getBounds && grp.layer.getBounds();
+								if (b && b.isValid()) map.fitBounds(b.pad(0.1));
+							} catch (_) {}
+						}
+						
+						// Update popup content on lightweight marker
+						if (marker) {
+							marker.setPopupContent(popupContentHide);
+						}
+					}
+					
+					// Update layers info
+					if (mounted) {
+						const bounds = map.getBounds();
+						const filtered = groups
+							.filter((g) => {
+								if (!g.startLatLng) return false;
+								return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
+							})
+							.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm, raceSlug: g.raceId, color: g.color }));
+						setLayersInfo(filtered);
+					}
+					
+					// Scroll to race in sidebar
+					setTimeout(() => {
+						const listItem = document.querySelector(`input[type="checkbox"][data-color="${grp.color}"]`)?.closest('.maps-page-race-item');
+						if (listItem) {
+							listItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+						}
+					}, 100);
+				};
+
 				// Create lightweight layer with GPX markers but without polylines (visible by default)
 				let lightMarker = null;
 				let lightLayer = null;
 				if (startLatLng) {
-					// Create GPX layer with start marker only (no end marker, no polylines)
-					// Use DivIcon for better stability during zoom/pan
 					try {
 						lightLayer = new L.GPX(blobUrl, {
 							async: true,
@@ -234,14 +377,10 @@ export default function MapsPage() {
 							children.forEach((child) => {
 								if (child instanceof L.Polyline && !(child instanceof L.Marker)) {
 									lightLayer.removeLayer(child);
-								}
-							});
-							
-							// Find the start marker and bind popup to it
-							children.forEach((child) => {
-								if (child instanceof L.Marker) {
+								} else if (child instanceof L.Marker) {
 									lightMarker = child;
 									if (typeof child.setZIndexOffset === "function") child.setZIndexOffset(900);
+									setupMarkerPopup(child, popupContentShow, false);
 								}
 							});
 						});
@@ -251,195 +390,7 @@ export default function MapsPage() {
 						console.error("Error creating light layer:", err);
 						lightLayer = null;
 					}
-
-					// Bind popup to the start marker after it loads
-					const distanceKm = typeof race.distance === "number" ? +(race.distance) : (race.distance ? String(race.distance) : null);
-					const distText = distanceKm != null ? `<br/>Distance: ${typeof distanceKm === "number" ? `${distanceKm}km` : distanceKm}` : "";
-					const elvText = elevGainMeters != null ? `<br/>Elevation gain: ${Math.round(elevGainMeters)} m` : "";
-					const popupContent = `<strong>${race.name}</strong>${distText}${elvText}<br/><button data-rid="${raceId}">Show track</button>`;
-					
-					if (lightLayer) {
-						lightLayer.on("loaded", () => {
-							// Find the start marker and bind popup
-							const children = typeof lightLayer.getLayers === "function" ? lightLayer.getLayers() : [];
-							children.forEach((child) => {
-								if (child instanceof L.Marker) {
-									try {
-										child.bindPopup(popupContent);
-										
-										// Explicitly open popup when marker is clicked
-										child.on("click", () => {
-											child.openPopup();
-										});
-										
-										child.on("popupopen", () => {
-											// Automatically show the route when popup opens (if not already visible)
-											const grp = groups.find((g) => g.raceId === raceId);
-											if (grp && !grp.visible) {
-												// Auto-show the route
-												if (grp.lightLayer && map.hasLayer(grp.lightLayer)) map.removeLayer(grp.lightLayer);
-												
-												if (!grp.layer) {
-													try {
-														const layer = new L.GPX(grp.blobUrl || gpxUrl, {
-															async: true,
-															polyline_options: { color: grp.color, weight: 3, opacity: 0.9 },
-															markers: {
-																startIcon: L.divIcon({
-																	className: 'custom-div-icon',
-																	html: `<div style="background-color: ${grp.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
-																	iconSize: [12, 12],
-																	iconAnchor: [6, 6],
-																}),
-																endIcon: L.divIcon({
-																	className: 'custom-div-icon',
-																	html: `<div style="background-color: ${grp.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
-																	iconSize: [12, 12],
-																	iconAnchor: [6, 6],
-																}),
-															},
-															marker_options: {
-																clickable: true
-															},
-														});
-														layer.on("loaded", () => {
-															const popupContent2 = `<strong>${race.name}</strong>${distText}${elvText}<br/><button data-rid="${raceId}">Hide track</button>`;
-															const children2 = typeof layer.getLayers === "function" ? layer.getLayers() : [];
-															children2.forEach((child2) => {
-																if (child2 instanceof L.Marker) {
-																	try { 
-																		child2.bindPopup(popupContent2);
-																		// Explicitly open popup when marker is clicked
-																		child2.on("click", () => {
-																			child2.openPopup();
-																		});
-																	} catch (_) {}
-																}
-															});
-														});
-														grp.layer = layer;
-													} catch (_) { grp.layer = null; }
-												}
-												
-												if (grp.layer) grp.layer.addTo(map);
-												grp.visible = true;
-												
-												try {
-													const b = grp.layer.getBounds && grp.layer.getBounds();
-													if (b && b.isValid()) map.fitBounds(b.pad(0.1));
-												} catch (_) {}
-												
-												if (mounted) {
-													const bounds = map.getBounds();
-													const filtered = groups
-														.filter((g) => {
-															if (!g.startLatLng) return false;
-															return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
-														})
-														.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm, raceSlug: g.raceId, color: g.color }));
-													setLayersInfo(filtered);
-												}
-												
-												// Scroll to race in sidebar list
-												setTimeout(() => {
-													const listItem = document.querySelector(`input[type="checkbox"][data-color="${grp.color}"]`)?.closest('.maps-page-race-item');
-													if (listItem) {
-														listItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-													}
-												}, 100);
-											}
-											
-											// Set up button handler for manual toggle
-											const btn = document.querySelector(`button[data-rid="${raceId}"]`);
-											if (btn) {
-												btn.onclick = (ev) => {
-													ev.preventDefault();
-													const grp = groups.find((g) => g.raceId === raceId);
-													if (!grp) return;
-													// toggle via same logic as sidebar
-													if (grp.visible) {
-														// hide full GPX layer and re-show lightweight layer
-														if (map.hasLayer(grp.layer)) map.removeLayer(grp.layer);
-														grp.visible = false;
-														if (grp.lightLayer && !map.hasLayer(grp.lightLayer)) grp.lightLayer.addTo(map);
-														btn.textContent = "Show track";
-													} else {
-														// remove lightweight layer and create & show full plugin layer on-demand
-														if (grp.lightLayer && map.hasLayer(grp.lightLayer)) map.removeLayer(grp.lightLayer);
-														// create L.GPX from blobUrl if not created yet
-														if (!grp.layer) {
-															try {
-																const layer = new L.GPX(grp.blobUrl || gpxUrl, {
-																	async: true,
-																	polyline_options: { color: grp.color, weight: 3, opacity: 0.9 },
-																	markers: {
-																		startIcon: L.divIcon({
-																			className: 'custom-div-icon',
-																			html: `<div style="background-color: ${grp.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
-																			iconSize: [12, 12],
-																			iconAnchor: [6, 6],
-																		}),
-																		endIcon: L.divIcon({
-																			className: 'custom-div-icon',
-																			html: `<div style="background-color: ${grp.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
-																			iconSize: [12, 12],
-																			iconAnchor: [6, 6],
-																		}),
-																	},
-																	marker_options: {
-																		clickable: true
-																	},
-																});
-																layer.on("loaded", () => {
-																	// bind plugin markers' popups
-																	const children = typeof layer.getLayers === "function" ? layer.getLayers() : [];
-																	children.forEach((child) => {
-																		if (child instanceof L.Marker) {
-																			try {
-																				child.bindPopup(popupContent);
-																				// Explicitly open popup when marker is clicked
-																				child.on("click", () => {
-																					child.openPopup();
-																				});
-																			} catch (err) {}
-																		}
-																	});
-																});
-																grp.layer = layer;
-															} catch (_) { grp.layer = null; }
-														}
-														if (grp.layer) grp.layer.addTo(map);
-														grp.visible = true;
-														btn.textContent = "Hide track";
-														try {
-															const b = grp.layer.getBounds && grp.layer.getBounds();
-															if (b && b.isValid()) map.fitBounds(b.pad(0.1));
-														} catch (_) {}
-													}
-													if (mounted) {
-														const bounds = map.getBounds();
-														const filtered = groups
-															.filter((g) => {
-																if (!g.startLatLng) return false;
-																return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
-															})
-															.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm, raceSlug: g.raceId, color: g.color }));
-														setLayersInfo(filtered);
-													}
-												};
-											}
-										});
-									} catch (err) {
-										console.error("Error binding popup:", err);
-									}
-								}
-							});
-						});
-					}
 				}
-
-				// Distance from race data
-				const distanceKm = typeof race.distance === "number" ? +(race.distance) : (race.distance ? String(race.distance) : null);
 
 				// push group but DO NOT create full plugin GPX layer yet; store blobUrl for on-demand creation
 				const group = {
