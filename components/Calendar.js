@@ -200,9 +200,6 @@ export default function Calendar() {
   if (isMobile) {
     return (
       <div className="mobile-calendar">
-        <div className="mobile-calendar-header">
-          <h2>Race Calendar</h2>
-        </div>
         <div className="mobile-calendar-list">
           {mobileDays.map((day, index) => {
             const racesForDay = getRacesForDay(day);
