@@ -211,6 +211,10 @@ export default function MapsPage() {
 				if (startLatLng) {
 					// Create GPX layer with start marker only (no end marker, no polylines)
 					// Use DivIcon for better stability during zoom/pan
+					// Prepare popup content before creating layer
+					const elvText = elevGainMeters != null ? `<br/>Elevation gain: ${Math.round(elevGainMeters)} m` : "";
+					const popupContent = `<strong>${race.name}</strong>${elvText}<br/><button data-rid="${raceId}">Show track</button>`;
+
 					try {
 						lightLayer = new L.GPX(blobUrl, {
 							async: true,
@@ -230,39 +234,39 @@ export default function MapsPage() {
 						});
 						
 						lightLayer.on("loaded", () => {
+							// The GPX plugin returns FeatureGroups/LayerGroups that contain the actual markers
+							// We need to recursively get all layers including nested ones
+							const getAllLayers = (layer) => {
+								const layers = [];
+								if (typeof layer.getLayers === 'function') {
+									const children = layer.getLayers();
+									children.forEach(child => {
+										layers.push(child);
+										layers.push(...getAllLayers(child));
+									});
+								}
+								return layers;
+							};
+							
+							const allLayers = getAllLayers(lightLayer);
+							
 							// Remove polylines from the layer to prevent them from appearing
-							const children = typeof lightLayer.getLayers === "function" ? lightLayer.getLayers() : [];
-							children.forEach((child) => {
+							allLayers.forEach((child) => {
 								if (child instanceof L.Polyline && !(child instanceof L.Marker)) {
-									lightLayer.removeLayer(child);
+									// Remove from parent layer if possible
+									if (lightLayer.hasLayer(child)) {
+										lightLayer.removeLayer(child);
+									}
 								}
 							});
 							
-							// Find the start marker and bind popup to it
-							children.forEach((child) => {
+							// Find the start marker, bind popup, and set z-index
+							allLayers.forEach((child) => {
 								if (child instanceof L.Marker) {
 									lightMarker = child;
 									if (typeof child.setZIndexOffset === "function") child.setZIndexOffset(900);
-								}
-							});
-						});
-						
-						lightLayer.addTo(map);
-					} catch (err) {
-						console.error("Error creating light layer:", err);
-						lightLayer = null;
-					}
-
-					// Bind popup to the start marker after it loads
-					const elvText = elevGainMeters != null ? `<br/>Elevation gain: ${Math.round(elevGainMeters)} m` : "";
-					const popupContent = `<strong>${race.name}</strong>${elvText}<br/><button data-rid="${raceId}">Show track</button>`;
-					
-					if (lightLayer) {
-						lightLayer.on("loaded", () => {
-							// Find the start marker and bind popup
-							const children = typeof lightLayer.getLayers === "function" ? lightLayer.getLayers() : [];
-							children.forEach((child) => {
-								if (child instanceof L.Marker) {
+									
+									// Bind popup to marker
 									try {
 										child.bindPopup(popupContent);
 										child.on("popupopen", () => {
@@ -307,9 +311,21 @@ export default function MapsPage() {
 																	},
 																});
 																layer.on("loaded", () => {
-																	// bind plugin markers' popups
-																	const children = typeof layer.getLayers === "function" ? layer.getLayers() : [];
-																	children.forEach((child) => {
+																	// Recursively get all layers including nested ones
+																	const getAllLayers = (lyr) => {
+																		const layers = [];
+																		if (typeof lyr.getLayers === 'function') {
+																			const children = lyr.getLayers();
+																			children.forEach(child => {
+																				layers.push(child);
+																				layers.push(...getAllLayers(child));
+																			});
+																		}
+																		return layers;
+																	};
+																	
+																	const allLayers = getAllLayers(layer);
+																	allLayers.forEach((child) => {
 																		if (child instanceof L.Marker) {
 																			try {
 																				child.bindPopup(popupContent);
@@ -347,6 +363,11 @@ export default function MapsPage() {
 								}
 							});
 						});
+						
+						lightLayer.addTo(map);
+					} catch (err) {
+						console.error("Error creating light layer:", err);
+						lightLayer = null;
 					}
 				}
 
@@ -527,8 +548,22 @@ export default function MapsPage() {
 					});
 					layer.on("loaded", () => {
 						const popupContent = `<strong>${group.name}</strong>${group.elevInfo ? `<br/>Elevation gain: ${Math.round(group.elevInfo.gain)} m` : ""}<br/><button data-rid="${group.raceId}">Show track</button>`;
-						const children = typeof layer.getLayers === "function" ? layer.getLayers() : [];
-						children.forEach((child) => {
+						
+						// Recursively get all layers including nested ones
+						const getAllLayers = (lyr) => {
+							const layers = [];
+							if (typeof lyr.getLayers === 'function') {
+								const children = lyr.getLayers();
+								children.forEach(child => {
+									layers.push(child);
+									layers.push(...getAllLayers(child));
+								});
+							}
+							return layers;
+						};
+						
+						const allLayers = getAllLayers(layer);
+						allLayers.forEach((child) => {
 							if (child instanceof ref.L.Marker) {
 								try { child.bindPopup(popupContent); } catch (_) {}
 							}
