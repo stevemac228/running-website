@@ -171,10 +171,13 @@ nav {
   header {
     position: sticky;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 100;
     /* Ensure header spans full width including scrollbar */
     margin: 0;
-    width: 100%;
+    width: 100vw;
+    max-width: 100%;
     box-sizing: border-box;
   }
 }
