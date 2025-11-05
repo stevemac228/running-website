@@ -7,6 +7,7 @@ export default function MapsPage() {
 	const mapRef = useRef(null);
 	const leafletRef = useRef(null);
 	const blobUrlsRef = useRef([]); // track created blob URLs to revoke on unmount
+	const mapBoundsRef = useRef(null);
 	const [loading, setLoading] = useState(true);
 	const [layersInfo, setLayersInfo] = useState([]); // { id, name, visible, elevInfo, distanceKm, raceSlug }
 	const [mapBounds, setMapBounds] = useState(null); // track current map viewport bounds
@@ -396,6 +397,7 @@ export default function MapsPage() {
 				} else {
 					map.setView([47.5, -52.7], 8);
 				}
+				mapBoundsRef.current = map.getBounds();
 				if (mounted) setLoading(false);
 			}, 200);
 
@@ -405,6 +407,7 @@ export default function MapsPage() {
 			// Function to update the race list based on current map bounds
 			const updateVisibleRaces = () => {
 				const bounds = map.getBounds();
+				mapBoundsRef.current = bounds;
 				setMapBounds(bounds);
 				
 				// Filter races whose start points are within the viewport
@@ -584,10 +587,6 @@ export default function MapsPage() {
 
   return (
     <div>
-      <div className="maps-page-container">
-        <h1 className="maps-page-title">Race Map</h1>
-      </div>
-
       <div className="maps-page-grid">
         <div className="maps-page-map-container">
           <div ref={mapRef} id="map" className="maps-page-map" />

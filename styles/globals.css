@@ -1822,16 +1822,11 @@ header, .nav-left, nav, .nav-link {
 .maps-page-grid {
   display: grid;
   grid-template-columns: 1fr 380px;
-  gap: 20px;
 }
 
 .maps-page-map-container {
-  min-height: 500px;
-  height: 70vh;
-  border-radius: 8px;
+  min-height: 94vh;
   overflow: hidden;
-  border: 1px solid #ddd;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .maps-page-map {
@@ -1842,16 +1837,16 @@ header, .nav-left, nav, .nav-link {
 .maps-page-sidebar {
   background-color: var(--runnl-background);
   border: 1px solid #e0e0e0;
-  border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  max-height: 70vh;
+  max-height: 94vh;
   overflow-y: auto;
 }
 
 .maps-page-sidebar-title {
   margin-top: 0;
   margin-bottom: 1rem;
+  border-bottom:#848484 1px solid;
   font-size: 1.3rem;
   font-weight: 700;
   color: var(--runnl-dark-text);
@@ -1865,7 +1860,6 @@ header, .nav-left, nav, .nav-link {
 
 .maps-page-race-item {
   margin-bottom: 12px;
-  padding: 10px;
   border-radius: 8px;
   transition: background-color 0.2s ease;
 }
@@ -1964,10 +1958,6 @@ header, .nav-left, nav, .nav-link {
 
 .date-range-relative {
   position: relative;
-}
-
-.page-main-padding {
-  padding: 24px;
 }
 
 .theme-toggle-btn {

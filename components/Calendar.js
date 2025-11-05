@@ -53,11 +53,16 @@ export default function Calendar() {
           const viewportHeight = window.innerHeight;
           
           // Center the element: position - (viewport/2) + (element/2) + header
-          const offsetPosition = elementPosition + window.pageYOffset - (viewportHeight / 2) + (elementHeight / 2) + headerHeight;
-          
+          const offsetPosition =
+            elementPosition +
+            window.pageYOffset -
+            viewportHeight / 2 +
+            elementHeight / 2 -
+            headerHeight;
+
           window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth"
+            top: Math.max(offsetPosition, 0),
+            behavior: "smooth",
           });
         }
       }, 300);
