@@ -29,6 +29,19 @@ export default function MapsPage() {
 			return R * c;
 		};
 
+		// helper: recursively get all layers including nested ones from a layer group
+		const getAllLayers = (layer) => {
+			const layers = [];
+			if (typeof layer.getLayers === 'function') {
+				const children = layer.getLayers();
+				children.forEach(child => {
+					layers.push(child);
+					layers.push(...getAllLayers(child));
+				});
+			}
+			return layers;
+		};
+
 		// compute polyline total length (meters)
 		const computePolyLength = (poly) => {
 			// poly.getLatLngs is a function that returns arrays (possibly nested)
@@ -234,20 +247,7 @@ export default function MapsPage() {
 						});
 						
 						lightLayer.on("loaded", () => {
-							// The GPX plugin returns FeatureGroups/LayerGroups that contain the actual markers
-							// We need to recursively get all layers including nested ones
-							const getAllLayers = (layer) => {
-								const layers = [];
-								if (typeof layer.getLayers === 'function') {
-									const children = layer.getLayers();
-									children.forEach(child => {
-										layers.push(child);
-										layers.push(...getAllLayers(child));
-									});
-								}
-								return layers;
-							};
-							
+							// Recursively get all layers including nested ones
 							const allLayers = getAllLayers(lightLayer);
 							
 							// Remove polylines from the layer to prevent them from appearing
@@ -312,18 +312,6 @@ export default function MapsPage() {
 																});
 																layer.on("loaded", () => {
 																	// Recursively get all layers including nested ones
-																	const getAllLayers = (lyr) => {
-																		const layers = [];
-																		if (typeof lyr.getLayers === 'function') {
-																			const children = lyr.getLayers();
-																			children.forEach(child => {
-																				layers.push(child);
-																				layers.push(...getAllLayers(child));
-																			});
-																		}
-																		return layers;
-																	};
-																	
 																	const allLayers = getAllLayers(layer);
 																	allLayers.forEach((child) => {
 																		if (child instanceof L.Marker) {
@@ -550,18 +538,6 @@ export default function MapsPage() {
 						const popupContent = `<strong>${group.name}</strong>${group.elevInfo ? `<br/>Elevation gain: ${Math.round(group.elevInfo.gain)} m` : ""}<br/><button data-rid="${group.raceId}">Show track</button>`;
 						
 						// Recursively get all layers including nested ones
-						const getAllLayers = (lyr) => {
-							const layers = [];
-							if (typeof lyr.getLayers === 'function') {
-								const children = lyr.getLayers();
-								children.forEach(child => {
-									layers.push(child);
-									layers.push(...getAllLayers(child));
-								});
-							}
-							return layers;
-						};
-						
 						const allLayers = getAllLayers(layer);
 						allLayers.forEach((child) => {
 							if (child instanceof ref.L.Marker) {
