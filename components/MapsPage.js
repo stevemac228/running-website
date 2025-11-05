@@ -224,9 +224,16 @@ export default function MapsPage() {
 				if (startLatLng) {
 					// Create GPX layer with start marker only (no end marker, no polylines)
 					// Use DivIcon for better stability during zoom/pan
-					// Prepare popup content before creating layer
-					const elvText = elevGainMeters != null ? `<br/>Elevation gain: ${Math.round(elevGainMeters)} m` : "";
-					const popupContent = `<strong>${race.name}</strong>${elvText}<br/><button data-rid="${raceId}">Show track</button>`;
+						// Prepare popup content before creating layer
+					const elvText = elevGainMeters != null ? `<div class="popup-elevation">${Math.round(elevGainMeters)}m elevation gain</div>` : "";
+					const distText = race.distance ? `<div class="popup-distance">${race.distance}</div>` : "";
+					const popupContent = `
+						<div class="custom-popup">
+							<div class="popup-title">${race.name}</div>
+							${distText}
+							${elvText}
+						</div>
+					`;
 
 					try {
 						lightLayer = new L.GPX(blobUrl, {
@@ -268,81 +275,105 @@ export default function MapsPage() {
 									
 									// Bind popup to marker
 									try {
-										child.bindPopup(popupContent);
+										child.bindPopup(popupContent, {
+											className: 'modern-leaflet-popup'
+										});
+										
+										// Auto-show track when popup opens
 										child.on("popupopen", () => {
-											const btn = document.querySelector(`button[data-rid="${raceId}"]`);
-											if (btn) {
-												btn.onclick = (ev) => {
-													ev.preventDefault();
-													const grp = groups.find((g) => g.raceId === raceId);
-													if (!grp) return;
-													// toggle via same logic as sidebar
-													if (grp.visible) {
-														// hide full GPX layer and re-show lightweight layer
-														if (map.hasLayer(grp.layer)) map.removeLayer(grp.layer);
-														grp.visible = false;
-														if (grp.lightLayer && !map.hasLayer(grp.lightLayer)) grp.lightLayer.addTo(map);
-														btn.textContent = "Show track";
-													} else {
-														// remove lightweight layer and create & show full plugin layer on-demand
-														if (grp.lightLayer && map.hasLayer(grp.lightLayer)) map.removeLayer(grp.lightLayer);
-														// create L.GPX from blobUrl if not created yet
-														if (!grp.layer) {
-															try {
-																const layer = new L.GPX(grp.blobUrl || gpxUrl, {
-																	async: true,
-																	polyline_options: { color: grp.color, weight: 3, opacity: 0.9 },
-																	markers: {
-																		startIcon: L.divIcon({
-																			className: 'custom-div-icon',
-																			html: `<div style="background-color: ${grp.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
-																			iconSize: [12, 12],
-																			iconAnchor: [6, 6],
-																		}),
-																		endIcon: L.divIcon({
-																			className: 'custom-div-icon',
-																			html: `<div style="background-color: ${grp.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
-																			iconSize: [12, 12],
-																			iconAnchor: [6, 6],
-																		}),
-																	},
-																	marker_options: {
-																		clickable: true
-																	},
-																});
-																layer.on("loaded", () => {
-																	// Recursively get all layers including nested ones
-																	const allLayers = getAllLayers(layer);
-																	allLayers.forEach((child) => {
-																		if (child instanceof L.Marker) {
-																			try {
-																				child.bindPopup(popupContent);
-																			} catch (err) {}
-																		}
+											const grp = groups.find((g) => g.raceId === raceId);
+											if (!grp || grp.visible) return; // Already visible
+											
+											// Remove lightweight layer and show full track
+											if (grp.lightLayer && map.hasLayer(grp.lightLayer)) {
+												map.removeLayer(grp.lightLayer);
+											}
+											
+											// Create L.GPX layer if not created yet
+											if (!grp.layer) {
+												try {
+													const layer = new L.GPX(grp.blobUrl || gpxUrl, {
+														async: true,
+														polyline_options: { color: grp.color, weight: 3, opacity: 0.9 },
+														markers: {
+															startIcon: L.divIcon({
+																className: 'custom-div-icon',
+																html: `<div style="background-color: ${grp.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
+																iconSize: [12, 12],
+																iconAnchor: [6, 6],
+															}),
+															endIcon: L.divIcon({
+																className: 'custom-div-icon',
+																html: `<div style="background-color: ${grp.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
+																iconSize: [12, 12],
+																iconAnchor: [6, 6],
+															}),
+														},
+														marker_options: {
+															clickable: true
+														},
+													});
+													layer.on("loaded", () => {
+														// Recursively get all layers including nested ones
+														const allLayers = getAllLayers(layer);
+														allLayers.forEach((child) => {
+															if (child instanceof L.Marker) {
+																try {
+																	child.bindPopup(popupContent, {
+																		className: 'modern-leaflet-popup'
 																	});
-																});
-																grp.layer = layer;
-															} catch (_) { grp.layer = null; }
-														}
-														if (grp.layer) grp.layer.addTo(map);
-														grp.visible = true;
-														btn.textContent = "Hide track";
-														try {
-															const b = grp.layer.getBounds && grp.layer.getBounds();
-															if (b && b.isValid()) map.fitBounds(b.pad(0.1));
-														} catch (_) {}
-													}
-													if (mounted) {
-														const bounds = map.getBounds();
-														const filtered = groups
-															.filter((g) => {
-																if (!g.startLatLng) return false;
-																return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
-															})
-															.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm, raceSlug: g.raceId, color: g.color }));
-														setLayersInfo(filtered);
-													}
-												};
+																} catch (err) {}
+															}
+														});
+													});
+													grp.layer = layer;
+												} catch (_) { grp.layer = null; }
+											}
+											
+											if (grp.layer) grp.layer.addTo(map);
+											grp.visible = true;
+											
+											// Fit bounds to track
+											try {
+												const b = grp.layer.getBounds && grp.layer.getBounds();
+												if (b && b.isValid()) map.fitBounds(b.pad(0.1));
+											} catch (_) {}
+											
+											// Update race list
+											if (mounted) {
+												const bounds = map.getBounds();
+												const filtered = groups
+													.filter((g) => {
+														if (!g.startLatLng) return false;
+														return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
+													})
+													.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm, raceSlug: g.raceId, color: g.color }));
+												setLayersInfo(filtered);
+											}
+										});
+										
+										// Hide track when popup closes
+										child.on("popupclose", () => {
+											const grp = groups.find((g) => g.raceId === raceId);
+											if (!grp || !grp.visible) return;
+											
+											// Hide full GPX layer and re-show lightweight layer
+											if (map.hasLayer(grp.layer)) map.removeLayer(grp.layer);
+											grp.visible = false;
+											if (grp.lightLayer && !map.hasLayer(grp.lightLayer)) {
+												grp.lightLayer.addTo(map);
+											}
+											
+											// Update race list
+											if (mounted) {
+												const bounds = map.getBounds();
+												const filtered = groups
+													.filter((g) => {
+														if (!g.startLatLng) return false;
+														return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
+													})
+													.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm, raceSlug: g.raceId, color: g.color }));
+												setLayersInfo(filtered);
 											}
 										});
 									} catch (err) {
@@ -495,6 +526,19 @@ export default function MapsPage() {
 		};
 	}, []);
 
+	// Helper function to recursively get all layers (used by toggleLayer)
+	const getAllLayersHelper = (layer) => {
+		const layers = [];
+		if (typeof layer.getLayers === 'function') {
+			const children = layer.getLayers();
+			children.forEach(child => {
+				layers.push(child);
+				layers.push(...getAllLayersHelper(child));
+			});
+		}
+		return layers;
+	};
+
 	// toggle either from sidebar or popup button — create GPX layer on demand
 	function toggleLayer(id) {
 		const ref = leafletRef.current;
@@ -535,13 +579,25 @@ export default function MapsPage() {
 						},
 					});
 					layer.on("loaded", () => {
-						const popupContent = `<strong>${group.name}</strong>${group.elevInfo ? `<br/>Elevation gain: ${Math.round(group.elevInfo.gain)} m` : ""}<br/><button data-rid="${group.raceId}">Show track</button>`;
+						const elvText = group.elevInfo?.gain ? `<div class="popup-elevation">${Math.round(group.elevInfo.gain)}m elevation gain</div>` : "";
+						const distText = group.distanceKm ? `<div class="popup-distance">${group.distanceKm}km</div>` : "";
+						const popupContent = `
+							<div class="custom-popup">
+								<div class="popup-title">${group.name}</div>
+								${distText}
+								${elvText}
+							</div>
+						`;
 						
 						// Recursively get all layers including nested ones
-						const allLayers = getAllLayers(layer);
+						const allLayers = getAllLayersHelper(layer);
 						allLayers.forEach((child) => {
 							if (child instanceof ref.L.Marker) {
-								try { child.bindPopup(popupContent); } catch (_) {}
+								try { 
+									child.bindPopup(popupContent, {
+										className: 'modern-leaflet-popup'
+									}); 
+								} catch (_) {}
 							}
 						});
 					});
