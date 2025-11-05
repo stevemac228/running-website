@@ -276,7 +276,14 @@ export default function MapsPage() {
 									// Bind popup to marker
 									try {
 										child.bindPopup(popupContent, {
-											className: 'modern-leaflet-popup'
+											className: 'modern-leaflet-popup',
+											autoClose: false,  // Don't auto-close when another popup opens
+											closeOnClick: false  // Don't close when map is clicked
+										});
+										
+										// Prevent marker clicks from closing the popup
+										child.on('click', (e) => {
+											L.DomEvent.stopPropagation(e);
 										});
 										
 										// Auto-show track when popup opens
@@ -320,7 +327,13 @@ export default function MapsPage() {
 															if (child instanceof L.Marker) {
 																try {
 																	child.bindPopup(popupContent, {
-																		className: 'modern-leaflet-popup'
+																		className: 'modern-leaflet-popup',
+																		autoClose: false,
+																		closeOnClick: false
+																	});
+																	// Prevent marker clicks from closing the popup
+																	child.on('click', (e) => {
+																		L.DomEvent.stopPropagation(e);
 																	});
 																} catch (err) {}
 															}
@@ -473,6 +486,12 @@ export default function MapsPage() {
 			map.on("moveend", updateVisibleRaces);
 			map.on("zoomend", updateVisibleRaces);
 
+			// Add map click handler to close popup when clicking on map (not on markers/popup)
+			map.on("click", (e) => {
+				// Close any open popups, which will trigger popupclose event and hide tracks
+				map.closePopup();
+			});
+
 			// Initial update after map is fitted
 			setTimeout(() => {
 				updateVisibleRaces();
@@ -595,8 +614,14 @@ export default function MapsPage() {
 							if (child instanceof ref.L.Marker) {
 								try { 
 									child.bindPopup(popupContent, {
-										className: 'modern-leaflet-popup'
-									}); 
+										className: 'modern-leaflet-popup',
+										autoClose: false,
+										closeOnClick: false
+									});
+									// Prevent marker clicks from closing the popup
+									child.on('click', (e) => {
+										ref.L.DomEvent.stopPropagation(e);
+									});
 								} catch (_) {}
 							}
 						});
