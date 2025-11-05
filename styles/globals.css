@@ -930,6 +930,8 @@ nav {
 
 .mobile-calendar-list {
   padding: 0;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
 }
 
 .mobile-calendar-day {

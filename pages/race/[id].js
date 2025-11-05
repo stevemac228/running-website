@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState, useRef } from "react";
 import Header from "../../components/Header";
@@ -282,6 +283,34 @@ export default function RaceDetail() {
     };
   }, [race, coords]);
 
+  const baseUrl = "https://www.runnl.ca";
+  const raceSlug = race ? encodeURIComponent(getRaceId(race)) : "";
+  const pageTitle = race
+    ? `${race.name} | Run NL`
+    : "Race Details | Run NL";
+  const pageDescription = race
+    ? `Details for ${race.name} including date, distance, and registration info in ${race.location || "Newfoundland and Labrador"}.`
+    : "Find Newfoundland race details on Run NL.";
+  const jsonLd = race
+    ? {
+        "@context": "https://schema.org",
+        "@type": "SportsEvent",
+        name: race.name,
+        startDate: race.date,
+        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+        eventStatus: "https://schema.org/EventScheduled",
+        location: {
+          "@type": "Place",
+          name: race.startLineLocation || race.location || "Newfoundland and Labrador",
+          address: race.location || "Newfoundland and Labrador",
+        },
+        url: `${baseUrl}/race/${raceSlug}`,
+        organizer: race.organization
+          ? { "@type": "Organization", name: race.organization }
+          : undefined,
+      }
+    : null;
+
   if (!router.isReady) return <p>Loading…</p>;
 
   if (!race) {
@@ -299,6 +328,21 @@ export default function RaceDetail() {
 
   return (
     <div>
+      <Head>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <link rel="canonical" href={`${baseUrl}/race/${raceSlug}`} />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:url" content={`${baseUrl}/race/${raceSlug}`} />
+        {jsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          />
+        )}
+      </Head>
+
       <Header />
 
       <main className="race-detail-main">

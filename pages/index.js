@@ -1,3 +1,4 @@
+import Head from "next/head";
 import races from "../data/races.json";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -41,6 +42,33 @@ export default function Home() {
 
   return (
     <div>
+      <Head>
+        <title>Run NL | Newfoundland Running Races</title>
+        <meta
+          name="description"
+          content="Discover upcoming Newfoundland and Labrador running events with dates, distances, and registration details."
+        />
+        <link rel="canonical" href="https://www.runnl.ca/" />
+        <meta property="og:title" content="Run NL | Newfoundland Running Races" />
+        <meta
+          property="og:description"
+          content="Browse road, trail, and fun run events happening soon across Newfoundland and Labrador."
+        />
+        <meta property="og:url" content="https://www.runnl.ca/" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Website",
+              name: "Run NL",
+              url: "https://www.runnl.ca/",
+              description:
+                "Discover upcoming Newfoundland and Labrador running events with dates, distances, and registration details.",
+            }),
+          }}
+        />
+      </Head>
       <Header />
       <main className="homepage">
         <div className="upcomingRaces">

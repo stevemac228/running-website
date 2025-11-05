@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Head from "next/head";
 import races from "../data/races.json";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -142,6 +143,33 @@ export default function Races() {
 
   return (
     <div>
+      <Head>
+        <title>All Newfoundland Races | Run NL</title>
+        <meta
+          name="description"
+          content="Filter and explore every Newfoundland and Labrador running race by date, distance, and terrain on Run NL."
+        />
+        <link rel="canonical" href="https://www.runnl.ca/races" />
+        <meta property="og:title" content="All Newfoundland Races | Run NL" />
+        <meta
+          property="og:description"
+          content="Filter and explore every Newfoundland and Labrador running race by date, distance, and terrain."
+        />
+        <meta property="og:url" content="https://www.runnl.ca/races" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "CollectionPage",
+              name: "All Newfoundland Races",
+              url: "https://www.runnl.ca/races",
+              description:
+                "Filter and explore every Newfoundland and Labrador running race by date, distance, and terrain.",
+            }),
+          }}
+        />
+      </Head>
       <Header />
       <main className="races-page-container">
         {/* Search Bar - Centered */}
