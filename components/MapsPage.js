@@ -689,10 +689,6 @@ export default function MapsPage() {
 			}
 
 			if (group.layer) group.layer.addTo(ref.map);
-			try {
-				const b = group.layer.getBounds && group.layer.getBounds();
-				if (b && b.isValid()) ref.map.fitBounds(b.pad(0.1));
-			} catch (err) {}
 		}
 	}
 
