@@ -281,15 +281,20 @@ export default function MapsPage() {
 											closeOnClick: false  // Don't close when map is clicked
 										});
 										
-										// Prevent marker clicks from closing the popup
+										// Handle marker clicks to show popup and track
 										child.on('click', (e) => {
 											L.DomEvent.stopPropagation(e);
+											// Explicitly open the popup
+											child.openPopup();
 										});
 										
 										// Auto-show track when popup opens
 										child.on("popupopen", () => {
 											const grp = groups.find((g) => g.raceId === raceId);
-											if (!grp || grp.visible) return; // Already visible
+											if (!grp) return;
+											
+											// Skip if track is already visible
+											if (grp.visible) return;
 											
 											// Remove lightweight layer and show full track
 											if (grp.lightLayer && map.hasLayer(grp.lightLayer)) {
@@ -323,21 +328,29 @@ export default function MapsPage() {
 													layer.on("loaded", () => {
 														// Recursively get all layers including nested ones
 														const allLayers = getAllLayers(layer);
+														let firstMarker = null;
 														allLayers.forEach((child) => {
 															if (child instanceof L.Marker) {
+																if (!firstMarker) firstMarker = child;
 																try {
 																	child.bindPopup(popupContent, {
 																		className: 'modern-leaflet-popup',
 																		autoClose: false,
 																		closeOnClick: false
 																	});
-																	// Prevent marker clicks from closing the popup
+																	// Handle marker clicks to show popup and track
 																	child.on('click', (e) => {
 																		L.DomEvent.stopPropagation(e);
+																		// Explicitly open the popup
+																		child.openPopup();
 																	});
 																} catch (err) {}
 															}
 														});
+														// Open the popup on the first marker immediately after loading
+														if (firstMarker) {
+															firstMarker.openPopup();
+														}
 													});
 													grp.layer = layer;
 												} catch (_) { grp.layer = null; }
@@ -618,9 +631,11 @@ export default function MapsPage() {
 										autoClose: false,
 										closeOnClick: false
 									});
-									// Prevent marker clicks from closing the popup
+									// Handle marker clicks to show popup and track
 									child.on('click', (e) => {
 										ref.L.DomEvent.stopPropagation(e);
+										// Explicitly open the popup
+										child.openPopup();
 									});
 								} catch (_) {}
 							}
