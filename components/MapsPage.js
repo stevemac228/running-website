@@ -674,6 +674,11 @@ export default function MapsPage() {
 								} catch (_) {}
 							}
 						});
+						// Open popup on first marker when checkbox is clicked
+						const firstMarker = allLayers.find(child => child instanceof ref.L.Marker);
+						if (firstMarker) {
+							firstMarker.openPopup();
+						}
 					});
 					group.layer = layer;
 				} catch (_) { group.layer = null; }
