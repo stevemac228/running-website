@@ -391,12 +391,6 @@ export default function MapsPage() {
 										}
 										
 										if (grp.layer) grp.layer.addTo(map);
-										
-										// Fit bounds to track
-										try {
-											const b = grp.layer.getBounds && grp.layer.getBounds();
-											if (b && b.isValid()) map.fitBounds(b.pad(0.1));
-										} catch (_) {}
 									});
 								}
 							});
