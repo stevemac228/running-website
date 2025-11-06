@@ -344,6 +344,30 @@ export default function MapsPage() {
 																		// Explicitly open the popup
 																		child.openPopup();
 																	});
+																	// Hide track when popup closes
+																	child.on("popupclose", () => {
+																		const grp = groups.find((g) => g.raceId === raceId);
+																		if (!grp || !grp.visible) return;
+																		
+																		// Hide full GPX layer and re-show lightweight layer
+																		if (map.hasLayer(grp.layer)) map.removeLayer(grp.layer);
+																		grp.visible = false;
+																		if (grp.lightLayer && !map.hasLayer(grp.lightLayer)) {
+																			grp.lightLayer.addTo(map);
+																		}
+																		
+																		// Update race list
+																		if (mounted) {
+																			const bounds = map.getBounds();
+																			const filtered = groups
+																				.filter((g) => {
+																					if (!g.startLatLng) return false;
+																					return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
+																				})
+																				.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm, raceSlug: g.raceId, color: g.color }));
+																			setLayersInfo(filtered);
+																		}
+																	});
 																} catch (err) {}
 															}
 														});
@@ -636,6 +660,27 @@ export default function MapsPage() {
 										ref.L.DomEvent.stopPropagation(e);
 										// Explicitly open the popup
 										child.openPopup();
+									});
+									// Hide track when popup closes
+									child.on("popupclose", () => {
+										if (!group || !group.visible) return;
+										
+										// Hide full GPX layer and re-show lightweight layer
+										if (ref.map.hasLayer(group.layer)) ref.map.removeLayer(group.layer);
+										group.visible = false;
+										if (group.lightLayer && !ref.map.hasLayer(group.lightLayer)) {
+											group.lightLayer.addTo(ref.map);
+										}
+										
+										// Update race list
+										const bounds = ref.map.getBounds();
+										const filtered = ref.groups
+											.filter((g) => {
+												if (!g.startLatLng) return false;
+												return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
+											})
+											.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm, raceSlug: g.raceId, color: g.color }));
+										setLayersInfo(filtered);
 									});
 								} catch (_) {}
 							}
