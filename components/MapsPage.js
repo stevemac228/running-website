@@ -341,12 +341,13 @@ export default function MapsPage() {
 																child.on("popupclose", () => {
 																	const grp = groups.find((g) => g.raceId === raceId);
 																	if (!grp) return;
+																	if (!grp.layer) return;
 																	
-																	// Only hide if currently visible
-																	if (!grp.visible) return;
+																	// Only hide if layer is actually on the map
+																	if (!map.hasLayer(grp.layer)) return;
 																	
 																	// Hide full GPX layer and re-show lightweight layer
-																	if (map.hasLayer(grp.layer)) map.removeLayer(grp.layer);
+																	map.removeLayer(grp.layer);
 																	grp.visible = false;
 																	if (grp.lightLayer && !map.hasLayer(grp.lightLayer)) {
 																		grp.lightLayer.addTo(map);
@@ -633,12 +634,13 @@ export default function MapsPage() {
 									// Hide track when popup closes (X button clicked)
 									child.on("popupclose", () => {
 										if (!group) return;
+										if (!group.layer) return;
 										
-										// Only hide if currently visible
-										if (!group.visible) return;
+										// Only hide if layer is actually on the map
+										if (!ref.map.hasLayer(group.layer)) return;
 										
 										// Hide full GPX layer and re-show lightweight layer
-										if (ref.map.hasLayer(group.layer)) ref.map.removeLayer(group.layer);
+										ref.map.removeLayer(group.layer);
 										group.visible = false;
 										if (group.lightLayer && !ref.map.hasLayer(group.lightLayer)) {
 											group.lightLayer.addTo(ref.map);
