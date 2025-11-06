@@ -593,6 +593,8 @@ export default function MapsPage() {
 
 		if (group.visible) {
 			// hide full plugin layer and re-add lightweight layer
+			// Close any open popups for this layer to keep popup and track in sync
+			ref.map.closePopup();
 			if (ref.map.hasLayer(group.layer)) ref.map.removeLayer(group.layer);
 			group.visible = false;
 			if (group.lightLayer && !ref.map.hasLayer(group.lightLayer)) group.lightLayer.addTo(ref.map);
