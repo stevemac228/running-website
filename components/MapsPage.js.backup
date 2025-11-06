@@ -284,8 +284,12 @@ export default function MapsPage() {
 										// Handle marker clicks to show popup and track
 										child.on('click', (e) => {
 											L.DomEvent.stopPropagation(e);
-											
-											// Load track when marker is clicked
+											// Explicitly open the popup
+											child.openPopup();
+										});
+										
+										// Auto-show track when popup opens
+										child.on("popupopen", () => {
 											const grp = groups.find((g) => g.raceId === raceId);
 											if (!grp) return;
 											
