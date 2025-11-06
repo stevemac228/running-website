@@ -397,31 +397,6 @@ export default function MapsPage() {
 												setLayersInfo(filtered);
 											}
 										});
-										
-										// Hide track when popup closes
-										child.on("popupclose", () => {
-											const grp = groups.find((g) => g.raceId === raceId);
-											if (!grp || !grp.visible) return;
-											
-											// Hide full GPX layer and re-show lightweight layer
-											if (map.hasLayer(grp.layer)) map.removeLayer(grp.layer);
-											grp.visible = false;
-											if (grp.lightLayer && !map.hasLayer(grp.lightLayer)) {
-												grp.lightLayer.addTo(map);
-											}
-											
-											// Update race list
-											if (mounted) {
-												const bounds = map.getBounds();
-												const filtered = groups
-													.filter((g) => {
-														if (!g.startLatLng) return false;
-														return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
-													})
-													.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm, raceSlug: g.raceId, color: g.color }));
-												setLayersInfo(filtered);
-											}
-										});
 									} catch (err) {
 										console.error("Error binding popup:", err);
 									}
