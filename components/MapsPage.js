@@ -281,8 +281,8 @@ export default function MapsPage() {
 										const grp = groups.find((g) => g.raceId === raceId);
 										if (!grp) return;
 										
-										// Skip if track layer is already on the map
-										if (grp.layer && map.hasLayer(grp.layer)) {
+										// Skip if track layer is already on the map and visible
+										if (grp.visible && grp.layer && map.hasLayer(grp.layer)) {
 											// Track is already showing, just ensure popup is open
 											const allTrackLayers = getAllLayers(grp.layer);
 											const firstMarker = allTrackLayers.find(l => l instanceof L.Marker);
@@ -340,7 +340,10 @@ export default function MapsPage() {
 																// Hide track when popup closes (X button clicked)
 																child.on("popupclose", () => {
 																	const grp = groups.find((g) => g.raceId === raceId);
-																	if (!grp || !grp.visible) return;
+																	if (!grp) return;
+																	
+																	// Only hide if currently visible
+																	if (!grp.visible) return;
 																	
 																	// Hide full GPX layer and re-show lightweight layer
 																	if (map.hasLayer(grp.layer)) map.removeLayer(grp.layer);
@@ -635,7 +638,10 @@ export default function MapsPage() {
 									});
 									// Hide track when popup closes (X button clicked)
 									child.on("popupclose", () => {
-										if (!group || !group.visible) return;
+										if (!group) return;
+										
+										// Only hide if currently visible
+										if (!group.visible) return;
 										
 										// Hide full GPX layer and re-show lightweight layer
 										if (ref.map.hasLayer(group.layer)) ref.map.removeLayer(group.layer);
