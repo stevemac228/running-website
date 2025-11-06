@@ -371,31 +371,33 @@ export default function MapsPage() {
 														if (firstMarker) {
 															firstMarker.openPopup();
 														}
+														
+														// Mark as visible only after the layer has fully loaded
+														grp.visible = true;
+														
+														// Update race list after track is loaded
+														if (mounted) {
+															const bounds = map.getBounds();
+															const filtered = groups
+																.filter((g) => {
+																	if (!g.startLatLng) return false;
+																	return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
+																})
+																.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm, raceSlug: g.raceId, color: g.color }));
+															setLayersInfo(filtered);
+														}
 													});
 													grp.layer = layer;
 												} catch (_) { grp.layer = null; }
 											}
 											
 											if (grp.layer) grp.layer.addTo(map);
-											grp.visible = true;
 											
-											// Fit bounds to track
+											// Fit bounds to track (if bounds are available immediately)
 											try {
 												const b = grp.layer.getBounds && grp.layer.getBounds();
 												if (b && b.isValid()) map.fitBounds(b.pad(0.1));
 											} catch (_) {}
-											
-											// Update race list
-											if (mounted) {
-												const bounds = map.getBounds();
-												const filtered = groups
-													.filter((g) => {
-														if (!g.startLatLng) return false;
-														return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
-													})
-													.map((g) => ({ id: g.id, name: g.name, visible: g.visible, elevInfo: g.elevInfo, distanceKm: g.distanceKm, raceSlug: g.raceId, color: g.color }));
-												setLayersInfo(filtered);
-											}
 										});
 										
 										// Hide track when popup closes
@@ -681,37 +683,38 @@ export default function MapsPage() {
 						if (firstMarker) {
 							firstMarker.openPopup();
 						}
+						
+						// Mark as visible only after the layer has fully loaded
+						group.visible = true;
+						
+						// Update race list after track is loaded
+						const bounds = ref.map.getBounds();
+						const filtered = ref.groups
+							.filter((g) => {
+								if (!g.startLatLng) return false;
+								return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
+							})
+							.map((g) => ({
+								id: g.id,
+								name: g.name,
+								visible: g.visible,
+								elevInfo: g.elevInfo,
+								distanceKm: g.distanceKm,
+								raceSlug: g.raceId,
+								color: g.color
+							}));
+						setLayersInfo(filtered);
 					});
 					group.layer = layer;
 				} catch (_) { group.layer = null; }
 			}
 
 			if (group.layer) group.layer.addTo(ref.map);
-			group.visible = true;
 			try {
 				const b = group.layer.getBounds && group.layer.getBounds();
 				if (b && b.isValid()) ref.map.fitBounds(b.pad(0.1));
 			} catch (err) {}
 		}
-		
-		// Update race list based on current map bounds
-		const bounds = ref.map.getBounds();
-		const filteredGroups = ref.groups
-			.filter((g) => {
-				if (!g.startLatLng) return false;
-				return bounds.contains([g.startLatLng.lat, g.startLatLng.lng]);
-			})
-			.map((g) => ({
-				id: g.id,
-				name: g.name,
-				visible: g.visible,
-				elevInfo: g.elevInfo,
-				distanceKm: g.distanceKm,
-				raceSlug: g.raceId,
-				color: g.color
-			}));
-		
-		setLayersInfo(filteredGroups);
 	}
 
 	// helper formatting for sidebar: "10k - 41ft elv" -> "10km - 90m ↑ 100m ↓"
