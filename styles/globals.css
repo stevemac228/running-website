@@ -108,6 +108,62 @@ body::-webkit-scrollbar-track {
 /* #endregion */
 
 /* #region Header / Navbar */
+
+/* Hamburger menu button - hidden by default */
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1002;
+  position: relative;
+}
+
+.hamburger-line {
+  width: 100%;
+  height: 3px;
+  background-color: var(--runnl-light-text);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* Hamburger animation when open */
+.hamburger-line.open:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.hamburger-line.open:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-line.open:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+/* Mobile navigation - hidden by default, slides in from right */
+.nav-mobile {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 70%;
+  max-width: 300px;
+  height: 100vh;
+  background-color: var(--runnl-dark-grey);
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 80px 20px 20px 20px;
+  z-index: 1001;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+
 header {
   background-color: var(--runnl-dark-grey);
   color: var(--runnl-light-text);
@@ -177,6 +233,60 @@ nav {
     margin-left: 0.5rem;
     padding: 10px;
   }
+
+  /* Hide desktop navigation on mobile */
+  .nav-desktop {
+    display: none;
+  }
+
+  /* Show hamburger menu on mobile */
+  .hamburger-menu {
+    display: flex;
+  }
+
+  /* Show mobile navigation on mobile */
+  .nav-mobile {
+    display: flex;
+  }
+
+  .nav-mobile.open {
+    right: 0;
+  }
+
+  .nav-mobile .nav-link {
+    width: 100%;
+    padding: 15px;
+    margin-left: 0;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+  }
+
+  .nav-mobile .nav-text {
+    display: inline;
+    margin-left: 15px;
+  }
+
+  .nav-mobile .nav-link:hover {
+    background-color: var(--runnl-dark-blue);
+  }
+
+  /* Show overlay when menu is open */
+  .nav-overlay {
+    display: block;
+  }
+}
+
+/* Overlay background when mobile menu is open */
+.nav-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 }
 /* #endregion */
 
