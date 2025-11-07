@@ -1969,3 +1969,80 @@ header, .nav-left, nav, .nav-link {
   align-items: center;
 }
 /* #endregion */
+
+/* #region Modern Leaflet Popup Styling */
+.modern-leaflet-popup .leaflet-popup-content-wrapper {
+  background: var(--runnl-background);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 0;
+  overflow: hidden;
+}
+
+.modern-leaflet-popup .leaflet-popup-content {
+  margin: 0;
+  min-width: 200px;
+}
+
+.modern-leaflet-popup .leaflet-popup-tip {
+  background: var(--runnl-background);
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.15);
+}
+
+.custom-popup {
+  padding: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.popup-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--runnl-dark-text);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.popup-distance {
+  font-size: 0.95rem;
+  color: var(--runnl-dark-blue);
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.popup-distance::before {
+  content: "📏";
+  font-size: 1rem;
+}
+
+.popup-elevation {
+  font-size: 0.9rem;
+  color: var(--runnl-light-grey);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.popup-elevation::before {
+  content: "📈";
+  font-size: 1rem;
+}
+
+/* Modern close button */
+.modern-leaflet-popup .leaflet-popup-close-button {
+  color: var(--runnl-light-grey);
+  font-size: 24px;
+  font-weight: 300;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+}
+
+.modern-leaflet-popup .leaflet-popup-close-button:hover {
+  color: var(--runnl-dark-text);
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+/* #endregion */
