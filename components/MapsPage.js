@@ -105,7 +105,8 @@ export default function MapsPage() {
       };
 
       const setGroupVisibility = (group, shouldShow, { fromMarker = false } = {}) => {
-        if (!mounted || !group) return;
+        if (!mounted || !group || !map || !map.getPane) return;
+        if (!map.getPane("markerPane")) return;
 
         if (shouldShow) {
           if (group.layer && !map.hasLayer(group.layer)) {
@@ -157,6 +158,7 @@ export default function MapsPage() {
       const results = await Promise.allSettled(fetchPromises);
 
       results.forEach((res, index) => {
+        if (!mounted || !map || !map.getPane) return;
         if (res.status !== "fulfilled") return;
         const { race, raceId, gpxText } = res.value;
 
@@ -196,6 +198,7 @@ export default function MapsPage() {
         }
 
         if (!startLatLng) return;
+        if (!mounted || !map.getPane("markerPane")) return;
 
         let elevGain = null;
         let elevLoss = null;
@@ -243,6 +246,8 @@ export default function MapsPage() {
           .filter(Boolean);
 
         const layer = polylines.length ? L.featureGroup(polylines) : null;
+
+        if (!mounted || !map.getPane("markerPane")) return;
 
         if (layer) {
           const bounds = layer.getBounds();
@@ -308,6 +313,7 @@ export default function MapsPage() {
         groups.push(group);
       });
 
+      if (!mounted || !map || !map.getPane) return;
       if (globalBounds.isValid()) {
         map.fitBounds(globalBounds.pad(0.1));
       } else {
