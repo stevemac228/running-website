@@ -249,6 +249,18 @@ export default function RaceDetail() {
                   weight: 4,
                   opacity: 0.7,
                 }).addTo(map);
+
+                // add end 'X' marker when segment flagged as end
+                const lastPt = segment[segment.length - 1];
+                if (lastPt && lastPt.isEnd) {
+                  const endIcon = L.divIcon({
+                    className: "end-x-marker",
+                    html: '<div style="color:#b30000;font-weight:700;font-size:16px;text-shadow:0 0 4px #fff;">✖</div>',
+                    iconSize: [18, 18],
+                    iconAnchor: [9, 9],
+                  });
+                  L.marker([lastPt.lat, lastPt.lon], { icon: endIcon }).addTo(map);
+                }
               });
 
               // Fit map to show entire route
