@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
 import { getRaceId } from "../utils/getRaceId";
 import races from "../data/races.json";
 import { parseGpxToSegments } from "../utils/parseGpx";
+import { useEffect, useRef, useState } from "react";
 
 const LOCATION_FALLBACKS = {
   paradise: { lat: 47.5333, lng: -52.8833 },
@@ -32,6 +32,7 @@ const buildPopupHtml = (race, distanceLabel, elevInfo) => {
 
 export default function MapsPage() {
   const mapRef = useRef(null);
+  const sidebarRef = useRef(null);
   const leafletRef = useRef(null);
   const mapBoundsRef = useRef(null);
   const [loading, setLoading] = useState(true);
@@ -39,6 +40,29 @@ export default function MapsPage() {
 
   useEffect(() => {
     let mounted = true;
+
+    // Keep a stable resize handler reference so we can remove it on cleanup
+    const updateMapHeight = () => {
+      const header = document.querySelector("header");
+      const headerHeight = header ? header.offsetHeight : 0;
+      const h = Math.max(window.innerHeight - headerHeight, 200); // minimum height guard
+      if (mapRef.current) {
+        mapRef.current.style.height = `${h}px`;
+      }
+      if (sidebarRef.current) {
+        // set sidebar height to match the visible viewport space
+        sidebarRef.current.style.height = `${h}px`;
+      }
+      // if leaflet map exists, invalidate size so it reflows correctly
+      const refMap = leafletRef.current?.map;
+      if (refMap && typeof refMap.invalidateSize === "function") {
+        refMap.invalidateSize();
+      }
+      // also set CSS var for fallback usage (optional)
+      try {
+        document.documentElement.style.setProperty("--site-header-height", `${headerHeight}px`);
+      } catch {}
+    };
 
     const fetchRaceGpxText = (race, raceId) => {
       const gpxPath = race.gpx ? `/gpx/${race.gpx}` : `/gpx/${encodeURIComponent(raceId)}.gpx`;
@@ -134,10 +158,20 @@ export default function MapsPage() {
         document.head.appendChild(link);
       }
 
+      // Set initial container height before creating the map (prevents initial 0 height)
+      updateMapHeight();
+      // keep map size in sync on window resize
+      window.addEventListener("resize", updateMapHeight);
+
       const map = L.map(mapRef.current, { center: [47.5, -52.7], zoom: 8 });
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "&copy; OpenStreetMap contributors",
       }).addTo(map);
+
+      // ensure Leaflet knows its container size after creation
+      setTimeout(() => {
+        try { map.invalidateSize(); } catch {}
+      }, 120);
 
       const groups = [];
       const globalBounds = L.latLngBounds();
@@ -362,6 +396,8 @@ export default function MapsPage() {
 
     return () => {
       mounted = false;
+      // remove resize listener
+      window.removeEventListener("resize", updateMapHeight);
       const ref = leafletRef.current;
       if (ref?.map) {
         ref.map.off("moveend", ref.updateSidebar);
@@ -409,7 +445,7 @@ export default function MapsPage() {
           <div ref={mapRef} id="map" className="maps-page-map" />
         </div>
 
-        <aside className="maps-page-sidebar">
+        <aside ref={sidebarRef} className="maps-page-sidebar">
           <h3 className="maps-page-sidebar-title">Races in View</h3>
           {loading && <p>Loading GPX races…</p>}
           {!loading && layersInfo.length === 0 && <p>No races in current map view.</p>}

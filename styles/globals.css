@@ -1830,7 +1830,10 @@ header, .nav-left, nav, .nav-link {
 }
 
 .maps-page-map-container {
-  min-height: 94vh;
+  /* Make the map container occupy the user's viewport height minus header.
+     A CSS variable (--site-header-height) can be set from JS if header height is known.
+     Fallback to 0px if not set. */
+  height: calc(100vh - var(--site-header-height, 0px));
   overflow: hidden;
 }
 
@@ -1844,8 +1847,10 @@ header, .nav-left, nav, .nav-link {
   border: 1px solid #e0e0e0;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  max-height: 94vh;
+  /* match map height: viewport minus header (set via --site-header-height by JS) */
+  height: calc(100vh - var(--site-header-height, 0px));
   overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .maps-page-sidebar-title {
