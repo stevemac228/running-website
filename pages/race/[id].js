@@ -1,8 +1,8 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState, useRef } from "react";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
 import racesData from "../../data/races.json";
 import { formatDate } from "../../utils/formatDate";
 import { formatTime } from "../../utils/formatTime";

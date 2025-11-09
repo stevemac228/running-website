@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useCallback } from "react";
-import SearchFilter from "./SearchFilter";
+import SearchFilter from "../SearchFilter/SearchFilter";
 
 export default function Header() {
   const handleHeaderSearch = useCallback(() => {}, []);
@@ -27,19 +27,19 @@ export default function Header() {
           <Link href="/" className="nav-strip-link">
             Home
           </Link>
-          <Link href="/calendar" className="nav-strip-link">
+          <Link href="/calendar/calendar" className="nav-strip-link">
             Calendar
           </Link>
-          <Link href="/maps" className="nav-strip-link">
+          <Link href="/maps/maps" className="nav-strip-link">
             Map
           </Link>
-          <Link href="/races" className="nav-strip-link">
+          <Link href="/races/races" className="nav-strip-link">
             All Races
           </Link>
-          <Link href="/upcoming-races" className="nav-strip-link">
+          <Link href="/upcoming-races/upcoming-races" className="nav-strip-link">
             Upcoming Races
           </Link>
-          <Link href="/registrations" className="nav-strip-link">
+          <Link href="/registrations/registrations" className="nav-strip-link">
             Registrations
           </Link>
         </nav>

@@ -1,0 +1,54 @@
+/* #region Homepage*/
+.homepage {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap; /* 👈 allows the columns to move vertically if needed */
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden; /* 👈 prevent horizontal scroll */
+  box-sizing: border-box;
+}
+
+.upcomingRegistrations,
+.upcomingRaces {
+  flex: 1;
+  min-width: 300px; /* ensures decent width on desktop */
+  margin-right: 5px;
+  margin-left: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.upcomingRaces h1,
+.upcomingRegistrations h1 {
+  text-align: center; /* ensures header text is centered */
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  /* Improve text size and spacing for smaller screens */
+  h1,
+  h2,
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  /* stack cardsvertically on smaller screens */
+  .upcomingRegistrations,
+  .upcomingRaces {
+    flex: 1 1 100%;
+    min-width: 100%;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+
+  .homepage-container {
+    flex-direction: column;
+  }
+
+  .homepage-right {
+    display: none; /* hide small calendar, navigate to full page instead */
+  }
+}
+/* #endregion */

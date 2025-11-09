@@ -1,0 +1,262 @@
+/* #region Calendar*/
+.calendar-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.month-calendar {
+  width: 100%;
+  max-width: 90%;
+  text-align: center;
+  margin-right: 1rem;
+}
+
+@media (max-width: 768px) {
+  .calendar-container {
+    display: none; /* hidden in home page right column on mobile */
+  }
+  
+  .month-calendar {
+    display: none; /* hide desktop calendar on mobile */
+  }
+}
+
+/* #region Mobile Calendar */
+.mobile-calendar {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.5rem;
+}
+
+.mobile-calendar-list {
+  padding: 0;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.mobile-calendar-day {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem;
+  background-color: var(--runnl-background);
+}
+
+.mobile-calendar-day.weekend {
+  background-color: #f5f5f5;
+}
+
+.mobile-calendar-day.today {
+  border: 2px solid #0b3af5;
+  box-shadow: 0 2px 8px rgba(11, 58, 245, 0.2);
+}
+
+.mobile-day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.mobile-day-date {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mobile-day-name {
+  font-weight: 600;
+  color: var(--runnl-dark-grey);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.mobile-day-number {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--runnl-dark-text);
+}
+
+.mobile-month-name {
+  font-size: 0.9rem;
+  color: var(--runnl-light-grey);
+  text-transform: uppercase;
+}
+
+.today-badge {
+  background-color: #0b3af5;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.mobile-races-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mobile-race-chip {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 6px;
+}
+
+.mobile-race-chip .dot-icon {
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+}
+
+.mobile-race-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mobile-race-info .race-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--runnl-dark-text);
+  text-decoration: none;
+}
+
+.mobile-race-info .race-name:hover {
+  color: var(--runnl-dark-blue);
+  text-decoration: underline;
+}
+
+.mobile-race-details {
+  font-size: 0.85rem;
+  color: var(--runnl-light-grey);
+}
+
+.mobile-race-details .race-time,
+.mobile-race-details .race-distance {
+  font-weight: 500;
+}
+/* #endregion */
+
+/* #region Calendar-Header*/
+.calendar-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.calendar-header h2 {
+  margin-left: 3rem;
+  margin-right: 3rem;
+  min-width: 12rem;
+}
+
+.calendar-header button {
+  padding: 0.4rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: var(--bg-color);
+  cursor: pointer;
+}
+
+.calendar-header button:hover {
+  border: 1px solid var(--runnl-dark-blue);
+  background-color: #E6F0FF;
+  cursor: pointer;
+}
+/* #endregion */
+
+/* #region Calendar-Days*/
+.calendar-day-name {
+  font-weight: bold;
+}
+
+.calendar-weekday {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 22px; /* exact height for all rows */
+  gap: 5px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 150px; /* exact height for all rows */
+  gap: 5px;
+}
+
+.weekend {
+  background-color: #ececec; /* highlight race day */
+  color: rgb(0, 0, 0);
+}
+
+.calendar-day {
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: flex-start;
+  padding: 0.2rem;
+  overflow-y: auto; /* scroll if too many race chips */
+  box-sizing: border-box;
+  border-radius: 4px;
+  font-size: 12px;
+  overflow-x: hidden;
+}
+
+.today {
+  border: #0b3af5 thin solid;
+}
+/* #endregion */
+
+/* #region Calendar-Racechip*/
+.race-chip {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 3px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.race-text {
+  display: flex;
+  align-items: center; /* centers all text spans vertically */
+  line-height: 1; /* ensures text aligns with SVG */
+}
+
+.race-time {
+  margin-right: 4px;
+  margin-left: 4px;
+}
+
+.race-name {
+  font-weight: bold;
+  margin-right: 4px;
+  color: var(--runnl-dark-text);
+  text-decoration: none;
+}
+
+.race-distance {
+  margin-left: 2px;
+}
+
+.dot-icon {
+  width: 9px;
+  height: 9px;
+  color: var(--runnl-dark-grey); /* default color */
+  vertical-align: middle; /* aligns to middle of text */ /* ensures the SVG doesn’t have extra descender space */
+}
+
+.dot-icon.Road {
+  color: var(--badge-road);
+}
+
+.dot-icon.Trail {
+  color: var(--badge-trail);
+}

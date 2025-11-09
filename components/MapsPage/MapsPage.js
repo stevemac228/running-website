@@ -1,6 +1,6 @@
-import { getRaceId } from "../utils/getRaceId";
-import races from "../data/races.json";
-import { parseGpxToSegments } from "../utils/parseGpx";
+import { getRaceId } from "../../utils/getRaceId";
+import races from "../../data/races.json";
+import { parseGpxToSegments } from "../../utils/parseGpx";
 import { useEffect, useRef, useState } from "react";
 
 const LOCATION_FALLBACKS = {

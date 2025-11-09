@@ -1,5 +1,5 @@
-import FilterChip from "./FilterChip";
-import DistanceRangeSlider from "./DistanceRangeSlider";
+import FilterChip from "../FilterChip/FilterChip";
+import DistanceRangeSlider from "../DistanceRangeSlider/DistanceRangeSlider";
 
 export default function FilterSidebar({
   filterOptions,

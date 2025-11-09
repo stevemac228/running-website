@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
-import races from "../data/races.json";
-import { getRaceId } from "../utils/getRaceId";
+import races from "../../data/races.json";
+import { getRaceId } from "../../utils/getRaceId";
 
 // Minimal, self-contained search with results dropdown.
 export default function SearchFilter({ onSearch, initialValue = "" }) {

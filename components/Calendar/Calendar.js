@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import races from "../data/races.json";
-import { getRaceId } from "../utils/getRaceId";
+import races from "../../data/races.json";
+import { getRaceId } from "../../utils/getRaceId";
 import Link from "next/link";
 
 

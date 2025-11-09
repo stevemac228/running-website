@@ -1,0 +1,48 @@
+
+:root {
+  --runnl-dark-text:#232323;
+  --runnl-light-text:#ffffff;
+  --runnl-background:#ffffff;
+  --runnl-border:#ccc;
+
+  --runnl-dark-grey:#2e3440;
+  --runnl-light-grey: #5E6A82;
+
+  --runnl-dark-green:#0f5c5b;
+  --runnl-light-green: #1dafad;
+
+  --runnl-light-orange:#ff4d00;
+  --runnl-dark-orange:#e83200;
+
+  --runnl-dark-blue:#006aac;
+  --runnl-light-blue: #3aaff8;
+
+  --runnl-dark-pink:#BA2C73;
+  --runnl-light-pink:#d85a99;
+
+  --runnl-dark-red:#b10000;
+  --runnl-light-red:#ff6161;
+
+  --runnl-dark-purple:#8332AC;
+  --runnl-light-purple:#A351CD;
+
+  --badge-road:#2c2c2c;
+  --badge-trail:#688f4e;
+  --badge-track:#d11;
+  --badge-gravel:#646065;
+  --badge-funrun:#ef470b;
+  --badge-competitive:#006aac;
+
+  --footer-bg: #f9f9f9;
+  --footer-text: #222;
+  --footer-accent: #0070f3;
+  --footer-border: #ddd;
+  --footer-muted: #555;
+
+  --puffin-orange: #ff6f00;
+  --puffin-yellow: #ffc059;
+  --puffin-dark-blue: #214cdc;
+  --puffin-green: #0f5c5b;
+  --puffin-teal: #189897;
+  --puffin-gray: #282828;
+}

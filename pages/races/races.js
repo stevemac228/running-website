@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import races from "../data/races.json";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import SearchFilter from "../components/SearchFilter";
-import FilterSidebar from "../components/FilterSidebar";
-import CompactRaceCard from "../components/CompactRaceCard";
-import DateRangeSelector from "../components/DateRangeSelector";
+import races from "../../data/races.json";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
+import SearchFilter from "../../components/SearchFilter/SearchFilter";
+import FilterSidebar from "../../components/FilterSidebar/FilterSidebar";
+import CompactRaceCard from "../../components/CompactRaceCard/CompactRaceCard";
+import DateRangeSelector from "../../components/DateRangeSelector/DateRangeSelector";
 
 function parseUSDate(dateStr) {
   if (!dateStr) return new Date(NaN);
