@@ -40,30 +40,87 @@ export default function MapsPage() {
   useEffect(() => {
     let mounted = true;
 
-    const fetchRaceGpx = (race, raceId) => {
+    const fetchRaceGpxText = (race, raceId) => {
       const gpxPath = race.gpx ? `/gpx/${race.gpx}` : `/gpx/${encodeURIComponent(raceId)}.gpx`;
-      const cacheKey = `gpx:${raceId}`;
-      let cached = null;
-      try {
-        cached = sessionStorage.getItem(cacheKey);
-      } catch {
-        cached = null;
-      }
-      if (cached) return Promise.resolve({ race, raceId, gpxText: cached });
+      return fetch(gpxPath).then((res) => (res.ok ? res.text() : null)).catch(() => null);
+    };
 
-      return fetch(gpxPath)
-        .then((res) => (res.ok ? res.text() : null))
-        .then((text) => {
+    // create polylines from parsed segments
+    const createLayerFromSegments = (L, segments, color) => {
+      const polylines = segments
+        .map((segment) => {
+          const latLngs = segment
+            .map((pt) => (typeof pt.lat === "number" && typeof pt.lon === "number" ? [pt.lat, pt.lon] : null))
+            .filter(Boolean);
+          return latLngs.length ? L.polyline(latLngs, { color, weight: 3, opacity: 0.9, smoothFactor: 1 }) : null;
+        })
+        .filter(Boolean);
+      return polylines.length ? L.featureGroup(polylines) : null;
+    };
+
+    // compute elevation info from parsed segments
+    const computeElevation = (segments) => {
+      let gain = 0;
+      let loss = 0;
+      let hasElevation = false;
+      segments.forEach((seg) => {
+        for (let i = 1; i < seg.length; i++) {
+          const prev = seg[i - 1];
+          const curr = seg[i];
+          if (prev.ele != null && curr.ele != null) {
+            hasElevation = true;
+            const diff = curr.ele - prev.ele;
+            if (diff > 0) gain += diff;
+            else if (diff < 0) loss += -diff;
+          }
+        }
+      });
+      if (!hasElevation) return null;
+      return { gain: Math.round(gain), loss: Math.round(loss), unit: "m" };
+    };
+
+    // load parsed segments cached or fetching & parsing as needed
+    const loadGpxForGroup = async (group) => {
+      if (!group || group.gpxLoading || group.gpxLoaded) return null;
+      group.gpxLoading = true;
+      try {
+        const cacheKey = `gpxParsed:${group.raceId}`;
+        let parsed = null;
+        try {
+          const cached = sessionStorage.getItem(cacheKey);
+          if (cached) parsed = JSON.parse(cached);
+        } catch {
+          parsed = null;
+        }
+
+        if (!parsed) {
+          const text = await fetchRaceGpxText(group.rawRace, group.raceId);
           if (text) {
             try {
-              sessionStorage.setItem(cacheKey, text);
+              parsed = parseGpxToSegments(text) || [];
+              try {
+                sessionStorage.setItem(cacheKey, JSON.stringify(parsed));
+              } catch {
+                /* ignore quota errors */
+              }
             } catch {
-              /* ignore quota errors */
+              parsed = [];
             }
+          } else {
+            parsed = [];
           }
-          return { race, raceId, gpxText: text };
-        })
-        .catch(() => ({ race, raceId, gpxText: null }));
+        }
+
+        // build layer and elevation info
+        if (parsed && parsed.length) {
+          const L = leafletRef.current?.map?._leaflet ? leafletRef.current.map.constructor : null;
+          // the above is guarded; instead use stored map reference
+        }
+
+        return parsed;
+      } finally {
+        group.gpxLoading = false;
+      }
     };
 
     async function init() {
@@ -104,9 +161,58 @@ export default function MapsPage() {
         setLayersInfo(visibleGroups);
       };
 
-      const setGroupVisibility = (group, shouldShow, { fromMarker = false } = {}) => {
-        if (!mounted || !group || !map || !map.getPane) return;
-        if (!map.getPane("markerPane")) return;
+      // set visibility; if we need the route we lazy-load it here
+      const setGroupVisibility = async (group, shouldShow, { fromMarker = false } = {}) => {
+        if (!mounted || !group || !map) return;
+
+        // if we should show and layer not built yet -> load GPX and create layer
+        if (shouldShow && !group.layer && !group.gpxLoading) {
+          const cacheKey = `gpxParsed:${group.raceId}`;
+          // check session cache quickly
+          let parsed = null;
+          try {
+            const cached = sessionStorage.getItem(cacheKey);
+            if (cached) parsed = JSON.parse(cached);
+          } catch {
+            parsed = null;
+          }
+
+          if (!parsed) {
+            // show a quick UI hint by keeping marker popup open while loading
+            if (group.marker) {
+              group.marker.setPopupContent(`<div class="custom-popup"><div class="popup-title">${group.name}</div><div>Loading route…</div></div>`);
+              if (!group.marker.isPopupOpen || !group.isPopupRequested) {
+                group.marker.openPopup();
+              }
+            }
+            parsed = await loadGpxForGroup(group);
+          }
+
+          // create layer
+          if (parsed && parsed.length) {
+            const layer = createLayerFromSegments(L, parsed, group.color);
+            group.layer = layer;
+            // compute elevation now
+            const elevInfo = computeElevation(parsed);
+            group.elevInfo = elevInfo;
+            // update popup & sidebar info
+            const distanceLabel = typeof group.rawRace.distance === "number" ? `${group.rawRace.distance}km` : (typeof group.rawRace.distance === "string" ? group.rawRace.distance : null);
+            const popupHtml = buildPopupHtml(group.rawRace, distanceLabel, elevInfo);
+            if (group.marker) {
+              group.marker.setPopupContent(popupHtml);
+            }
+            // if we have a layer and group requested to be visible - add it
+            if (layer) {
+              if (!map.hasLayer(layer)) layer.addTo(map);
+            }
+          } else {
+            // no segments: update popup to say route not available
+            if (group.marker) {
+              group.marker.setPopupContent(`<div class="custom-popup"><div class="popup-title">${group.name}</div><div class="popup-elevation">Route not available</div></div>`);
+            }
+          }
+          group.gpxLoaded = true;
+        }
 
         if (shouldShow) {
           if (group.layer && !map.hasLayer(group.layer)) {
@@ -150,27 +256,9 @@ export default function MapsPage() {
       map.on("moveend", updateSidebar);
       map.on("zoomend", updateSidebar);
 
-      const fetchPromises = races.map((race) => {
+      // Instead of fetching all GPX at init, create markers/groups with start location only.
+      races.forEach((race, index) => {
         const raceId = getRaceId(race);
-        return fetchRaceGpx(race, raceId);
-      });
-
-      const results = await Promise.allSettled(fetchPromises);
-
-      results.forEach((res, index) => {
-        if (!mounted || !map || !map.getPane) return;
-        if (res.status !== "fulfilled") return;
-        const { race, raceId, gpxText } = res.value;
-
-        let segments = [];
-        if (gpxText) {
-          try {
-            segments = parseGpxToSegments(gpxText) || [];
-          } catch {
-            segments = [];
-          }
-        }
-
         let startLatLng = null;
         if (Array.isArray(race.startLineCoordinates) && race.startLineCoordinates.length === 2) {
           const [lat, lon] = race.startLineCoordinates;
@@ -179,14 +267,7 @@ export default function MapsPage() {
           }
         }
 
-        if (!startLatLng && segments.length) {
-          const firstSegment = segments.find((seg) => Array.isArray(seg) && seg.length > 0);
-          if (firstSegment) {
-            const firstPoint = firstSegment[0];
-            startLatLng = { lat: firstPoint.lat, lng: firstPoint.lon };
-          }
-        }
-
+        // try to quickly derive start from fallback locations (no GPX fetch)
         if (!startLatLng) {
           const fallbackKey = `${race.startLineLocation || ""} ${race.location || ""}`.toLowerCase();
           for (const key of Object.keys(LOCATION_FALLBACKS)) {
@@ -197,34 +278,8 @@ export default function MapsPage() {
           }
         }
 
+        // if no startLatLng and no cached GPX start, still add nothing (no marker)
         if (!startLatLng) return;
-        if (!mounted || !map.getPane("markerPane")) return;
-
-        let elevGain = null;
-        let elevLoss = null;
-        if (segments.length) {
-          let gain = 0;
-          let loss = 0;
-          let hasElevation = false;
-
-          segments.forEach((seg) => {
-            for (let i = 1; i < seg.length; i++) {
-              const prev = seg[i - 1];
-              const curr = seg[i];
-              if (prev.ele != null && curr.ele != null) {
-                hasElevation = true;
-                const diff = curr.ele - prev.ele;
-                if (diff > 0) gain += diff;
-                else if (diff < 0) loss += -diff;
-              }
-            }
-          });
-
-          if (hasElevation) {
-            elevGain = Math.round(gain);
-            elevLoss = Math.round(loss);
-          }
-        }
 
         const color = colors[index % colors.length];
         const marker = L.marker([startLatLng.lat, startLatLng.lng], {
@@ -236,43 +291,15 @@ export default function MapsPage() {
           }),
         }).addTo(map);
 
-        const polylines = segments
-          .map((segment) => {
-            const latLngs = segment
-              .map((pt) => (typeof pt.lat === "number" && typeof pt.lon === "number" ? [pt.lat, pt.lon] : null))
-              .filter(Boolean);
-            return latLngs.length ? L.polyline(latLngs, { color, weight: 3, opacity: 0.9 }) : null;
-          })
-          .filter(Boolean);
-
-        const layer = polylines.length ? L.featureGroup(polylines) : null;
-
-        if (!mounted || !map.getPane("markerPane")) return;
-
-        if (layer) {
-          const bounds = layer.getBounds();
-          if (bounds.isValid()) {
-            globalBounds.extend(bounds);
-          } else {
-            globalBounds.extend([startLatLng.lat, startLatLng.lng]);
-          }
-        } else {
-          globalBounds.extend([startLatLng.lat, startLatLng.lng]);
-        }
-
         const distanceValue =
           typeof race.distance === "number"
             ? race.distance
             : typeof race.distance === "string" && race.distance.trim() !== ""
             ? race.distance.trim()
             : null;
-        const distanceLabel = typeof distanceValue === "number" ? `${distanceValue}km` : distanceValue;
-        const elevInfo =
-          elevGain != null || elevLoss != null
-            ? { gain: elevGain ?? null, loss: elevLoss ?? null, unit: "m" }
-            : null;
 
-        const popupHtml = buildPopupHtml(race, distanceLabel, elevInfo);
+        const distanceLabel = typeof distanceValue === "number" ? `${distanceValue}km` : distanceValue;
+        const popupHtml = buildPopupHtml(race, distanceLabel, null);
         marker.bindPopup(popupHtml, {
           className: "modern-leaflet-popup",
           autoClose: false,
@@ -284,19 +311,23 @@ export default function MapsPage() {
           id: String(index),
           raceId,
           name: race.name,
+          rawRace: race,
           marker,
-          layer,
+          layer: null,
           color,
           visible: false,
           popupHtml,
-          elevInfo,
+          elevInfo: null,
           distanceValue,
           startLatLng,
           isClosingProgrammatically: false,
+          gpxLoaded: false,
+          gpxLoading: false,
         };
 
         marker.on("click", (event) => {
           L.DomEvent.stopPropagation(event);
+          group.isPopupRequested = true;
           setGroupVisibility(group, !group.visible, { fromMarker: true });
         });
 
@@ -311,9 +342,11 @@ export default function MapsPage() {
         });
 
         groups.push(group);
+        // extend bounds to include marker start
+        globalBounds.extend([startLatLng.lat, startLatLng.lng]);
       });
 
-      if (!mounted || !map || !map.getPane) return;
+      if (!mounted || !map) return;
       if (globalBounds.isValid()) {
         map.fitBounds(globalBounds.pad(0.1));
       } else {
