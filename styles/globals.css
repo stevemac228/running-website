@@ -108,125 +108,7 @@ body::-webkit-scrollbar-track {
 /* #endregion */
 
 /* #region Header / Navbar */
-header {
-  background-color: var(--runnl-dark-grey);
-  color: var(--runnl-light-text);
-  padding: 5px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
 
-.header-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 5px 10px;
-}
-
-.header-tools {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-left: auto;
-}
-
-.header-search {
-  flex: 1;
-  min-width: 220px;
-}
-
-.header-search .search-container {
-  margin-bottom: 0;
-  justify-content: flex-end;
-}
-
-.header-search .search-wrapper {
-  max-width: 420px;
-  width: 100%;
-}
-
-.nav-strip {
-  width: 100%;
-  background-color: #3a4354;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.nav-strip-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.25rem;
-  padding: 0.45rem 1.25rem;
-  color: var(--runnl-light-text);
-}
-
-.nav-strip-link {
-  color: inherit;
-  text-decoration: none;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
-}
-
-.nav-strip-link:hover {
-  color: var(--runnl-light-blue);
-}
-
-header h1 {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-.nav_left {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-nav {
-  display: flex;
-  align-items: center;
-}
-
-.nav-link {
-  display: inline-flex;
-  align-items: center;
-  color: var(--runnl-light-text);
-  margin-left: 1rem;
-  text-decoration: none;
-  padding: 6px;
-  gap: 6px; /* space between text and icon */
-}
-
-/* Only apply hover effects on devices with hover capability (not touch devices) */
-@media (hover: hover) {
-  .nav-link:hover {
-    border-radius: 9999px;
-    background-color: var(--runnl-dark-blue);
-    transform: scale(1.05);
-  }
-}
-
-.nav-icon {
-  width: 22px; /* set visible size */
-  height: 22px;
-  flex-shrink: 0; /* prevents collapsing */
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-}
-
-/* Show icons and hide text on mobile */
-@media (max-width: 768px) {
-  .nav-text {
-    display: none;
-  }
-
-  .nav-link {
-    margin-left: 0.5rem;
-    padding: 10px;
-  }
-}
 /* #endregion */
 
 /* #region Race Card */
@@ -303,6 +185,8 @@ nav {
   align-items: center;
   color: var(--runnl-dark-grey); /* same as your theme */
   transition: color 0.2s;
+  position:relative;
+  z-index: 0;
 }
 
 .chevron-toggle {
@@ -442,6 +326,78 @@ nav {
   color: var(--runnl-light-grey);
   font-size: 1.2rem;
   margin-left: 0.5rem;
+}
+
+/* Search results dropdown (attached to .search-wrapper) */
+.search-wrapper {
+  position: relative; /* ensure dropdown anchors to this */
+  z-index: 30;
+}
+
+/* Dropdown panel */
+.search-results {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 6px;
+  margin: 0;
+  font-family: inherit;
+  color: var(--runnl-dark-text);
+  z-index: 99999; /* increased to ensure dropdown sits above other UI */
+}
+
+/* Ensure the wrapper has a higher stacking context */
+.search-wrapper {
+  position: relative;
+  z-index: 99998;
+}
+
+/* Individual result */
+.search-result-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+.search-result-item .result-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--runnl-dark-text);
+}
+
+.search-result-item .result-sub {
+  font-size: 0.82rem;
+  color: var(--runnl-light-grey);
+}
+
+.search-result-item:hover,
+.search-result-item.highlight {
+  background-color: #f5f8ff;
+}
+
+/* Keep clear button visible and clickable */
+.search-wrapper .clear-btn {
+  z-index: 40;
+}
+
+/* For small screens, make dropdown full width of view */
+@media (max-width: 480px) {
+  .search-results {
+    left: -6px;
+    right: -6px;
+    border-radius: 0 0 8px 8px;
+  }
 }
 
 /* #endregion */
@@ -2009,14 +1965,6 @@ header, .nav-left, nav, .nav-link {
   position: relative;
 }
 
-.theme-toggle-btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0.25rem;
-  display: flex;
-  align-items: center;
-}
 /* #endregion */
 
 /* #region Modern Leaflet Popup Styling */

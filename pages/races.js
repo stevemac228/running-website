@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import races from "../data/races.json";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -33,6 +34,8 @@ function toDistanceNumber(d) {
 }
 
 export default function Races() {
+  const router = useRouter();
+
   const filterOptions = [
     { key: "5k", label: "5K" },
     { key: "10k", label: "10K" },
@@ -52,6 +55,16 @@ export default function Races() {
   const [sortOption, setSortOption] = useState("date-asc");
   const [dateRange, setDateRange] = useState({ start: null, end: null });
   const [distanceRange, setDistanceRange] = useState({ min: 0, max: 999 });
+
+  // sync searchTerm from query param when arriving with ?search=...
+  useEffect(() => {
+    if (!router.isReady) return;
+    const q =
+      typeof router.query.search === "string" ? router.query.search : "";
+    if (q !== searchTerm) {
+      setSearchTerm(q);
+    }
+  }, [router.isReady, router.query.search]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleFilter = (key) => {
     setActiveFilters((prev) =>
@@ -174,7 +187,7 @@ export default function Races() {
       <main className="races-page-container">
         {/* Search Bar - Centered */}
         <div className="races-search-bar">
-          <SearchFilter onSearch={setSearchTerm} />
+          <SearchFilter onSearch={setSearchTerm} initialValue={searchTerm} />
         </div>
 
         {/* Two-column layout: Sidebar + Content */}

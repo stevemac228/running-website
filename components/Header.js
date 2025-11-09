@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { useCallback } from "react";
-import ThemeToggle from "./ThemeToggle";
 import SearchFilter from "./SearchFilter";
 
 export default function Header() {
@@ -9,7 +8,6 @@ export default function Header() {
   return (
     <header>
       <div className="header-top">
-        <div className="nav_left">
           <img
             src="/icons/newPufin-Kittl(1).svg"
             alt="Puffin Mascot"
@@ -17,12 +15,10 @@ export default function Header() {
             fill="none"
           />
           <h1>Run NL</h1>
-        </div>
         <div className="header-tools">
           <div className="header-search">
             <SearchFilter onSearch={handleHeaderSearch} />
           </div>
-          <ThemeToggle />
         </div>
       </div>
 
