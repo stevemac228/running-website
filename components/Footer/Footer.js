@@ -16,13 +16,13 @@ export default function Footer() {
           <h3 className="socials-header">Socials</h3>
           <div className="footer-section-socials">
             <a href="https://www.instagram.com/stevemac228/" target="_blank" rel="noopener noreferrer">
-              <img src="icons/instagram.svg" alt="Instagram" className="footer-icon" />
+              <img src="../icons/instagram.svg" alt="Instagram" className="footer-icon" />
             </a>
             <a href="https://www.strava.com/athletes/99125298" target="_blank" rel="noopener noreferrer">
-              <img src="icons/strava.svg" alt="Strava" className="footer-icon" />
+              <img src="../icons/strava.svg" alt="Strava" className="footer-icon" />
             </a>
             <a href="https://www.facebook.com/steven.macdonald.73594/" target="_blank" rel="noopener noreferrer">
-              <img src="icons/facebook.svg" alt="Facebook" className="footer-icon" />
+              <img src="../icons/facebook.svg" alt="Facebook" className="footer-icon" />
             </a>
           </div>
         </div>

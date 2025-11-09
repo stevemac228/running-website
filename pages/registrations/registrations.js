@@ -6,8 +6,10 @@ import RaceList from "../../components/RaceList/RaceList";
 
 export default function RegistrationsPage() {
   const today = new Date();
+  const threeMonthsFromNow = new Date(today);
+  threeMonthsFromNow.setMonth(today.getMonth() + 3);
 
-  const upcomingRegistrations = races
+  const currentRegistrations = races
     .filter((race) => {
       if (!race.registrationStart) return false;
       const regStartDate = new Date(race.registrationStart);
@@ -26,6 +28,16 @@ export default function RegistrationsPage() {
     })
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 
+  const upcomingRegistrations = races
+    .filter((race) => {
+      if (!race.registrationStart) return false;
+      const regStartDate = new Date(race.registrationStart);
+
+      if (isNaN(regStartDate)) return false;
+      return regStartDate > today && regStartDate <= threeMonthsFromNow;
+    })
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+
   return (
     <div>
       <Head>
@@ -39,9 +51,12 @@ export default function RegistrationsPage() {
       <Header />
       <main className="page-main-padding">
         <h1>Open Registrations</h1>
+        <RaceList races={currentRegistrations} type="currentRegistrations" />
+        <h2>Upcoming Registrations</h2>
         <RaceList races={upcomingRegistrations} type="upcomingRegistrations" />
       </main>
       <Footer />
     </div>
   );
 }
+
