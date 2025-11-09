@@ -1,13 +1,13 @@
 import { useState } from "react";
 import Link from "next/link";
-import { formatDate } from "../utils/formatDate";
-import { getExpandedFields } from "../utils/getExpandedFields";
-import { formatTime } from "../utils/formatTime";
+import { formatDate } from "../../utils/formatDate";
+import { getExpandedFields } from "../../utils/getExpandedFields";
+import { formatTime } from "../../utils/formatTime";
 import {
   getTerrainBadgeClass,
   getFormatBadgeClass,
-} from "../utils/renderBadges";
-import { getRaceId } from "../utils/getRaceId";
+} from "../../utils/renderBadges";
+import { getRaceId } from "../../utils/getRaceId";
 
 export default function UpcomingRegistrationCard({ race }) {
   const [expanded, setExpanded] = useState(false);

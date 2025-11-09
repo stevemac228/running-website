@@ -1,6 +1,6 @@
-import RaceCard from "./RaceCard";
-import UpcomingRaceCard from "./UpcomingRaceCard";
-import UpcomingRegistrationCard from "./UpcomingRegistrationCard";
+import RaceCard from "../RaceCard/RaceCard";
+import UpcomingRaceCard from "../UpcomingRaceCard/UpcomingRaceCard";
+import UpcomingRegistrationCard from "../UpcomingRegistrationCard/UpcomingRegistrationCard";
 
 export default function RaceList({ races, type = "all" }) {
   return (

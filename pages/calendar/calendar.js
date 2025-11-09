@@ -1,7 +1,7 @@
 import React from "react";
-import Calendar from "../components/Calendar";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Calendar from "../../components/Calendar/Calendar";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
 
 export default function CalendarPage() {
   return (
