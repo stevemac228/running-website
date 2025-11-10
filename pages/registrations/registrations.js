@@ -24,7 +24,7 @@ export default function RegistrationsPage() {
         return today >= regStartDate && today <= regEndDate;
       }
 
-      return regStartDate >= today;
+      return today >= regStartDate;
     })
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 
@@ -51,7 +51,7 @@ export default function RegistrationsPage() {
       <Header />
       <main className="page-main-padding">
         <h1>Open Registrations</h1>
-        <RaceList races={currentRegistrations} type="currentRegistrations" />
+        <RaceList races={currentRegistrations} type="upcomingRegistrations" />
         <h2>Upcoming Registrations</h2>
         <RaceList races={upcomingRegistrations} type="upcomingRegistrations" />
       </main>

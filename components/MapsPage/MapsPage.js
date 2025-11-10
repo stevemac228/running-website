@@ -71,15 +71,28 @@ export default function MapsPage() {
 
     // create polylines from parsed segments
     const createLayerFromSegments = (L, segments, color) => {
-      const polylines = segments
-        .map((segment) => {
+      const layers = [];
+      segments
+        .forEach((segment) => {
           const latLngs = segment
             .map((pt) => (typeof pt.lat === "number" && typeof pt.lon === "number" ? [pt.lat, pt.lon] : null))
             .filter(Boolean);
-          return latLngs.length ? L.polyline(latLngs, { color, weight: 3, opacity: 0.9, smoothFactor: 1 }) : null;
-        })
-        .filter(Boolean);
-      return polylines.length ? L.featureGroup(polylines) : null;
+          if (latLngs.length) {
+            layers.push(L.polyline(latLngs, { color, weight: 3, opacity: 0.9, smoothFactor: 1 }));
+          }
+          // add end marker when last point is flagged as isEnd
+          const lastPt = segment && segment.length ? segment[segment.length - 1] : null;
+          if (lastPt && lastPt.isEnd && typeof lastPt.lat === "number" && typeof lastPt.lon === "number") {
+            const endIcon = L.divIcon({
+              className: "end-x-marker",
+              html: '<div style="color:#ff0000;font-weight:700;font-size:20px;text-shadow:0 0 3px #fff;">✖</div>',
+              iconSize: [16, 16],
+              iconAnchor: [8, 8],
+            });
+            layers.push(L.marker([lastPt.lat, lastPt.lon], { icon: endIcon }));
+          }
+        });
+      return layers.length ? L.featureGroup(layers) : null;
     };
 
     // compute elevation info from parsed segments

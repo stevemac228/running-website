@@ -1,5 +1,6 @@
 [
   {
+    "id": 0,
     "name": "Shamrockin' 5K",
     "nickName": "Shamrock",
     "date": "2026-03-15",
@@ -16,6 +17,7 @@
     "reception": true,
     "location": "St.Johns",
     "startLineLocation": "Jack Astor's",
+    "startLineCoordinates": [47.560964650947334, -52.709323890029275],
     "organization": "NL Events",
     "nLAACertified": false,
     "format": "Fun",
@@ -23,6 +25,7 @@
     "website": "https://raceroster.com/events/2026/107646/shamrockin-5k-2026"
   },
   {
+    "id": 1,
     "name": "Boston Pizza Flat Out 5K",
     "nickName": "Flat Out 5k",
     "date": "2025-04-27",
@@ -39,12 +42,14 @@
     "reception": false,
     "location": "St.Johns",
     "startLineLocation": "Boston Pizza Stavanger",
+    "startLineCoordinates": [47.614197140040204, -52.712019461012275],
     "organization": "ANE",
     "nLAACertified": true,
     "format": "Competitive",
     "terrain": "Road"
   },
   {
+    "id": 2,
     "name": "Cinco de Mayo",
     "nickName": "Cinco de Mayo",
     "date": "2026-05-03",
@@ -69,6 +74,7 @@
     "website": "https://raceroster.com/events/2026/111451/cinco-de-mayo-2026"
   },
   {
+    "id": 3,
     "name": "LiveBy Wealth Mundy Pond 5K",
     "nickName": "Mundy 5k",
     "date": "2025-05-11",
@@ -85,12 +91,14 @@
     "reception": true,
     "location": "St.Johns",
     "startLineLocation": "Mundy Pond",
+    "startLineCoordinates": [47.552312193036435, -52.733769790787754],
     "organization": "Stride Running NL",
     "nLAACertified": true,
     "format": "Competitive",
     "terrain": "Road"
   },
   {
+    "id": 4,
     "name": "Paradise Backyard Ultra",
     "nickName": "PBU",
     "date": "2026-05-22",
@@ -107,16 +115,18 @@
     "reception": false,
     "location": "Paradise",
     "startLineLocation": "Octagon Pond - Paradise",
+    "startLineCoordinates": [47.5211301, -52.87271999],
     "organization": "PBU",
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Gravel"
   },
   {
+    "id": 5,
     "name": "Kicking Pancreas",
     "nickName": "Kicking Pancreas",
     "date": "2025-05-31",
-    "startTime": "6:30 PM",
+    "startTime": "7:30 PM",
     "distance": 5,
     "registrationStart": null,
     "earlyBirdDeadline": null,
@@ -124,17 +134,19 @@
     "registrationDeadline": null,
     "registrationCost": "$45.51",
     "fundraiser": true,
-    "medal": false,
+    "medal": true,
     "shirt": false,
     "reception": false,
     "location": "St.Johns",
     "startLineLocation": "Quidi Vidi",
-    "organization": null,
+    "startLineCoordinates": [47.57832991, -52.69529991],
+    "organization": "Running Room",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
   },
   {
+    "id": 6,
     "name": "Banished Brewing Five & Dime Road Race",
     "nickName": "Five & Dime",
     "date": "2025-06-01",
@@ -151,12 +163,14 @@
     "reception": true,
     "location": "Paradise",
     "startLineLocation": "Banished Brewery",
+    "startLineCoordinates": [47.51770066, -52.91520953],
     "organization": "PRC",
     "nLAACertified": true,
     "format": "Competitive",
     "terrain": "Road"
   },
   {
+    "id": 7,
     "name": "Banished Brewing Five & Dime Road Race",
     "nickName": "Five & Dime",
     "date": "2025-06-01",
@@ -173,12 +187,14 @@
     "reception": true,
     "location": "Paradise",
     "startLineLocation": "Banished Brewery",
+    "startLineCoordinates": [47.51770066, -52.91520953],
     "organization": "PRC",
     "nLAACertified": true,
     "format": "Competitive",
     "terrain": "Road"
   },
   {
+    "id": 8,
     "name": "Run for Beer",
     "nickName": "Run for Beer",
     "date": "2025-06-07",
@@ -195,12 +211,14 @@
     "reception": false,
     "location": "Dildo",
     "startLineLocation": "Dildo",
+    "startLineCoordinates": [47.56837088, -53.5558824],
     "organization": "Dildo Brewing",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
   },
   {
+    "id": 9,
     "name": "TrailRacer for ECTA",
     "nickName": "TrailRacer",
     "date": "2025-06-07",
@@ -217,12 +235,14 @@
     "reception": false,
     "location": null,
     "startLineLocation": null,
+    "startLineCoordinates": [47.63442984, -52.66924024],
     "organization": "ECTA",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Trail"
   },
   {
+    "id": 10,
     "name": "Mews Memorial 8K",
     "nickName": "Mews",
     "date": "2025-06-08",
@@ -239,12 +259,14 @@
     "reception": true,
     "location": "St.Johns",
     "startLineLocation": "Mundy Pond",
+    "startLineCoordinates": [47.55065984, -52.7433899],
     "organization": "ANE",
     "nLAACertified": true,
     "format": "Competitive",
     "terrain": "Road"
   },
   {
+    "id": 11,
     "name": "SDM Run for Women",
     "nickName": "Run for Women",
     "date": "2025-06-14",
@@ -261,12 +283,14 @@
     "reception": false,
     "location": "St.Johns",
     "startLineLocation": "The Blvd",
+    "startLineCoordinates": [],
     "organization": "Shoppers Drug Mart",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
   },
   {
+    "id": 12,
     "name": "SDM Run for Women",
     "nickName": "Run for Women",
     "date": "2025-06-14",
@@ -283,12 +307,14 @@
     "reception": false,
     "location": "St.Johns",
     "startLineLocation": "The Blvd",
+    "startLineCoordinates": [],
     "organization": "Shoppers Drug Mart",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
   },
   {
+    "id": 13,
     "name": "Tely 10",
     "nickName": "Tely 10",
     "date": "2025-06-22",
@@ -305,12 +331,14 @@
     "reception": false,
     "location": "Paradise",
     "startLineLocation": "Octagon Pond - Paradise",
+    "startLineCoordinates": [47.52875452, -52.87955128],
     "organization": null,
     "nLAACertified": true,
     "format": "Competitive",
     "terrain": "Road"
   },
   {
+    "id": 14,
     "name": "Seaside Showdown Series: Deadman's Bay Path",
     "nickName": "Seaside Deadmans",
     "date": "2025-06-28",
@@ -327,12 +355,14 @@
     "reception": false,
     "location": "Fort Amherst",
     "startLineLocation": "Fort Amherst",
+    "startLineCoordinates": [],
     "organization": "Don / Outfitters",
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Trail"
   },
   {
+    "id": 15,
     "name": "Outpost 8k",
     "nickName": "Outpost 8k",
     "date": "2026-07-04",
@@ -349,12 +379,14 @@
     "reception": false,
     "location": "Torbay",
     "startLineLocation": "Father Troys Trail",
+    "startLineCoordinates": [],
     "organization": "Tim and Mel",
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Trail"
   },
   {
+    "id": 16,
     "name": "Kelligrews Soiree 8K Road Race",
     "nickName": "Kelligrews Soiree 8k",
     "date": "2025-07-05",
@@ -371,12 +403,14 @@
     "reception": false,
     "location": "CBS",
     "startLineLocation": "CBS Arena - CBS",
+    "startLineCoordinates": [],
     "organization": "Town of CBS",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
   },
   {
+    "id": 17,
     "name": "8K Roody Road Race",
     "nickName": "Roody Road Race",
     "date": "2025-07-19",
@@ -393,12 +427,14 @@
     "reception": false,
     "location": "CBS",
     "startLineLocation": "Centennial Softball Field - CBS",
+    "startLineCoordinates": [],
     "organization": "Holyrood Squidfest",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
   },
   {
+    "id": 18,
     "name": "Seaside Showdown Series: Sugarloaf Path",
     "nickName": "Seaside Sugarloaf",
     "date": "2025-07-19",
@@ -415,12 +451,14 @@
     "reception": false,
     "location": "Logy Bay",
     "startLineLocation": "Logy Bay",
+    "startLineCoordinates": [],
     "organization": "Don / Outfitters",
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Trail"
   },
   {
+    "id": 19,
     "name": "Pride Fun Run",
     "nickName": "Pride Fun Run",
     "date": "2025-07-20",
@@ -437,12 +475,14 @@
     "reception": false,
     "location": "St.Johns",
     "startLineLocation": "Quidi Vidi",
+    "startLineCoordinates": [],
     "organization": "Running Room / NL Events",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
   },
   {
+    "id": 20,
     "name": "Endurotrack 12hr",
     "nickName": "Endurotrack 12hr",
     "date": "2025-07-26",
@@ -459,12 +499,14 @@
     "reception": false,
     "location": "Mount Pearl",
     "startLineLocation": "Pearlgate Track and Field",
+    "startLineCoordinates": [],
     "organization": "PBU",
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Track"
   },
   {
+    "id": 21,
     "name": "Endurotrack 24hr",
     "nickName": "Endurotrack 24hr",
     "date": "2025-07-26",
@@ -481,12 +523,14 @@
     "reception": false,
     "location": "Mount Pearl",
     "startLineLocation": "Pearlgate Track and Field",
+    "startLineCoordinates": [],
     "organization": "PBU",
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Track"
   },
   {
+    "id": 22,
     "name": "Pharmasave Figure 8 Trail Race",
     "nickName": "Figure 8",
     "date": "2025-07-27",
@@ -503,12 +547,14 @@
     "reception": true,
     "location": "Paradise",
     "startLineLocation": "Paradise Double Ice Complex",
+    "startLineCoordinates": [],
     "organization": "PRC",
     "nLAACertified": true,
     "format": "Competitive",
     "terrain": "Gravel"
   },
   {
+    "id": 23,
     "name": "Seaside Showdown Series: Mickeleens Path",
     "nickName": "Seaside Mickeleens",
     "date": "2025-08-02",
@@ -525,12 +571,14 @@
     "reception": false,
     "location": "Witless Bay",
     "startLineLocation": "Witless Bay",
+    "startLineCoordinates": [],
     "organization": "Don / Outfitters",
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Trail"
   },
   {
+    "id": 24,
     "name": "Seaside Showdown Series: Cape Spear Path",
     "nickName": "Seaside Cape Spear",
     "date": "2025-08-16",
@@ -547,12 +595,14 @@
     "reception": false,
     "location": "Patty Harbor",
     "startLineLocation": "Petty Harbor",
+    "startLineCoordinates": [],
     "organization": "Don / Outfitters",
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Trail"
   },
   {
+    "id": 25,
     "name": "NL Sun Run",
     "nickName": "Sun Run",
     "date": "2025-08-17",
@@ -569,12 +619,14 @@
     "reception": false,
     "location": "St.Johns",
     "startLineLocation": "Bowring Park",
+    "startLineCoordinates": [],
     "organization": "NL Events",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
   },
   {
+    "id": 26,
     "name": "Torbay 5K Fun Run/Walk",
     "nickName": "Torbay 5K",
     "date": "2025-08-24",
@@ -591,12 +643,14 @@
     "reception": false,
     "location": "Torbay",
     "startLineLocation": "Jack Byrne - Torbay",
+    "startLineCoordinates": [],
     "organization": "Made to Move Physio",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
   },
   {
+    "id": 27,
     "name": "Steep Ultra",
     "nickName": "Steep Ultra",
     "date": "2026-09-05",
@@ -613,12 +667,14 @@
     "reception": false,
     "location": "Corner Brook",
     "startLineLocation": "Corner Brook",
+    "startLineCoordinates": [],
     "organization": null,
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Trail"
   },
   {
+    "id": 28,
     "name": "Steep Ultra",
     "nickName": "Steep Ultra",
     "date": "2025-09-06",
@@ -635,12 +691,14 @@
     "reception": false,
     "location": "Corner Brook",
     "startLineLocation": "Corner Brook",
+    "startLineCoordinates": [],
     "organization": null,
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Trail"
   },
   {
+    "id": 29,
     "name": "Uniformed Services Run",
     "nickName": "USR Marathon",
     "date": "2025-09-07",
@@ -657,12 +715,14 @@
     "reception": true,
     "location": "St.Johns",
     "startLineLocation": "Bowring Park",
+    "startLineCoordinates": [],
     "organization": "ANE",
     "nLAACertified": true,
     "format": "Competitive",
     "terrain": "Road"
   },
   {
+    "id": 30,
     "name": "Uniformed Services Run",
     "nickName": "USR Half",
     "date": "2025-09-07",
@@ -679,12 +739,14 @@
     "reception": true,
     "location": "St.Johns",
     "startLineLocation": "Bowring Park",
+    "startLineCoordinates": [],
     "organization": "ANE",
     "nLAACertified": true,
     "format": "Competitive",
     "terrain": "Road"
   },
   {
+    "id": 31,
     "name": "Uniformed Services Run",
     "nickName": "USR 10k",
     "date": "2025-09-07",
@@ -701,12 +763,14 @@
     "reception": true,
     "location": "St.Johns",
     "startLineLocation": "Bowring Park",
+    "startLineCoordinates": [],
     "organization": "ANE",
     "nLAACertified": true,
     "format": "Competitive",
     "terrain": "Road"
   },
   {
+    "id": 32,
     "name": "Damnable Trail Coastal Ridge Challenge",
     "nickName": "Damnable Trail",
     "date": "2025-09-20",
@@ -723,12 +787,14 @@
     "reception": false,
     "location": "Happy Adventure",
     "startLineLocation": "Happy Adventure",
+    "startLineCoordinates": [],
     "organization": null,
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Trail"
   },
   {
+    "id": 33,
     "name": "T’Railway Trek Half Marathon",
     "nickName": "T’Railway Trek",
     "date": "2025-09-21",
@@ -745,12 +811,14 @@
     "reception": true,
     "location": "CBS",
     "startLineLocation": "Parsons Rotary Clubhouse",
+    "startLineCoordinates": [],
     "organization": "Town of CBS",
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Gravel"
   },
   {
+    "id": 34,
     "name": "Candlelighters Go Gold",
     "nickName": "Candlelighters Go Gold",
     "date": "2025-09-21",
@@ -767,12 +835,14 @@
     "reception": false,
     "location": "St.Johns",
     "startLineLocation": "Quidi Vidi",
+    "startLineCoordinates": [],
     "organization": "Running Room",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
   },
   {
+    "id": 35,
     "name": "Carved by the Sea",
     "nickName": "Carved by the Sea",
     "date": "2025-09-21",
@@ -789,12 +859,14 @@
     "reception": false,
     "location": "Bay Roberts",
     "startLineLocation": "Wilbur Sparkes Complex - Bay Roberts",
+    "startLineCoordinates": [],
     "organization": "Town of Bay Roberts",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": null
   },
   {
+    "id": 36,
     "name": "Trinity Fort to Forge",
     "nickName": "Fort to Forge 5k",
     "date": "2026-09-26",
@@ -811,12 +883,14 @@
     "reception": false,
     "location": "Trinity",
     "startLineLocation": "Trinity",
+    "startLineCoordinates": [],
     "organization": "Town of Trinity",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": null
   },
   {
+    "id": 37,
     "name": "Trinity Fort to Forge",
     "nickName": "Fort to Forge 10k",
     "date": "2026-09-26",
@@ -833,12 +907,14 @@
     "reception": false,
     "location": "Trinity",
     "startLineLocation": "Trinity",
+    "startLineCoordinates": [],
     "organization": "Town of Trinity",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": null
   },
   {
+    "id": 38,
     "name": "Rockcut 50k",
     "nickName": "Rockcut 50k",
     "date": "2025-09-27",
@@ -855,12 +931,14 @@
     "reception": false,
     "location": "Twillingate",
     "startLineLocation": null,
+    "startLineCoordinates": [],
     "organization": "Rockcut Ultra",
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Trail"
   },
   {
+    "id": 39,
     "name": "Rockcut Half Marathon",
     "nickName": "Rockcut Half",
     "date": "2025-09-27",
@@ -877,12 +955,14 @@
     "reception": false,
     "location": "Twillingate",
     "startLineLocation": null,
+    "startLineCoordinates": [],
     "organization": "Rockcut Ultra",
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Trail"
   },
   {
+    "id": 40,
     "name": "Rockcut 9k",
     "nickName": "Rockcut 9k",
     "date": "2025-09-27",
@@ -899,12 +979,14 @@
     "reception": false,
     "location": "Twillingate",
     "startLineLocation": null,
+    "startLineCoordinates": [],
     "organization": "Rockcut Ultra",
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Trail"
   },
   {
+    "id": 41,
     "name": "Run Walk Stroll and Roll",
     "nickName": "Stroll and Roll 2k",
     "date": "2025-09-28",
@@ -921,12 +1003,14 @@
     "reception": false,
     "location": "St.Johns",
     "startLineLocation": "Bowring Park",
+    "startLineCoordinates": [],
     "organization": "Easter Seals NL",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
   },
   {
+    "id": 42,
     "name": "Run Walk Stroll and Roll",
     "nickName": "Stroll and Roll 5k",
     "date": "2025-09-28",
@@ -943,12 +1027,14 @@
     "reception": false,
     "location": "St.Johns",
     "startLineLocation": "Bowring Park",
+    "startLineCoordinates": [],
     "organization": "Easter Seals NL",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
   },
   {
+    "id": 43,
     "name": "ECT 15",
     "nickName": "ECT 15",
     "date": "2025-10-04",
@@ -965,12 +1051,14 @@
     "reception": false,
     "location": "Flatrock",
     "startLineLocation": "Flatrock",
+    "startLineCoordinates": [],
     "organization": null,
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Trail"
   },
   {
+    "id": 44,
     "name": "Turkey Tea",
     "nickName": "Turkey Tea",
     "date": "2025-10-05",
@@ -994,6 +1082,7 @@
     "terrain": "Road"
   },
   {
+    "id": 45,
     "name": "CIBC Run for the Cure",
     "nickName": "Run for the Cure",
     "date": "2025-10-05",
@@ -1010,12 +1099,14 @@
     "reception": false,
     "location": "St.Johns",
     "startLineLocation": "Bowring Park",
+    "startLineCoordinates": [],
     "organization": "Cancer Society",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
   },
   {
+    "id": 46,
     "name": "RBC Race for the Kids",
     "nickName": "Race for the Kids",
     "date": "2025-10-11",
@@ -1032,12 +1123,14 @@
     "reception": false,
     "location": "St.Johns",
     "startLineLocation": "Bowring Park",
+    "startLineCoordinates": [],
     "organization": "Janeway / RBC",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
   },
   {
+    "id": 47,
     "name": "ECT 50%",
     "nickName": "ECT 50%",
     "date": "2025-10-11",
@@ -1054,12 +1147,14 @@
     "reception": false,
     "location": "Flatrock",
     "startLineLocation": "Ann Waterman Family Park, 365 Windgap Rd, Flatrock, A1K 1C3, Canada",
+    "startLineCoordinates": [],
     "organization": "ECT",
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Trail"
   },
   {
+    "id": 48,
     "name": "Trapline Marathon",
     "nickName": "Trapline 5k",
     "date": "2025-10-12",
@@ -1076,12 +1171,14 @@
     "reception": false,
     "location": "North West River",
     "startLineLocation": "North West River",
+    "startLineCoordinates": [],
     "organization": null,
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": null
   },
   {
+    "id": 49,
     "name": "Trapline Marathon",
     "nickName": "Trapline 10k",
     "date": "2025-10-12",
@@ -1098,12 +1195,14 @@
     "reception": false,
     "location": "North West River",
     "startLineLocation": "North West River",
+    "startLineCoordinates": [],
     "organization": null,
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": null
   },
   {
+    "id": 50,
     "name": "Trapline Marathon",
     "nickName": "Trapline Half",
     "date": "2025-10-12",
@@ -1120,12 +1219,14 @@
     "reception": false,
     "location": "North West River",
     "startLineLocation": "North West River",
+    "startLineCoordinates": [],
     "organization": null,
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": null
   },
   {
+    "id": 51,
     "name": "Trapline Marathon",
     "nickName": "Trapline Marathon",
     "date": "2025-10-12",
@@ -1142,12 +1243,14 @@
     "reception": false,
     "location": "North West River",
     "startLineLocation": "North West River",
+    "startLineCoordinates": [],
     "organization": null,
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": null
   },
   {
+    "id": 52,
     "name": "Cape to Cabot",
     "nickName": "Cape to Cabot",
     "date": "2025-10-19",
@@ -1164,12 +1267,14 @@
     "reception": false,
     "location": "St.Johns",
     "startLineLocation": "Cape Spear",
+    "startLineCoordinates": [],
     "organization": "ANE",
     "nLAACertified": true,
     "format": "Competitive",
     "terrain": "Road"
   },
   {
+    "id": 53,
     "name": "ECT 50",
     "nickName": "ECT 50",
     "date": "2025-10-25",
@@ -1186,12 +1291,14 @@
     "reception": false,
     "location": "Flatrock",
     "startLineLocation": "Flatrock",
+    "startLineCoordinates": [],
     "organization": null,
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Trail"
   },
   {
+    "id": 54,
     "name": "Spooky Sprint",
     "nickName": "Spooky Sprint",
     "date": "2025-10-26",
@@ -1208,12 +1315,14 @@
     "reception": false,
     "location": "St.Johns",
     "startLineLocation": "Quidi Vidi",
+    "startLineCoordinates": [],
     "organization": "Running Room / NL Events",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
   },
   {
+    "id": 55,
     "name": "Giv'er on the River Fun Run",
     "nickName": "Giv'er on the River",
     "date": "2025-10-26",
@@ -1230,12 +1339,14 @@
     "reception": false,
     "location": "CBS",
     "startLineLocation": "Manuels River",
+    "startLineCoordinates": [],
     "organization": "Town of CBS",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": null
   },
   {
+    "id": 56,
     "name": "Run to Remember",
     "nickName": "Run to Remember",
     "date": "2025-11-11",
@@ -1260,6 +1371,7 @@
     "website": "https://striderunningnl.ca/run-to-remember/"
   },
   {
+    "id": 57,
     "name": "Mummers Run",
     "nickName": "Mummers Run",
     "date": "2025-11-15",
@@ -1276,12 +1388,14 @@
     "reception": false,
     "location": "St.Johns",
     "startLineLocation": "Quidi Vidi",
+    "startLineCoordinates": [],
     "organization": "Running Room",
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
   },
   {
+    "id": 58,
     "name": "Joy Run",
     "nickName": "Joy Run",
     "date": "2025-11-15",
@@ -1298,12 +1412,14 @@
     "reception": false,
     "location": "Flatrock",
     "startLineLocation": "Flatrock",
+    "startLineCoordinates": [],
     "organization": "Tanya Joy",
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Trail"
   },
   {
+    "id": 59,
     "name": "Santa Shuffle Fun Run & Elf Walk 2025",
     "nickName": "Santa Shuffle",
     "date": "2025-12-06",
@@ -1320,6 +1436,7 @@
     "reception": false,
     "location": "St.Johns",
     "startLineLocation": "Quidi Vidi",
+    "startLineCoordinates": [],
     "organization": "Running Room",
     "nLAACertified": false,
     "format": "Fun",
