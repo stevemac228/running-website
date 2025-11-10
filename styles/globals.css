@@ -605,6 +605,7 @@ body::-webkit-scrollbar-track {
 .modern-leaflet-popup .leaflet-popup-content {
   margin: 0;
   min-width: 200px;
+  padding: 3px;
 }
 
 .modern-leaflet-popup .leaflet-popup-tip {
@@ -613,7 +614,7 @@ body::-webkit-scrollbar-track {
 }
 
 .custom-popup {
-  padding: 16px;
+  padding: 10px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
@@ -659,7 +660,6 @@ body::-webkit-scrollbar-track {
   color: var(--runnl-light-grey);
   font-size: 24px;
   font-weight: 300;
-  padding: 8px 12px;
   transition: all 0.2s ease;
 }
 

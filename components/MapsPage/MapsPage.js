@@ -85,7 +85,7 @@ export default function MapsPage() {
           if (lastPt && lastPt.isEnd && typeof lastPt.lat === "number" && typeof lastPt.lon === "number") {
             const endIcon = L.divIcon({
               className: "end-x-marker",
-              html: '<div style="color:#b30000;font-weight:700;font-size:14px;text-shadow:0 0 3px #fff;">✖</div>',
+              html: '<div style="color:#ff0000;font-weight:700;font-size:20px;text-shadow:0 0 3px #fff;">✖</div>',
               iconSize: [16, 16],
               iconAnchor: [8, 8],
             });
