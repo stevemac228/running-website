@@ -464,10 +464,10 @@
     "date": "2026-07-18",
     "startTime": "10:00 AM",
     "distance": 5,
-    "registrationStart": "2025-01-04",
-    "earlyBirdDeadline": "2025-07-04",
+    "registrationStart": "2026-01-04",
+    "earlyBirdDeadline": "2026-07-04",
     "earlyBirdCost": 45.51,
-    "registrationDeadline": "2025-07-15",
+    "registrationDeadline": "2026-07-15",
     "registrationCost": 56.31,
     "fundraiser": true,
     "medal": true,
@@ -479,7 +479,7 @@
     "organization": "Running Room / NL Events",
     "nLAACertified": false,
     "format": "Fun",
-    "terrain": "Road"
+    "terrain": "Gravel"
   },
   {
     "id": 20,
