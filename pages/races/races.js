@@ -187,7 +187,7 @@ export default function Races() {
       <main className="races-page-container">
         {/* Search Bar - Centered */}
         <div className="races-search-bar">
-          <SearchFilter onSearch={setSearchTerm} initialValue={searchTerm} />
+          {/* <SearchFilter onSearch={setSearchTerm} initialValue={searchTerm} /> */}
         </div>
 
         {/* Two-column layout: Sidebar + Content */}

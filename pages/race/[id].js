@@ -46,9 +46,9 @@ export default function RaceDetail() {
   const displayEntries = useMemo(() => {
     if (!race) return [];
     const order = [
-      "name",
-      "nickName",
       "date",
+      "location",
+      "startLineLocation",
       "startTime",
       "distance",
       "registrationStart",
@@ -60,8 +60,6 @@ export default function RaceDetail() {
       "medal",
       "shirt",
       "reception",
-      "location",
-      "startLineLocation",
       "organization",
       "nLAACertified",
       "format",
@@ -92,14 +90,12 @@ export default function RaceDetail() {
       entries.push({ key, label: humanLabel(key), value: formatted });
     };
 
-    // add in preferred order first
+    // add in preferred order only (do not append remaining keys)
     for (const k of order) {
       if (k in race) add(k, race[k]);
     }
-    // add any remaining keys not in order
-    for (const [k, v] of Object.entries(race)) {
-      if (!order.includes(k)) add(k, v);
-    }
+
+    // removed: loop that added any remaining race keys — we only want fields defined in `order`
 
     return entries;
   }, [race]);
@@ -361,16 +357,13 @@ export default function RaceDetail() {
         <header className="race-detail-header">
           <h1 className="race-detail-title">{race.name}</h1>
           <div className="race-detail-subtitle">
-            {race.nickName ? <em>{race.nickName}</em> : null}{" "}
-            {race.date ? `• ${formatDate(race.date)}` : null}{" "}
+            {race.date ? ` ${formatDate(race.date)}` : null}{" "}
             {race.startTime ? `• ${formatTime(race.startTime)}` : null}
           </div>
         </header>
 
         <div className="race-detail-grid">
           <section>
-            <h2 className="race-detail-section-title">All Race Info</h2>
-
             <div className="race-detail-info-grid">
               {displayEntries.map(({ key, label, value }) => (
                 <div key={key} className="race-detail-info-row">

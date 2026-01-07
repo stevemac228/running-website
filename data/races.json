@@ -22,7 +22,10 @@
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road",
-    "website": "https://raceroster.com/events/2026/107646/shamrockin-5k-2026"
+    "website": "https://raceroster.com/events/2026/107646/shamrockin-5k-2026",
+    "previousDates" : [
+      "2026-03-15"
+    ]
   },
   {
     "id": 1,
@@ -46,7 +49,10 @@
     "organization": "ANE",
     "nLAACertified": true,
     "format": "Competitive",
-    "terrain": "Road"
+    "terrain": "Road",
+    "previousDates" : [
+      "2025-04-27"
+    ]
   },
   {
     "id": 2,

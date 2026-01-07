@@ -8,6 +8,7 @@ export default function Header() {
   return (
     <header>
       <div className="header-top">
+        <Link href="/" className="header-text">
           <img
             src="/icons/newPufin-Kittl(1).svg"
             alt="Puffin Mascot"
@@ -15,6 +16,7 @@ export default function Header() {
             fill="none"
           />
           <h1>Run NL</h1>
+        </Link>
         <div className="header-tools">
           <div className="header-search">
             <SearchFilter onSearch={handleHeaderSearch} />

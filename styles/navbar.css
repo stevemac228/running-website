@@ -20,6 +20,14 @@ header {
   padding: 5px 10px;
 }
 
+.header-text{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+}
+
 .header-tools {
   display: flex;
   align-items: center;
@@ -56,6 +64,7 @@ header {
   width: 100%;
   background-color: #434b5b;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 22px;
 }
 
 .nav-strip-links {
@@ -64,7 +73,7 @@ header {
   gap: 1.25rem;
   padding: 0.45rem 1.25rem;
   color: var(--runnl-light-text);
-  min-height: 20px;
+  min-height: 22px;
 }
 
 .nav-strip-link {
