@@ -43,11 +43,14 @@ export default function Races() {
     { key: "full", label: "Marathon" },
     { key: "ultra", label: "Ultra" },
     { key: "medal", label: "Medal" },
+    { key: "reception", label: "Reception" },
     { key: "tshirt", label: "T Shirt" },
     { key: "funRun", label: "Fun Run" },
     { key: "competitive", label: "Competitive" },
     { key: "trail", label: "Trail" },
     { key: "road", label: "Road" },
+    { key: "gravel", label: "Gravel" },
+    { key: "track", label: "Track" },
   ];
 
   const [activeFilters, setActiveFilters] = useState([]);
@@ -91,6 +94,7 @@ export default function Races() {
 
       // Other filters
       if (activeFilters.includes("medal") && !race.medal) return false;
+      if (activeFilters.includes("reception") && !race.reception) return false;
       if (activeFilters.includes("tshirt") && !race.shirt) return false;
       if (activeFilters.includes("funRun") && race.format !== "Fun")
         return false;
@@ -102,6 +106,10 @@ export default function Races() {
       if (activeFilters.includes("trail") && race.terrain !== "Trail")
         return false;
       if (activeFilters.includes("road") && race.terrain !== "Road")
+        return false;
+      if (activeFilters.includes("gravel") && race.terrain !== "Gravel")
+        return false;
+      if (activeFilters.includes("track") && race.terrain !== "Track")
         return false;
 
       // Multi-select distance filters

@@ -15,10 +15,10 @@ export default function FilterSidebar({
     ["funRun", "competitive"].includes(opt.key)
   );
   const terrainFilters = filterOptions.filter((opt) =>
-    ["trail", "road"].includes(opt.key)
+    ["trail", "road", "gravel", "track"].includes(opt.key)
   );
   const featureFilters = filterOptions.filter((opt) =>
-    ["medal", "tshirt"].includes(opt.key)
+    ["medal", "tshirt", "reception"].includes(opt.key)
   );
 
   return (
