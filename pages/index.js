@@ -5,40 +5,6 @@ import Footer from "../components/Footer/Footer";
 import RaceList from "../components/RaceList/RaceList";
 
 export default function Home() {
-  const today = new Date();
-  const threeMonthsFromNow = new Date();
-  threeMonthsFromNow.setMonth(today.getMonth() + 3);
-
-  // Upcoming races
-  const upcomingRaces = races
-    .filter(r => {
-      const raceDate = new Date(r.date);
-      return raceDate >= today && raceDate <= threeMonthsFromNow;
-    })
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
-
-  // Upcoming registrations
-  const upcomingRegistrations = races
-    .filter(r => {
-      if (!r.registrationStart) return false; // skip if no start date
-
-      const regStartDate = new Date(r.registrationStart);
-      const regEndDate = r.registrationDeadline
-        ? new Date(r.registrationDeadline)
-        : null;
-
-      if (isNaN(regStartDate)) return false;
-      if (regEndDate && isNaN(regEndDate)) return false;
-
-      // Include if today is within registration start → registration end
-      if (regEndDate) {
-        return today >= regStartDate && today <= regEndDate;
-      } else {
-        // If no end date, just check start date is in the future
-        return regStartDate >= today;
-      }
-    })
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
 
   return (
     <div>
@@ -71,14 +37,23 @@ export default function Home() {
       </Head>
       <Header />
       <main className="homepage">
-        <div className="upcomingRaces">
-          <h1>Upcoming Races</h1>
-          <RaceList races={upcomingRaces} type="upcomingRaces" />
-        </div>
-        <div className="upcomingRegistrations">
-          <h1>Current Registrations</h1>
-          <RaceList races={upcomingRegistrations} type="upcomingRegistrations" />
-        </div>
+          <img
+            src="/images/marathon-1236351.png"
+            alt="homepage running graphic"
+            className="home-image"
+            fill="none"
+          />
+          <div className="home-text-container">
+            <p className="home-text">
+              Welcome to Run NL, your go-to source for discovering running events across Newfoundland and Labrador.<br></br>
+              Browse upcoming road races, trail runs, and fun runs with detailed information on dates, distances, locations, and registration links. <br></br>
+              <i>Please use official race websites for the most accurate and up-to-date information.</i><br></br>
+              If anyting is missing or incorrect, please <a href="mailto:steven.macdonald228@gmail.com">let me know</a>!<br></br>
+            </p>
+          </div>
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="home-blob">
+            <path fill="#48ff00ff" d="M34.2,-56.1C48.1,-51.2,65.6,-49.6,74.4,-40.8C83.2,-32,83.2,-16,78.3,-2.8C73.4,10.4,63.7,20.8,55.5,30.6C47.3,40.4,40.7,49.7,31.7,55.5C22.7,61.3,11.4,63.5,0,63.6C-11.5,63.7,-22.9,61.6,-32.4,56.1C-41.8,50.6,-49.3,41.7,-58.8,31.8C-68.3,21.8,-79.9,10.9,-82.9,-1.8C-86,-14.5,-80.5,-28.9,-72.2,-40.9C-63.9,-52.9,-52.7,-62.5,-40.2,-68.1C-27.7,-73.8,-13.9,-75.6,-1.8,-72.4C10.2,-69.2,20.3,-61,34.2,-56.1Z" transform="translate(100 100)" />
+          </svg>
       </main>
       <Footer />
     </div>
