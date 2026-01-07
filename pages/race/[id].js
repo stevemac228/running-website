@@ -8,6 +8,7 @@ import { formatDate } from "../../utils/formatDate";
 import { formatTime } from "../../utils/formatTime";
 import { getRaceId } from "../../utils/getRaceId";
 import { parseGpxToSegments } from "../../utils/parseGpx";
+import { isPreviousYear } from "../../utils/isPreviousYear"; // <-- new import
 
 export default function RaceDetail() {
   const router = useRouter();
@@ -357,7 +358,14 @@ export default function RaceDetail() {
         <header className="race-detail-header">
           <h1 className="race-detail-title">{race.name}</h1>
           <div className="race-detail-subtitle">
-            {race.date ? ` ${formatDate(race.date)}` : null}{" "}
+            {race.date ? (
+              <>
+                {" "}
+                <span className={isPreviousYear(race.date) ? "race-date-previous-year" : ""}>
+                  {formatDate(race.date)}
+                </span>
+              </>
+            ) : null}{" "}
             {race.startTime ? `• ${formatTime(race.startTime)}` : null}
           </div>
         </header>

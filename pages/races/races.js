@@ -75,6 +75,33 @@ export default function Races() {
     );
   };
 
+  // helper: extract month/day from Date or string
+  const monthDayFrom = (input) => {
+    if (!input) return { m: 0, d: 0 };
+    if (input instanceof Date && !isNaN(input)) {
+      return { m: input.getMonth() + 1, d: input.getDate() };
+    }
+    const s = String(input).trim();
+    const iso = /^\d{4}-\d{2}-\d{2}$/;
+    if (iso.test(s)) {
+      const [y, mo, da] = s.split("-").map(Number);
+      return { m: mo, d: da };
+    }
+    const us = /^(\d{1,2})\/(\d{1,2})\/\d{4}$/;
+    const m = s.match(us);
+    if (m) return { m: Number(m[1]), d: Number(m[2]) };
+    const parsed = new Date(s);
+    if (!isNaN(parsed)) return { m: parsed.getMonth() + 1, d: parsed.getDate() };
+    return { m: 0, d: 0 };
+  };
+
+  const compareMonthDay = (a, b) => {
+    const A = monthDayFrom(a);
+    const B = monthDayFrom(b);
+    if (A.m !== B.m) return A.m - B.m;
+    return A.d - B.d;
+  };
+
   const filteredRaces = races
     .filter((race) => {
       const raceDate = parseUSDate(race.date);
@@ -146,9 +173,9 @@ export default function Races() {
       const dateB = parseUSDate(b.date);
       switch (sortOption) {
         case "date-asc":
-          return dateA - dateB;
+          return compareMonthDay(dateA, dateB);
         case "date-desc":
-          return dateB - dateA;
+          return compareMonthDay(dateB, dateA);
         case "distance-asc":
           return toDistanceNumber(a.distance) - toDistanceNumber(b.distance);
         case "distance-desc":

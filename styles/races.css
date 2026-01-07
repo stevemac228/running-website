@@ -593,3 +593,37 @@
 .races-controls .sort-dropdown {
   min-width: 200px;
 }
+
+/* Previous year date styling */
+.race-date-previous-year {
+  color: #d32f2f; /* red for previous-year dates */
+  font-style: italic;
+  position: relative; /* needed for pseudo-element positioning */
+  cursor: help;
+}
+
+/* Show "Past event" tooltip for previous-year dates */
+.race-date-previous-year::after {
+  content: "This is a past event, use this date as reference only.";
+  position: absolute;
+  bottom: 125%; /* show above the date */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.race-date-previous-year:hover::after,
+.race-date-previous-year:focus::after {
+  opacity: 1;
+  visibility: visible;
+}

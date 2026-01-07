@@ -8,6 +8,7 @@ import {
   getFormatBadgeClass,
 } from "../../utils/renderBadges";
 import { getRaceId } from "../../utils/getRaceId";
+import { isPreviousYear } from "../../utils/isPreviousYear";
 
 export default function RaceCard({ race }) {
   const [expanded, setExpanded] = useState(false);
@@ -113,7 +114,10 @@ export default function RaceCard({ race }) {
 
             {/* Additional Information */}
             <p>
-              {race.location} - {formatDate(race.date)}
+              {race.location} -{" "}
+              <span className={isPreviousYear(race.date) ? "race-date-previous-year" : ""}>
+                {formatDate(race.date)}
+              </span>
               {race.startTime ? ` @ ${formatTime(race.startTime)}` : ""}
             </p>
           </div>
@@ -134,6 +138,22 @@ export default function RaceCard({ race }) {
                 <path fill="currentColor" d="M7 10l5 5 5-5z" />
               </svg>
             </button>
+          </div>
+        </div>
+
+        {expanded && (
+          <div className="race-card-expanded-content">
+            {expandedFields.map(({ label, value }) => (
+              <p key={label}>
+                <strong>{label}:</strong> {value}
+              </p>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
           </div>
         </div>
 

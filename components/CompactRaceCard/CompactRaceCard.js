@@ -8,6 +8,7 @@ import {
   getFormatBadgeClass,
 } from "../../utils/renderBadges";
 import { getRaceId } from "../../utils/getRaceId";
+import { isPreviousYear } from "../../utils/isPreviousYear";
 
 export default function CompactRaceCard({ race }) {
   const [expanded, setExpanded] = useState(false);
@@ -82,7 +83,10 @@ export default function CompactRaceCard({ race }) {
         <div className="compact-race-details">
           <div className="compact-race-location">{race.location}</div>
           <div className="compact-race-date">
-            {formatDate(race.date)}
+            <span className="tooltip-text">This race has a reception!</span>
+            <span className={isPreviousYear(race.date) ? "race-date-previous-year" : ""}>
+              {formatDate(race.date)}
+            </span>
             {race.startTime && <span> • {formatTime(race.startTime)}</span>}
           </div>
         </div>

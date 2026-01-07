@@ -8,6 +8,7 @@ import {
   getFormatBadgeClass,
 } from "../../utils/renderBadges";
 import { getRaceId } from "../../utils/getRaceId";
+import { isPreviousYear } from "../../utils/isPreviousYear";
 
 export default function UpcomingRegistrationCard({ race }) {
   const [expanded, setExpanded] = useState(false);
@@ -112,7 +113,9 @@ export default function UpcomingRegistrationCard({ race }) {
             {/* Additional Information */}
             <p>
               <span className="race-card-registration-label">Race Date:</span>{" "}
-              {formatDate(race.date)}
+              <span className={isPreviousYear(race.date) ? "race-date-previous-year" : ""}>
+                {formatDate(race.date)}
+              </span>
             </p>
             {/* Early Bird Info */}
             {race.earlyBirdCost && (
