@@ -154,19 +154,3 @@ export default function RaceCard({ race }) {
     </div>
   );
 }
-          </div>
-        </div>
-
-        {expanded && (
-          <div className="race-card-expanded-content">
-            {expandedFields.map(({ label, value }) => (
-              <p key={label}>
-                <strong>{label}:</strong> {value}
-              </p>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
