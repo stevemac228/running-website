@@ -125,3 +125,45 @@
   visibility: visible;
   opacity: 1;
 }
+
+/* Mobile: ensure badges and icons always sit on a row below the title */
+@media (max-width: 768px) {
+  /* Make the h2 a wrapping flex container so we can force a line break */
+  .race-card h2 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  /* This spacer forces following inline elements (badges/icons) onto a
+     new row below the title regardless of title length. */
+  .race-card h2 .race-card-spacer {
+    flex-basis: 100%;
+    height: 0;
+    display: block;
+  }
+
+  /* Ensure icons and badges take the full width on mobile and wrap nicely */
+  .race-card h2 .tooltip-container,
+  .race-card h2 .badge,
+  .race-card h2 .badge-road,
+  .race-card h2 .badge-trail,
+  .race-card h2 .badge-track,
+  .race-card h2 .badge-gravel,
+  .race-card h2 .badge-funrun,
+  .race-card h2 .badge-competitive {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 0.4rem;
+  }
+
+  /* Compact card: stack name and icons/badges vertically */
+
+
+  /* Make sure racecard icons don't push the title horizontally */
+  .racecard-icon {
+    margin-left: 0.15rem;
+    margin-right: 0.15rem;
+  }
+}

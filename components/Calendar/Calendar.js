@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import races from "../../data/races.json";
 import { getRaceId } from "../../utils/getRaceId";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 
 export default function Calendar() {
@@ -9,6 +10,7 @@ export default function Calendar() {
 
   const [isMobile, setIsMobile] = useState(false);
   const todayRef = useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -17,17 +19,12 @@ export default function Calendar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // For mobile vertical view: generate days from 3 months ago to 6 months ahead
+  // For mobile vertical view: show the full calendar year so Jan 1 is always
+  // the first item at the top. We generate days from Jan 1 to Dec 31 of the
+  // current year.
   const today = new Date();
-  const mobileStartDate = new Date(today);
-  mobileStartDate.setMonth(mobileStartDate.getMonth() - 3);
-  mobileStartDate.setDate(1); // Start from the 1st of the month
-  
-  const mobileEndDate = new Date(today);
-  mobileEndDate.setMonth(mobileEndDate.getMonth() + 6);
-  mobileEndDate.setDate(1);
-  mobileEndDate.setMonth(mobileEndDate.getMonth() + 1);
-  mobileEndDate.setDate(0); // Last day of the month
+  const mobileStartDate = new Date(today.getFullYear(), 0, 1); // Jan 1
+  const mobileEndDate = new Date(today.getFullYear(), 11, 31); // Dec 31
   
   // Generate all days for mobile view
   const mobileDays = [];
@@ -37,39 +34,57 @@ export default function Calendar() {
     currentDay.setDate(currentDay.getDate() + 1);
   }
 
-  // Scroll to today on mobile when component mounts (centered in viewport)
+  // Scroll to today on mobile when component mounts. Instead of centering
+  // the day, align it just below the page header so that the list still
+  // begins with Jan 1 at the top when the user scrolls to the top.
   useEffect(() => {
     if (isMobile && todayRef.current) {
       // Wait for the DOM to be fully rendered, then scroll
       const timer = setTimeout(() => {
         if (todayRef.current) {
-          // Get the header height dynamically
-          const header = document.querySelector('header');
-          const headerHeight = header ? header.offsetHeight : 60;
-          
-          // Calculate position to center the element in viewport
-          const elementPosition = todayRef.current.getBoundingClientRect().top;
-          const elementHeight = todayRef.current.offsetHeight;
-          const viewportHeight = window.innerHeight;
-          
-          // Center the element: position - (viewport/2) + (element/2) + header
-          const offsetPosition =
-            elementPosition +
-            window.pageYOffset -
-            viewportHeight / 2 +
-            elementHeight / 2 -
-            headerHeight;
+          const focusToday = router?.query?.focus === "today";
 
-          window.scrollTo({
-            top: Math.max(offsetPosition, 0),
-            behavior: "smooth",
-          });
+          // Scroll the mobile calendar container (not the whole window)
+          const container =
+            todayRef.current.closest(".mobile-calendar-list") ||
+            document.querySelector(".mobile-calendar-list");
+
+          const elementOffsetTop = todayRef.current.offsetTop;
+          const elementHeight = todayRef.current.offsetHeight;
+
+          if (container && typeof container.scrollTo === "function") {
+            let target;
+            if (focusToday) {
+              // Center the element in the container's viewport
+              const containerHeight = container.clientHeight;
+              target = elementOffsetTop - containerHeight / 2 + elementHeight / 2;
+            } else {
+              // Align the top of the element near the top of the list
+              target = elementOffsetTop - 8; // small gap
+            }
+
+            container.scrollTo({ top: Math.max(target, 0), behavior: "smooth" });
+          } else {
+            // Fallback to window scroll if container not found
+            const header = document.querySelector("header");
+            const headerHeight = header ? header.offsetHeight : 60;
+            const elementTop =
+              todayRef.current.getBoundingClientRect().top + window.pageYOffset;
+            let offsetPosition;
+            if (focusToday) {
+              const viewportHeight = window.innerHeight;
+              offsetPosition = elementTop - viewportHeight / 2 + elementHeight / 2 - headerHeight;
+            } else {
+              offsetPosition = elementTop - headerHeight - 8;
+            }
+            window.scrollTo({ top: Math.max(offsetPosition, 0), behavior: "smooth" });
+          }
         }
       }, 300);
-      
+
       return () => clearTimeout(timer);
     }
-  }, [isMobile]); // Only run when isMobile changes
+  }, [isMobile, router?.query?.focus]); // Run when isMobile or focus query changes
 
   const startOfMonth = new Date(
     currentDate.getFullYear(),

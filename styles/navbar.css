@@ -214,3 +214,24 @@ header {
     border-radius: 0 0 8px 8px;
   }
 }
+
+/* Mobile: center the nav links horizontally and make them easier to tap */
+@media (max-width: 768px) {
+  .nav-strip-links {
+    justify-content: center;
+    padding: 0.6rem 0.75rem;
+    gap: 1rem;
+  }
+
+  .nav-strip-link {
+    display: inline-block;
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    text-align: center;
+  }
+
+  /* Make the nav strip slightly taller for comfortable tapping */
+  .nav-strip {
+    min-height: 40px;
+  }
+}

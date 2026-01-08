@@ -81,13 +81,36 @@ export default function CompactRaceCard({ race }) {
 
         {/* Middle section - Location and date */}
         <div className="compact-race-details">
-          <div className="compact-race-location">{race.location}</div>
-          <div className="compact-race-date">
-            <span className="tooltip-text">This race has a reception!</span>
-            <span className={isPreviousYear(race.date) ? "race-date-previous-year" : ""}>
-              {formatDate(race.date)}
-            </span>
-            {race.startTime && <span> • {formatTime(race.startTime)}</span>}
+          {/* Row containing location/date on the left and the chevron on the right
+              so there is no extra space underneath on mobile. */}
+          <div className="compact-race-details-row">
+            <div className="compact-race-left">
+              <div className="compact-race-location">{race.location}</div>
+              <div className="compact-race-date">
+                <span className="tooltip-text">This race has a reception!</span>
+                <span className={isPreviousYear(race.date) ? "race-date-previous-year" : ""}>
+                  {formatDate(race.date)}
+                </span>
+                {race.startTime && <span> • {formatTime(race.startTime)}</span>}
+              </div>
+            </div>
+
+            <div className="compact-race-chev-mobile">
+              <button
+                className="chevron-toggle"
+                aria-label={expanded ? "Hide details" : "Show details"}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  className={`race-card-chevron-svg ${expanded ? 'race-card-chevron-expanded' : 'race-card-chevron-collapsed'}`}
+                >
+                  <path fill="currentColor" d="M7 10l5 5 5-5z" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 

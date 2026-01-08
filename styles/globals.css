@@ -175,6 +175,11 @@ body::-webkit-scrollbar-track {
   margin-bottom: 0.15rem;
 }
 
+.compact-race-chev-mobile {
+  display: none;
+}
+
+
 /* Responsive layout */
 @media (max-width: 1200px) {
   .compact-race-card-main {
@@ -243,6 +248,44 @@ body::-webkit-scrollbar-track {
 
   .compact-race-expanded {
     grid-template-columns: 1fr;
+  }
+
+  /* On smaller screens hide the desktop chevron column and place the
+     chevron inline with the location/date so it sits on the same row. */
+  .compact-race-actions {
+    display: none;
+  }
+
+  .compact-race-details-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .compact-race-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  .compact-race-chev-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+  }
+
+  .compact-race-chev-mobile .chevron-toggle {
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
