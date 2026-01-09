@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/router";
 import races from "../../data/races.json";
 import { getRaceId } from "../../utils/getRaceId";
@@ -11,6 +12,7 @@ export default function SearchFilter({ onSearch, initialValue = "" }) {
   const [open, setOpen] = useState(false);
   const [highlight, setHighlight] = useState(-1);
   const wrapperRef = useRef(null);
+  const [dropdownStyle, setDropdownStyle] = useState(null);
 
   // sync when parent-provided initialValue changes (e.g. when arriving at /races?search=...)
   useEffect(() => {
@@ -28,6 +30,38 @@ export default function SearchFilter({ onSearch, initialValue = "" }) {
     window.addEventListener("click", handleClick);
     return () => window.removeEventListener("click", handleClick);
   }, []);
+
+  // compute dropdown position when opened so we can render via a portal
+  useEffect(() => {
+    if (!open || !wrapperRef.current) {
+      setDropdownStyle(null);
+      return;
+    }
+
+    const update = () => {
+      // Prefer the visible .search-wrapper element (it defines the visual box)
+      // since wrapperRef is attached to the outer container which may include
+      // extra margins/padding. This makes the dropdown width match the box.
+      const inner = wrapperRef.current.querySelector
+        ? wrapperRef.current.querySelector(".search-wrapper")
+        : null;
+      const target = inner || wrapperRef.current;
+      const rect = target.getBoundingClientRect();
+      setDropdownStyle({
+        left: Math.max(rect.left, 0) + window.scrollX,
+        top: rect.bottom + window.scrollY,
+        width: rect.width,
+      });
+    };
+
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("scroll", update, true);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update, true);
+    };
+  }, [open]);
 
   useEffect(() => {
     // filter races client-side as user types
@@ -131,9 +165,23 @@ export default function SearchFilter({ onSearch, initialValue = "" }) {
         )}
       </div>
 
-      {/* Results dropdown attached to bottom of search-wrapper */}
-      {open && results.length > 0 && (
-        <div className="search-results" role="listbox" id="search-results-list">
+      {/* Results dropdown rendered via portal (attached to document.body) to avoid
+          stacking context issues — we compute an absolute position matching the
+          input wrapper so the dropdown appears visually below the input. */}
+      {open && results.length > 0 && dropdownStyle && createPortal(
+        <div
+          className="search-results"
+          role="listbox"
+          id="search-results-list"
+          style={{
+            position: "absolute",
+            left: `${dropdownStyle.left}px`,
+            top: `${dropdownStyle.top}px`,
+            width: `${dropdownStyle.width}px`,
+            boxSizing: "border-box",
+            zIndex: 2147483647,
+          }}
+        >
           {results.map((race, idx) => (
             <div
               key={getRaceId(race) || `${idx}`}
@@ -150,7 +198,8 @@ export default function SearchFilter({ onSearch, initialValue = "" }) {
               </div>
             </div>
           ))}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

@@ -136,7 +136,8 @@ header {
 /* Search results dropdown (attached to .search-wrapper) */
 .search-wrapper {
   position: relative; /* ensure dropdown anchors to this */
-  z-index: 30;
+  /* Raised high so search dropdown sits above other UI (maps, popups, etc.) */
+  z-index: 2147483646;
 }
 
 /* Dropdown panel */
@@ -155,13 +156,14 @@ header {
   margin: 0;
   font-family: inherit;
   color: var(--runnl-dark-text);
-  z-index: 99999; /* increased to ensure dropdown sits above other UI */
+  /* Very high z-index to ensure it isn't occluded by other stacking contexts */
+  z-index: 2147483647;
 }
 
 /* Ensure the wrapper has a higher stacking context */
 .search-wrapper {
   position: relative;
-  z-index: 99998;
+  z-index: 99999999;
 }
 
 /* Individual result */
@@ -217,6 +219,10 @@ header {
 
 /* Mobile: center the nav links horizontally and make them easier to tap */
 @media (max-width: 768px) {
+  /* hide the puffin logo on mobile to save header space */
+  .puffin-icon {
+    display: none;
+  }
   .nav-strip-links {
     justify-content: center;
     padding: 0.6rem 0.75rem;
@@ -226,7 +232,6 @@ header {
   .nav-strip-link {
     display: inline-block;
     padding: 0.35rem 0.6rem;
-    border-radius: 6px;
     text-align: center;
   }
 

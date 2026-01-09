@@ -36,6 +36,7 @@ export default function MapsPage() {
   const leafletRef = useRef(null);
   const mapBoundsRef = useRef(null);
   const [loading, setLoading] = useState(true);
+  const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
   const [layersInfo, setLayersInfo] = useState([]);
 
   useEffect(() => {
@@ -458,7 +459,8 @@ export default function MapsPage() {
           <div ref={mapRef} id="map" className="maps-page-map" />
         </div>
 
-        <aside ref={sidebarRef} className="maps-page-sidebar">
+          {/* Desktop sidebar (hidden on small screens via CSS) */}
+          <aside ref={sidebarRef} className="maps-page-sidebar">
           <h3 className="maps-page-sidebar-title">Races in View</h3>
           {loading && <p>Loading GPX races…</p>}
           {!loading && layersInfo.length === 0 && <p>No races in current map view.</p>}
@@ -492,6 +494,51 @@ export default function MapsPage() {
             ))}
           </ul>
         </aside>
+
+          {/* Mobile pull-up panel (only visible on small screens via CSS) */}
+          <div className={`maps-page-mobile-pullup ${mobilePanelOpen ? "open" : ""}`}>
+            <button
+              className="maps-page-mobile-pullup-handle"
+              onClick={() => setMobilePanelOpen((s) => !s)}
+              aria-expanded={mobilePanelOpen}
+            >
+              <span className="pullup-title">Races in View</span>
+              <span className={`pullup-chevron ${mobilePanelOpen ? "open" : ""}`}>▾</span>
+            </button>
+            <div className="maps-page-mobile-pullup-content" role="dialog" aria-label="Races in view list">
+              {loading && <p>Loading GPX races…</p>}
+              {!loading && layersInfo.length === 0 && <p>No races in current map view.</p>}
+              <ul className="maps-page-race-list">
+                {layersInfo.map((li) => (
+                  <li key={li.id} className="maps-page-race-item">
+                    <label className="maps-page-race-label">
+                      <input
+                        type="checkbox"
+                        checked={li.visible}
+                        onChange={() => toggleLayer(li.id)}
+                        className="maps-page-checkbox"
+                        data-color={li.color}
+                        style={{
+                          borderColor: li.visible ? "white" : li.color,
+                          backgroundColor: li.visible ? li.color : "white",
+                        }}
+                      />
+                      <div className="maps-page-race-content">
+                        <a
+                          href={`/race/${encodeURIComponent(li.raceSlug || li.name)}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="maps-page-race-link"
+                        >
+                          {li.name}
+                        </a>
+                        <span className="maps-page-race-details">{formatSideText(li.distanceKm, li.elevInfo)}</span>
+                      </div>
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
       </div>
     </div>
   );
