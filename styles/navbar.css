@@ -4,6 +4,8 @@ header {
   display: flex;
   flex-direction: column;
   gap: 0;
+  position: relative; /* anchor absolute-positioned mobile drawer */
+  z-index: 11000;
 }
 
 .puffin-icon {
@@ -102,19 +104,18 @@ header {
   height: 2px;
   background: currentColor;
   margin: 4px 0;
-  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.nav-menu-toggle[aria-expanded="true"] .nav-menu-bar:nth-child(1) {
-  transform: translateY(6px) rotate(45deg);
+/* SVG hamburger icon styling (used instead of the three spans) */
+.nav-menu-icon {
+  display: block;
+  width: 22px;
+  height: 18px;
 }
-
-.nav-menu-toggle[aria-expanded="true"] .nav-menu-bar:nth-child(2) {
-  opacity: 0;
-}
-
-.nav-menu-toggle[aria-expanded="true"] .nav-menu-bar:nth-child(3) {
-  transform: translateY(-6px) rotate(-45deg);
+.nav-menu-icon line {
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
 }
 
 .nav-strip-search {
@@ -223,10 +224,35 @@ header {
   .puffin-icon {
     display: none;
   }
+  /* show hamburger toggle next to the search */
+  .nav-menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.5rem;
+    position: relative;
+    z-index: 13000; /* ensure it is clickable above the search */
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border-radius: 8px;
+    border: none;
+    padding: 6px;
+  }
+
+  /* hide the desktop nav strip on small screens; we'll show a mobile drawer */
+  .nav-strip {
+    display: none;
+  }
   .nav-strip-links {
     justify-content: center;
     padding: 0.6rem 0.75rem;
     gap: 1rem;
+  }
+
+  /* Hide site title on mobile so the hamburger can sit top-left */
+  .header-text {
+    display: none;
   }
 
   .nav-strip-link {
@@ -238,5 +264,79 @@ header {
   /* Make the nav strip slightly taller for comfortable tapping */
   .nav-strip {
     min-height: 40px;
+  }
+
+  /* Make the search fill the header and avoid overlaying the hamburger */
+  .header-top {
+    align-items: center;
+    padding: 10px 0px; /* vertical and horizontal padding on mobile */
+  }
+
+  .header-tools {
+    margin-left: 0; /* don't push tools to the far right on mobile */
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    order: 1;
+  }
+
+  .header-search {
+    position: relative;
+    left: auto;
+    transform: none;
+    top: auto;
+    width: 100%;
+    max-width: none;
+    margin: 0 8px 0 0;
+    z-index: 1; /* sit below the hamburger */
+  }
+
+  .nav-menu-toggle {
+    order: 0;
+  }
+
+  .header-search .search-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Mobile nav drawer rendered under the header */
+  .nav-mobile-drawer {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: none;
+    background: var(--runnl-dark-grey); /* match header so it connects visually */
+    color: var(--runnl-light-text);
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    z-index: 12000;
+    overflow: hidden;
+  }
+
+  .nav-mobile-drawer.open {
+    display: block;
+  }
+
+  .nav-mobile-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0; /* full-bleed links, no inner margins */
+  }
+
+  .nav-mobile-links .nav-strip-link {
+    padding: 14px 16px;
+    border-radius: 0;
+    color: var(--runnl-light-text);
+    display: block;
+  }
+
+  .nav-mobile-links .nav-strip-link:hover {
+    background: rgba(0,0,0,0.04);
   }
 }
