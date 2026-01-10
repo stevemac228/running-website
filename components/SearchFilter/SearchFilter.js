@@ -13,6 +13,7 @@ export default function SearchFilter({ onSearch, initialValue = "" }) {
   const [highlight, setHighlight] = useState(-1);
   const wrapperRef = useRef(null);
   const [dropdownStyle, setDropdownStyle] = useState(null);
+  const fuseRef = useRef(null);
 
   // sync when parent-provided initialValue changes (e.g. when arriving at /races?search=...)
   useEffect(() => {
@@ -64,8 +65,36 @@ export default function SearchFilter({ onSearch, initialValue = "" }) {
   }, [open]);
 
   useEffect(() => {
+    // Initialize Fuse.js for fuzzy searching (client-side only)
+    let mounted = true;
+    (async () => {
+      try {
+        const FuseModule = (await import("fuse.js")).default;
+        if (!mounted) return;
+        // Configure keys and options tuned for name/location matching with typo-tolerance
+        fuseRef.current = new FuseModule(races, {
+          keys: [
+            { name: "name", weight: 0.7 },
+            { name: "nickName", weight: 0.5 },
+            { name: "location", weight: 0.4 },
+          ],
+          includeScore: true,
+          threshold: 0.4, // lower = stricter, ~0.4 is a common fuzzy default
+          distance: 100,
+          minMatchCharLength: 2,
+        });
+      } catch (err) {
+        // If import fails, leave fuseRef null and fallback to simple contains search
+        fuseRef.current = null;
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
+
+  useEffect(() => {
     // filter races client-side as user types
-    const term = String(inputValue || "").trim().toLowerCase();
+    const raw = String(inputValue || "").trim();
+    const term = raw.toLowerCase();
     if (term === "") {
       setResults([]);
       setOpen(false);
@@ -73,13 +102,27 @@ export default function SearchFilter({ onSearch, initialValue = "" }) {
       return;
     }
 
-    // search by name, nickName, location (simple contains)
-    const matched = races
-      .filter((r) => {
-        const s = `${r.name || ""} ${r.nickName || ""} ${r.location || ""}`.toLowerCase();
-        return s.includes(term);
-      })
-      .slice(0, 20);
+    // Use Fuse.js if available (gives fuzzy typo-tolerant matching), else fallback to simple contains
+    let matched = [];
+    if (fuseRef.current) {
+      try {
+        // Fuse returns list of {item, score}; map to item and keep the best matches
+        const fuseResults = fuseRef.current.search(raw, { limit: 20 });
+        matched = fuseResults.map((r) => r.item).slice(0, 20);
+      } catch (err) {
+        // fallback to simple contains if fuse search errors
+        matched = races
+          .filter((r) => `${r.name || ""} ${r.nickName || ""} ${r.location || ""}`.toLowerCase().includes(term))
+          .slice(0, 20);
+      }
+    } else {
+      matched = races
+        .filter((r) => {
+          const s = `${r.name || ""} ${r.nickName || ""} ${r.location || ""}`.toLowerCase();
+          return s.includes(term);
+        })
+        .slice(0, 20);
+    }
 
     setResults(matched);
     setOpen(matched.length > 0);
