@@ -96,7 +96,8 @@
     "organization": "Stride Running NL",
     "nLAACertified": true,
     "format": "Competitive",
-    "terrain": "Road"
+    "terrain": "Road",
+    "website": "https://striderunningnl.ca/mundy-pond-5k/"
   },
   {
     "id": 4,
@@ -120,7 +121,8 @@
     "organization": "PBU",
     "nLAACertified": false,
     "format": "Competitive",
-    "terrain": "Gravel"
+    "terrain": "Gravel",
+    "website": "https://www.facebook.com/paradisebackyardultra/"
   },
   {
     "id": 5,
@@ -144,7 +146,8 @@
     "organization": "Running Room",
     "nLAACertified": false,
     "format": "Fun",
-    "terrain": "Road"
+    "terrain": "Road",
+    "website": "https://www.craigscause.ca/kp"
   },
   {
     "id": 6,
@@ -168,7 +171,8 @@
     "organization": "PRC",
     "nLAACertified": true,
     "format": "Competitive",
-    "terrain": "Road"
+    "terrain": "Road",
+    "website": "https://www.paradiserunningclub.com/racesevents/fiveanddime"
   },
   {
     "id": 7,
@@ -192,7 +196,8 @@
     "organization": "PRC",
     "nLAACertified": true,
     "format": "Competitive",
-    "terrain": "Road"
+    "terrain": "Road",
+    "website": "https://www.paradiserunningclub.com/racesevents/fiveanddime"
   },
   {
     "id": 8,
@@ -216,7 +221,8 @@
     "organization": "Dildo Brewing",
     "nLAACertified": false,
     "format": "Fun",
-    "terrain": "Road"
+    "terrain": "Road",
+    "website": "https://www.trackie.com/event/8k-will-run-for-beer-2025/1019195/"
   },
   {
     "id": 9,
@@ -240,7 +246,8 @@
     "organization": "ECTA",
     "nLAACertified": false,
     "format": "Fun",
-    "terrain": "Trail"
+    "terrain": "Trail",
+    "website": "https://www.ultrasignup.com/register.aspx?did=126901"
   },
   {
     "id": 10,
@@ -271,7 +278,7 @@
     "id": 11,
     "name": "SDM Run for Women",
     "nickName": "Run for Women",
-    "date": "2025-06-14",
+    "date": "2025-06-13",
     "startTime": "9:30 AM",
     "distance": 5,
     "registrationStart": null,
@@ -289,7 +296,8 @@
     "organization": "Shoppers Drug Mart",
     "nLAACertified": false,
     "format": "Fun",
-    "terrain": "Road"
+    "terrain": "Road",
+    "website": "https://www.runforwomen.ca/Cities/StJohns-(1).aspx"
   },
   {
     "id": 12,
@@ -313,7 +321,8 @@
     "organization": "Shoppers Drug Mart",
     "nLAACertified": false,
     "format": "Fun",
-    "terrain": "Road"
+    "terrain": "Road",
+    "website": "https://www.runforwomen.ca/Cities/StJohns-(1).aspx"
   },
   {
     "id": 13,
@@ -362,7 +371,8 @@
     "organization": "Don / Outfitters",
     "nLAACertified": false,
     "format": "Competitive",
-    "terrain": "Trail"
+    "terrain": "Trail",
+    "website": "https://ultrasignup.com/register.aspx?did=125030"
   },
   {
     "id": 15,
@@ -386,7 +396,8 @@
     "organization": "Tim and Mel",
     "nLAACertified": false,
     "format": "Competitive",
-    "terrain": "Trail"
+    "terrain": "Trail",
+    "website": "https://www.facebook.com/p/Outpost-8k-61557558391022/"
   },
   {
     "id": 16,
@@ -410,7 +421,8 @@
     "organization": "Town of CBS",
     "nLAACertified": false,
     "format": "Fun",
-    "terrain": "Road"
+    "terrain": "Road",
+    "website": "https://www.facebook.com/events/4173966646223663/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22external_search_engine%22%7D%2C%7B%22mechanism%22%3A%22attachment%22%2C%22surface%22%3A%22newsfeed%22%7D]%2C%22ref_notif_type%22%3Anull%7D"
   },
   {
     "id": 17,
@@ -434,7 +446,8 @@
     "organization": "Holyrood Squidfest",
     "nLAACertified": false,
     "format": "Fun",
-    "terrain": "Road"
+    "terrain": "Road",
+    "website": "https://squidfest.ca/events/8k-roody-road-race/"
   },
   {
     "id": 18,
