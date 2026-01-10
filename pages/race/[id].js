@@ -212,9 +212,35 @@ export default function RaceDetail() {
           attribution: "&copy; OpenStreetMap contributors",
         }).addTo(map);
 
-        // Add start location marker
+        // Determine colors for route/markers. nLAACertified takes priority. Trail terrain/format takes precedence over competitive.
+        const fmt = (race.format || "").toLowerCase();
+        const trn = (race.terrain || "").toLowerCase();
+        const isNLAA = !!race.nLAACertified;
+        const isTrail = trn.includes("trail") || fmt.includes("trial") || fmt.includes("trail");
+
+        const routeColor = isNLAA
+          ? "#800080" // purple for N.L.A.A certified
+          : isTrail
+          ? "#006400" // dark green for Trail
+          : fmt.includes("competitive")
+          ? "#b30000" // red for Competitive
+          : fmt.includes("fun")
+          ? "#1f78b4" // blue for Fun
+          : "#1f78b4"; // default blue
+
+        const markerColorName = isNLAA
+          ? "violet"
+          : isTrail
+          ? "green"
+          : fmt.includes("competitive")
+          ? "red"
+          : fmt.includes("fun")
+          ? "blue"
+          : "blue";
+
+        // Add start location marker (color chosen to match route)
         const startIcon = L.icon({
-          iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
+          iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${markerColorName}.png`,
           shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
           iconSize: [25, 41],
           iconAnchor: [12, 41],
@@ -242,7 +268,7 @@ export default function RaceDetail() {
                 const latlngs = segment.map((pt) => [pt.lat, pt.lon]);
                 allLatLngs.push(...latlngs);
                 L.polyline(latlngs, {
-                  color: "#1f78b4",
+                  color: routeColor,
                   weight: 4,
                   opacity: 0.7,
                 }).addTo(map);
@@ -252,7 +278,7 @@ export default function RaceDetail() {
                 if (lastPt && lastPt.isEnd) {
                   const endIcon = L.divIcon({
                     className: "end-x-marker",
-                    html: '<div style="color:#b30000;font-weight:700;font-size:16px;text-shadow:0 0 4px #fff;">✖</div>',
+                    html: `<div style="color:${routeColor};font-weight:700;font-size:16px;text-shadow:0 0 4px #fff;">✖</div>`,
                     iconSize: [18, 18],
                     iconAnchor: [9, 9],
                   });

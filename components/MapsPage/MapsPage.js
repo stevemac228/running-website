@@ -15,19 +15,36 @@ const LOCATION_FALLBACKS = {
   "north west river": { lat: 53.5233, lng: -60.1444 },
 };
 
-const buildPopupHtml = (race, distanceLabel, elevInfo) => {
+const buildPopupHtml = (race, distanceLabel, elevInfo, id) => {
+  const uid = String(id ?? Math.random()).replace(/[^a-z0-9_-]/gi, "");
   const elevLine = elevInfo
     ? [elevInfo.gain != null ? `${Math.round(elevInfo.gain)}m ↑` : null, elevInfo.loss != null ? `${Math.round(elevInfo.loss)}m ↓` : null]
         .filter(Boolean)
         .join(" / ")
     : "";
+
+  // Minimal popup: only title visible by default. Hidden checkbox toggles the extra info (distance, elevation, etc.).
   return `
     <div class="custom-popup">
       <div class="popup-title">${race.name}</div>
+      <div class="popup-extra">
       ${distanceLabel ? `<div class="popup-distance">${distanceLabel}</div>` : ""}
       ${elevLine ? `<div class="popup-elevation">${elevLine}</div>` : ""}
+      </div>
     </div>
   `;
+};
+
+// Determine map color for a race. nLAACertified takes priority. Trail terrain/format takes precedence over competitive.
+const getMapColor = (race) => {
+  const trn = (race.terrain || "").toLowerCase();
+  const fmt = (race.format || "").toLowerCase();
+  if (race.nLAACertified) return "#800080"; // purple
+  const isTrail = trn.includes("trail") || fmt.includes("trial") || fmt.includes("trail");
+  if (isTrail) return "#006400"; // dark green
+  if (fmt.includes("competitive")) return "#b30000"; // red
+  if (fmt.includes("fun")) return "#1f78b4"; // blue
+  return "#1f78b4"; // default blue
 };
 
 export default function MapsPage() {
@@ -245,7 +262,7 @@ export default function MapsPage() {
             group.elevInfo = elevInfo;
             // update popup & sidebar info
             const distanceLabel = typeof group.rawRace.distance === "number" ? `${group.rawRace.distance}km` : (typeof group.rawRace.distance === "string" ? group.rawRace.distance : null);
-            const popupHtml = buildPopupHtml(group.rawRace, distanceLabel, elevInfo);
+            const popupHtml = buildPopupHtml(group.rawRace, distanceLabel, elevInfo, group.id);
             if (group.marker) {
               group.marker.setPopupContent(popupHtml);
             }
@@ -329,7 +346,8 @@ export default function MapsPage() {
         // if no startLatLng and no cached GPX start, still add nothing (no marker)
         if (!startLatLng) return;
 
-        const color = colors[index % colors.length];
+        // choose color based on race format / nLAACertified
+        const color = getMapColor(race);
         const marker = L.marker([startLatLng.lat, startLatLng.lng], {
           icon: L.divIcon({
             className: "custom-div-icon",
@@ -347,7 +365,7 @@ export default function MapsPage() {
             : null;
 
         const distanceLabel = typeof distanceValue === "number" ? `${distanceValue}km` : distanceValue;
-        const popupHtml = buildPopupHtml(race, distanceLabel, null);
+        const popupHtml = buildPopupHtml(race, distanceLabel, null, index);
         marker.bindPopup(popupHtml, {
           className: "modern-leaflet-popup",
           autoClose: false,
