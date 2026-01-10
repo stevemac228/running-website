@@ -209,6 +209,10 @@ header {
   cursor: pointer;
 }
 
+.nav-mobile-drawer {
+  display: none;
+}
+
 /* For small screens, make dropdown full width of view */
 @media (max-width: 480px) {
   .search-results {
@@ -269,7 +273,7 @@ header {
   /* Make the search fill the header and avoid overlaying the hamburger */
   .header-top {
     align-items: center;
-    padding: 10px 0px; /* vertical and horizontal padding on mobile */
+    padding: 10px 0px;
   }
 
   .header-tools {
@@ -298,6 +302,7 @@ header {
   .header-search .search-wrapper {
     width: 100%;
     box-sizing: border-box;
+    padding-right: 50px;
   }
 
   /* Mobile nav drawer rendered under the header */
