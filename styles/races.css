@@ -71,7 +71,7 @@
 
 .filter-chip {
   margin: 0.25rem;
-  padding: 0.4rem 0.8rem;
+  padding: 0.3rem 0.7rem;
   border-radius: 9999px;
   border: 1px solid var(--runnl-border);
   background-color: var(--runnl-background);
@@ -395,7 +395,7 @@
 }
 
 .filter-section {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
   padding-bottom: 1.5rem;
   border-bottom: 1px solid #f0f0f0;
 }
@@ -418,12 +418,13 @@
 
 .filter-chips-vertical {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
 .filter-chips-vertical .filter-chip {
-  width: 100%;
+  width: fit-content;
   margin: 0;
   text-align: left;
   justify-content: flex-start;
