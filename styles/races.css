@@ -363,7 +363,7 @@
 /* Two-column layout wrapper */
 .races-content-wrapper {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 1fr;
   gap: 2rem;
   align-items: start;
   width: 100%;
@@ -588,6 +588,46 @@
   gap: 0.5rem;
   align-items: center;
   flex-wrap: wrap;
+  position: relative; /* needed for absolute popout positioning */
+}
+
+.filter-popout-btn {
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.filter-popout {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: 320px;
+  max-width: calc(100vw - 2rem);
+  background-color: var(--runnl-background);
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 0.75rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  z-index: 1200;
+}
+
+/* Mobile: make the popout a bottom sheet */
+@media (max-width: 720px) {
+  .filter-popout {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: 100%;
+    height: 60%;
+    max-height: 80%;
+    border-radius: 12px 12px 0 0;
+    padding: 1rem;
+  }
 }
 
 .races-controls .sort-dropdown {
@@ -627,3 +667,72 @@
   opacity: 1;
   visibility: visible;
 }
+
+/* List + Map flex container inside the right content area */
+.races-list-map-flex {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.races-list-column {
+  flex: 1 1 100%;
+}
+.races-list-map-flex.map-on .races-list-column {
+  flex: 0 0 60%;
+}
+.races-map-column {
+  flex: 1 1 40%;
+  min-width: 300px;
+}
+.map-toggle-btn {
+  margin-left: 8px;
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Segmented control for view (List / Mixed / Map) */
+.view-segment {
+  display: inline-flex;
+  background: #efefef;
+  border-radius: 6px;
+  padding: 2px;
+  gap: 0;
+  align-items: center;
+}
+.view-segment .seg-btn {
+  border: none;
+  background: transparent;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+  color: #666;
+  font-weight: 600;
+  border-radius: 4px;
+}
+.view-segment .seg-btn + .seg-btn {
+  margin-left: 0;
+}
+.view-segment .seg-btn.active {
+  background: #fff;
+  color: #111;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.06) inset;
+}
+
+/* Layout variations */
+.races-list-map-flex.list-only .races-map-column {
+  display: none;
+}
+.races-list-map-flex.list-only .races-list-column {
+  flex: 1 1 100%;
+}
+.races-list-map-flex.map-only .races-list-column {
+  display: none;
+}
+.races-list-map-flex.map-only .races-map-column {
+  display: block;
+  flex: 1 1 100%;
+  min-width: 0;
+}
+

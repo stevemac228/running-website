@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import races from "../../data/races.json";
@@ -8,6 +8,7 @@ import SearchFilter from "../../components/SearchFilter/SearchFilter";
 import FilterSidebar from "../../components/FilterSidebar/FilterSidebar";
 import CompactRaceCard from "../../components/CompactRaceCard/CompactRaceCard";
 import DateRangeSelector from "../../components/DateRangeSelector/DateRangeSelector";
+import MapsPage from "../../components/MapsPage/MapsPage";
 
 function parseUSDate(dateStr) {
   if (!dateStr) return new Date(NaN);
@@ -58,6 +59,24 @@ export default function Races() {
   const [sortOption, setSortOption] = useState("date-asc");
   const [dateRange, setDateRange] = useState({ start: null, end: null });
   const [distanceRange, setDistanceRange] = useState({ min: 0, max: 999 });
+  const [showMap, setShowMap] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const filtersRef = useRef(null);
+  const [viewMode, setViewMode] = useState("list"); // 'list' | 'mixed' | 'map'
+
+  // close popout when clicking outside
+  useEffect(() => {
+    function handleClick(e) {
+      if (!filtersRef.current) return;
+      if (!filtersRef.current.contains(e.target)) {
+        setFiltersOpen(false);
+      }
+    }
+    if (filtersOpen) {
+      document.addEventListener("mousedown", handleClick);
+    }
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [filtersOpen]);
 
   // sync searchTerm from query param when arriving with ?search=...
   useEffect(() => {
@@ -225,24 +244,33 @@ export default function Races() {
           {/* <SearchFilter onSearch={setSearchTerm} initialValue={searchTerm} /> */}
         </div>
 
-        {/* Two-column layout: Sidebar + Content */}
+        {/* Content wrapper (filters are now a popout) */}
         <div className="races-content-wrapper">
-          {/* Left Sidebar */}
-          <FilterSidebar
-            filterOptions={filterOptions}
-            activeFilters={activeFilters}
-            onToggleFilter={toggleFilter}
-            onDistanceRangeChange={setDistanceRange}
-          />
-
-          {/* Right Content */}
+          {/* Right Content: list + optional map side-by-side */}
           <div className="races-list-container">
-            {/* Races count and sorting on same line */}
             <div className="races-header-bar">
               <div className="races-count">
                 {filteredRaces.length} race{filteredRaces.length !== 1 ? "s" : ""} found
               </div>
               <div className="races-controls">
+                <button
+                  className="filter-popout-btn"
+                  onClick={() => setFiltersOpen((s) => !s)}
+                  aria-expanded={filtersOpen}
+                  aria-controls="filter-popout"
+                >
+                  Filters
+                </button>
+                {filtersOpen && (
+                  <div id="filter-popout" className="filter-popout" ref={filtersRef}>
+                    <FilterSidebar
+                      filterOptions={filterOptions}
+                      activeFilters={activeFilters}
+                      onToggleFilter={toggleFilter}
+                      onDistanceRangeChange={setDistanceRange}
+                    />
+                  </div>
+                )}
                 <DateRangeSelector onChange={setDateRange} />
                 <select
                   className="sort-dropdown"
@@ -256,11 +284,55 @@ export default function Races() {
                   <option value="name-asc">Name (A–Z)</option>
                   <option value="name-desc">Name (Z–A)</option>
                 </select>
+
+                <div className="view-segment" role="tablist" aria-label="View mode">
+                  <button
+                    className={`seg-btn ${viewMode === "list" ? "active" : ""}`}
+                    onClick={() => setViewMode("list")}
+                    role="tab"
+                    aria-selected={viewMode === "list"}
+                  >
+                    List
+                  </button>
+                  <button
+                    className={`seg-btn ${viewMode === "mixed" ? "active" : ""}`}
+                    onClick={() => setViewMode("mixed")}
+                    role="tab"
+                    aria-selected={viewMode === "mixed"}
+                  >
+                    Mixed
+                  </button>
+                  <button
+                    className={`seg-btn ${viewMode === "map" ? "active" : ""}`}
+                    onClick={() => setViewMode("map")}
+                    role="tab"
+                    aria-selected={viewMode === "map"}
+                  >
+                    Map
+                  </button>
+                </div>
               </div>
             </div>
-            {filteredRaces.map((race, index) => (
-              <CompactRaceCard key={index} race={race} />
-            ))}
+
+            <div
+              className={`races-list-map-flex ${
+                viewMode === "mixed" ? "map-on" : viewMode === "map" ? "map-only" : "list-only"
+              }`}
+            >
+              {viewMode !== "map" && (
+                <div className="races-list-column">
+                  {filteredRaces.map((race, index) => (
+                    <CompactRaceCard key={index} race={race} />
+                  ))}
+                </div>
+              )}
+
+              {viewMode !== "list" && (
+                <div className="races-map-column">
+                  <MapsPage />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </main>
