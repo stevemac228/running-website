@@ -315,9 +315,14 @@ export default function Calendar() {
             day.getMonth() === currentDate.getMonth() &&
             day.getFullYear() === currentDate.getFullYear();
 
+          // Use a unique key that includes the actual date or a unique identifier
+          const uniqueKey = day 
+            ? `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day.getDate()}-${index}`
+            : `empty-${currentDate.getFullYear()}-${currentDate.getMonth()}-${index}`;
+
           return (
             <div
-              key={index}
+              key={uniqueKey}
               className={`calendar-day ${isWeekend(day) ? "weekend" : ""} ${
                 isTodayDate ? "today" : ""
               }`}
