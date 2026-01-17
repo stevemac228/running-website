@@ -363,7 +363,7 @@
 /* Two-column layout wrapper */
 .races-content-wrapper {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 1fr;
   gap: 2rem;
   align-items: start;
   width: 100%;
@@ -588,11 +588,189 @@
   gap: 0.5rem;
   align-items: center;
   flex-wrap: wrap;
+  position: relative; /* needed for absolute popout positioning */
 }
 
-.races-controls .sort-dropdown {
-  min-width: 200px;
+.filter-popout-btn {
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 600;
 }
+
+.filter-popout {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: 320px;
+  max-width: calc(100vw - 2rem);
+  background-color: var(--runnl-background);
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 0.75rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  z-index: 1200;
+}
+
+/* Mobile: make the popout a bottom sheet */
+@media (max-width: 720px) {
+  .filter-popout {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: 100%;
+    height: 60%;
+    max-height: 80%;
+    border-radius: 12px 12px 0 0;
+    padding: 1rem;
+  }
+}
+
+.races-controls .sort-dropdown,
+.races-controls .filter-dropdown {
+  min-width: 140px;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: white;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+.races-controls .sort-dropdown:hover,
+.races-controls .filter-dropdown:hover {
+  border-color: var(--runnl-dark-blue);
+}
+
+.races-controls .filter-dropdown option:disabled {
+  background-color: #f0f0f0;
+  color: #999;
+}
+
+/* Custom dropdown menu */
+.custom-dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 200px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Date dropdown specific styling */
+.date-dropdown-menu {
+  min-width: 280px;
+  padding: 0.75rem;
+}
+
+.date-range-selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding: 0 0.25rem;
+}
+
+.date-range-selector-header button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: var(--runnl-dark-blue);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.date-range-selector-header button:hover {
+  background-color: #f0f0f0;
+}
+
+.date-range-selector-header span {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--runnl-dark-text);
+}
+
+.date-range-selector-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.date-range-selector-calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.2s, color 0.2s;
+  padding: 0.5rem;
+}
+
+.date-range-selector-calendar-day:hover {
+  background-color: #f0f0f0;
+}
+
+.date-range-selector-calendar-day.selected {
+  background-color: var(--runnl-dark-blue);
+  color: white;
+  font-weight: 600;
+}
+
+.date-range-selector-calendar-day.in-range {
+  background-color: #e3f2fd;
+  color: var(--runnl-dark-text);
+}
+
+.dropdown-item {
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f5f5;
+}
+
+.dropdown-item input[type="checkbox"],
+.dropdown-item input[type="radio"] {
+  cursor: pointer;
+  margin: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.dropdown-item span {
+  flex: 1;
+  user-select: none;
+}
+
 
 /* Previous year date styling */
 .race-date-previous-year {
@@ -626,4 +804,336 @@
 .race-date-previous-year:focus::after {
   opacity: 1;
   visibility: visible;
+}
+
+/* List + Map flex container inside the right content area */
+.races-list-map-flex {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  height: calc(100vh - 250px);
+  min-height: 500px;
+  max-height: calc(100vh - 250px);
+}
+.races-list-column {
+  flex: 1 1 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Modern sleek scrollbar for races list */
+.races-list-column::-webkit-scrollbar {
+  width: 8px;
+}
+
+.races-list-column::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.races-list-column::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.races-list-column::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* Firefox scrollbar */
+.races-list-column {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
+}
+
+.races-list-map-flex.map-on .races-list-column {
+  flex: 0 0 50%;
+}
+.races-map-column {
+  flex: 1 1 40%;
+  min-width: 300px;
+  height: 100%;
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+}
+.map-toggle-btn {
+  margin-left: 8px;
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Segmented control for view (List / Mixed / Map) */
+.view-segment {
+  display: inline-flex;
+  background: #efefef;
+  border-radius: 6px;
+  padding: 2px;
+  gap: 0;
+  align-items: center;
+}
+.view-segment .seg-btn {
+  border: none;
+  background: transparent;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+  color: #666;
+  font-weight: 600;
+  border-radius: 4px;
+}
+.view-segment .seg-btn + .seg-btn {
+  margin-left: 0;
+}
+.view-segment .seg-btn.active {
+  background: #fff;
+  color: #111;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.06) inset;
+}
+
+/* Layout variations */
+.races-list-map-flex.list-only .races-map-column {
+  display: none;
+}
+.races-list-map-flex.list-only .races-list-column {
+  flex: 1 1 100%;
+}
+.races-list-map-flex.map-only .races-list-column {
+  display: none;
+}
+.races-list-map-flex.map-only .races-map-column {
+  display: block;
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+/* ========================================
+   MOBILE RESPONSIVE STYLES
+   ======================================== */
+
+/* Tablet and below */
+@media (max-width: 1024px) {
+  .races-list-map-flex {
+    height: calc(100vh - 280px);
+    max-height: calc(100vh - 280px);
+  }
+
+  .races-list-map-flex.map-on .races-list-column {
+    flex: 0 0 45%;
+  }
+
+  .races-map-column {
+    flex: 1 1 55%;
+    min-width: 250px;
+  }
+}
+
+/* Mobile landscape and below */
+@media (max-width: 768px) {
+  /* Page container adjustments */
+  .races-page-container {
+    padding: 0.5rem;
+  }
+
+  /* Stack list and map vertically on mobile */
+  .races-list-map-flex {
+    flex-direction: column;
+    height: auto;
+    max-height: none;
+    min-height: auto;
+    gap: 0.5rem;
+  }
+
+  /* List takes priority on mobile */
+  .races-list-column {
+    flex: 1 1 100%;
+    max-height: none !important;
+    order: 1;
+  }
+
+  /* Hide map completely on mobile */
+  .races-map-column {
+    display: none !important;
+  }
+
+  /* Mixed view adjustments - list only on mobile */
+  .races-list-map-flex.map-on .races-list-column {
+    flex: 1 1 100%;
+    max-height: none !important;
+  }
+
+  /* Hide view segment controls on mobile since map is hidden */
+  .view-segment {
+    display: none;
+  }
+
+  /* Header bar - stack on mobile */
+  .races-header-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  /* Controls stack and take full width */
+  .races-controls {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* Dropdowns and buttons full width on mobile */
+  .races-controls .filter-dropdown,
+  .races-controls .sort-dropdown,
+  .races-controls .custom-dropdown {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .races-controls .filter-dropdown,
+  .races-controls .sort-dropdown {
+    padding: 0.6rem 0.8rem;
+    font-size: 1rem;
+    text-align: left;
+  }
+
+  /* Dropdown menus adapt to mobile */
+  .dropdown-menu {
+    left: 0;
+    right: 0;
+    width: 100%;
+    min-width: 100%;
+    max-height: 60vh;
+    border-radius: 8px;
+  }
+
+  .date-dropdown-menu {
+    min-width: 100%;
+    width: 100%;
+  }
+
+  .date-range-selector-calendar-grid {
+    gap: 6px;
+  }
+
+  .date-range-selector-calendar-day {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  .dropdown-item {
+    padding: 0.75rem 1rem;
+    min-height: 44px; /* Touch-friendly tap target */
+  }
+
+  .dropdown-item input[type="checkbox"],
+  .dropdown-item input[type="radio"] {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Date range selector adjustments */
+  .date-range-selector-wrapper {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .date-range-selector-btn {
+    padding: 0.6rem 0.75rem;
+    font-size: 1rem;
+  }
+
+  /* Race count */
+  .races-count {
+    font-size: 1.1rem;
+    width: 100%;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .races-page-container {
+    padding: 0.25rem;
+  }
+
+  /* Reduce spacing */
+  .races-header-bar {
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .races-controls {
+    gap: 0.4rem;
+  }
+
+  /* Smaller text for space efficiency */
+  .races-count {
+    font-size: 0.95rem;
+  }
+
+  .races-controls .filter-dropdown,
+  .races-controls .sort-dropdown {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .view-segment .seg-btn {
+    padding: 0.5rem 0.4rem;
+    font-size: 0.85rem;
+  }
+
+  /* Adjust map and list heights for smaller screens */
+  .races-list-column {
+    max-height: none !important;
+  }
+
+  /* Distance slider in dropdown */
+  .dropdown-menu .distance-range-slider {
+    padding: 0.5rem;
+  }
+
+  /* Dropdown items more compact */
+  .dropdown-item {
+    padding: 0.65rem 0.75rem;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .view-segment .seg-btn {
+    padding: 0.45rem 0.3rem;
+    font-size: 0.8rem;
+  }
+
+  .races-controls .filter-dropdown,
+  .races-controls .sort-dropdown {
+    font-size: 0.85rem;
+  }
+
+  .dropdown-item span {
+    font-size: 0.9rem;
+  }
+}
+
+/* Landscape orientation adjustments - keep map hidden on small screens even in landscape */
+@media (max-width: 768px) and (orientation: landscape) {
+  .races-list-map-flex {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .races-list-column {
+    flex: 1 1 100%;
+    max-height: none !important;
+    height: auto;
+  }
+
+  /* Keep map hidden on mobile landscape too */
+  .races-map-column {
+    display: none !important;
+  }
 }

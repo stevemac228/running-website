@@ -1,24 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 
-export default function DateRangeSelector({ onChange }) {
-  const [showCalendar, setShowCalendar] = useState(false);
+export default function DateRangeSelector({ onChange, isOpen, onToggle }) {
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const modalRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        setShowCalendar(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [modalRef]);
 
   // Helper: get all days for the current month
   const getDaysInMonth = (month) => {
@@ -74,9 +59,9 @@ export default function DateRangeSelector({ onChange }) {
         : "";
 
     if (start && end)
-      return `${formatDayMonth(start)} – ${formatDayMonth(end)}`;
-    if (start) return `${formatDayMonth(start)} –`;
-    return "Select Dates";
+      return ` (${formatDayMonth(start)} – ${formatDayMonth(end)})`;
+    if (start) return ` (${formatDayMonth(start)} –)`;
+    return "";
   };
 
   const handleClear = (e) => {
@@ -87,32 +72,24 @@ export default function DateRangeSelector({ onChange }) {
   };
 
   return (
-    <div className="date-range-relative">
-      <div className="date-range-selector-wrapper">
-        <button
-          className="date-range-selector-btn"
-          onClick={() => setShowCalendar(!showCalendar)}
-        >
-          {formatDisplay()}
-        </button>
-        {(start || end) && (
-          <button className="date-clear-btn" onClick={handleClear}>
-            ×
-          </button>
-        )}
-      </div>
-
-      {showCalendar && (
-        <div className="date-range-selector-modal" ref={modalRef}>
+    <>
+      <button 
+        className="filter-dropdown"
+        onClick={onToggle}
+      >
+        Dates{formatDisplay()}
+      </button>
+      {isOpen && (
+        <div className="dropdown-menu date-dropdown-menu">
           <div className="date-range-selector-header">
-            <button onClick={prevMonth}>&lt;</button>
+            <button onClick={prevMonth} type="button">&lt;</button>
             <span>
               {currentMonth.toLocaleString("default", {
                 month: "long",
                 year: "numeric",
               })}
             </span>
-            <button onClick={nextMonth}>&gt;</button>
+            <button onClick={nextMonth} type="button">&gt;</button>
           </div>
 
           <div className="date-range-selector-calendar-grid">
@@ -128,8 +105,26 @@ export default function DateRangeSelector({ onChange }) {
               </div>
             ))}
           </div>
+          
+          {(start || end) && (
+            <div style={{ padding: '0.5rem', borderTop: '1px solid #ddd', textAlign: 'center' }}>
+              <button 
+                onClick={handleClear}
+                style={{
+                  padding: '0.4rem 0.8rem',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  background: 'white',
+                  cursor: 'pointer',
+                  fontSize: '0.85rem'
+                }}
+              >
+                Clear Dates
+              </button>
+            </div>
+          )}
         </div>
       )}
-    </div>
+    </>
   );
 }

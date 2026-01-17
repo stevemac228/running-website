@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, forwardRef, useImperativeHandle, useRef, useEffect } from "react";
 import Link from "next/link";
 import { formatDate } from "../../utils/formatDate";
 import { getExpandedFields } from "../../utils/getExpandedFields";
@@ -10,13 +10,67 @@ import {
 import { getRaceId } from "../../utils/getRaceId";
 import { isPreviousYear } from "../../utils/isPreviousYear";
 
-export default function CompactRaceCard({ race }) {
+const CompactRaceCard = forwardRef(({ race, onExpanded, isExpanded }, ref) => {
   const [expanded, setExpanded] = useState(false);
-  const toggleExpanded = () => setExpanded(!expanded);
+  const cardRef = useRef(null);
+
+  // Sync internal state with external isExpanded prop
+  useEffect(() => {
+    if (isExpanded !== undefined && isExpanded !== expanded) {
+      setExpanded(isExpanded);
+    }
+  }, [isExpanded]);
+
+  useImperativeHandle(ref, () => ({
+    scrollIntoView: () => {
+      if (cardRef.current) {
+        // Find the scrollable parent (.races-list-column)
+        const scrollParent = cardRef.current.closest('.races-list-column');
+        if (scrollParent) {
+          const cardTop = cardRef.current.offsetTop;
+          const cardHeight = cardRef.current.offsetHeight;
+          const parentHeight = scrollParent.clientHeight;
+          const scrollPosition = cardTop - (parentHeight / 2) + (cardHeight / 2);
+          
+          scrollParent.scrollTo({
+            top: scrollPosition,
+            behavior: 'smooth'
+          });
+        }
+      }
+    },
+    expand: () => {
+      if (!expanded) {
+        setExpanded(true);
+        if (onExpanded) {
+          onExpanded(true);
+        }
+      }
+    },
+    collapse: () => {
+      if (expanded) {
+        setExpanded(false);
+        if (onExpanded) {
+          onExpanded(false);
+        }
+      } else {
+        // Force update even if already collapsed to ensure state is clean
+        setExpanded(false);
+      }
+    }
+  }));
+
+  const toggleExpanded = () => {
+    const newExpanded = !expanded;
+    setExpanded(newExpanded);
+    if (onExpanded) {
+      onExpanded(newExpanded);
+    }
+  };
   const expandedFields = getExpandedFields(race);
 
   return (
-    <div className="compact-race-card" onClick={toggleExpanded}>
+    <div ref={cardRef} className={`compact-race-card ${expanded ? 'expanded' : ''}`} onClick={toggleExpanded}>
       <div className="compact-race-card-main">
         {/* Left section - Name, distance, icons, and badges */}
         <div className="compact-race-info">
@@ -145,4 +199,8 @@ export default function CompactRaceCard({ race }) {
       )}
     </div>
   );
-}
+});
+
+CompactRaceCard.displayName = 'CompactRaceCard';
+
+export default CompactRaceCard;
