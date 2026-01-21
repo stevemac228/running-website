@@ -2,7 +2,7 @@ import Head from "next/head";
 import races from "../data/races.json";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
-import RaceList from "../components/RaceList/RaceList";
+import SearchFilter from "../components/SearchFilter/SearchFilter";
 
 export default function Home() {
 
@@ -44,6 +44,7 @@ export default function Home() {
             fill="none"
           />
           <div className="home-text-container">
+            <SearchFilter onSearch={() => {}} />
             <p className="home-text">
               Welcome to Run NL, your go-to source for discovering running events across Newfoundland and Labrador.<br></br>
               Browse upcoming road and trail races as well as fun runs with detailed information on dates, distances and locations<br></br>
