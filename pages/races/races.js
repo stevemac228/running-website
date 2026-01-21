@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import races from "../../data/races.json";
@@ -9,6 +9,21 @@ import CompactRaceCard from "../../components/CompactRaceCard/CompactRaceCard";
 import DateRangeSelector from "../../components/DateRangeSelector/DateRangeSelector";
 import RacesMapView from "../../components/RacesMapView/RacesMapView";
 import DistanceRangeSlider from "../../components/DistanceRangeSlider/DistanceRangeSlider";
+
+// Simple debounce hook
+function useDebounce(value, delay) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 
 function parseUSDate(dateStr) {
   if (!dateStr) return new Date(NaN);
@@ -48,6 +63,32 @@ export default function Races() {
   const [openDropdown, setOpenDropdown] = useState(null);
   const raceCardRefs = useRef({});
 
+  // Initialize Fuse.js for fuzzy search
+  const fuseRef = useRef(null);
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const FuseModule = (await import("fuse.js")).default;
+        if (!mounted) return;
+        fuseRef.current = new FuseModule(races, {
+          keys: [
+            { name: "name", weight: 0.7 },
+            { name: "nickName", weight: 0.5 },
+            { name: "location", weight: 0.4 },
+          ],
+          includeScore: true,
+          threshold: 0.4,
+          distance: 100,
+          minMatchCharLength: 2,
+        });
+      } catch (err) {
+        fuseRef.current = null;
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
+
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -59,15 +100,46 @@ export default function Races() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [openDropdown]);
 
+  // Debounce search term to reduce re-renders from typing
+  const debouncedSearchTerm = useDebounce(searchTerm, 150);
+
+  // Helper function to apply fuzzy search
+  const applyFuzzySearch = useCallback((term, raceList) => {
+    if (!term || term.trim() === "") return raceList;
+    
+    if (fuseRef.current) {
+      try {
+        const results = fuseRef.current.search(term, { limit: 1000 });
+        return results.map(r => r.item);
+      } catch (err) {
+        // Fallback to simple contains
+        return raceList.filter(r =>
+          r.name.toLowerCase().includes(term.toLowerCase()) ||
+          r.location?.toLowerCase().includes(term.toLowerCase())
+        );
+      }
+    } else {
+      // Fallback to simple contains
+      return raceList.filter(r =>
+        r.name.toLowerCase().includes(term.toLowerCase()) ||
+        r.location?.toLowerCase().includes(term.toLowerCase())
+      );
+    }
+  }, []);
+
   // sync searchTerm from query param when arriving with ?search=...
   useEffect(() => {
     if (!router.isReady) return;
-    const q =
-      typeof router.query.search === "string" ? router.query.search : "";
-    if (q !== searchTerm) {
+    const q = router.query.search || "";
+    if (q && q !== searchTerm) {
       setSearchTerm(q);
     }
-  }, [router.isReady, router.query.search]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [router.isReady]);
+
+  // Memoized search handler to prevent SearchFilter from causing infinite loops
+  const handleSearch = useCallback((term) => {
+    setSearchTerm(term);
+  }, []);
 
   const toggleFilter = (key) => {
     setActiveFilters((prev) =>
@@ -102,96 +174,97 @@ export default function Races() {
     return A.d - B.d;
   };
 
-  const filteredRaces = races
-    .filter((race) => {
-      const raceDate = parseUSDate(race.date);
+  // Pre-compute filtered races before search (so we can apply search to results)
+  const allFilteredRaces = useMemo(() => {
+    return races
+      .filter((race) => {
+        const raceDate = parseUSDate(race.date);
 
-      // Date range filter
-      if (dateRange.start && raceDate < dateRange.start) return false;
-      if (dateRange.end && raceDate > dateRange.end) return false;
+        // Date range filter
+        if (dateRange.start && raceDate < dateRange.start) return false;
+        if (dateRange.end && raceDate > dateRange.end) return false;
 
-      // Distance range filter (custom slider)
-      const distVal = toDistanceNumber(race.distance);
-      // Infinity distances should always pass through the range filter
-      if (!Number.isFinite(distVal)) {
-        // Keep infinity races visible
-      } else if (distVal < distanceRange.min || distVal > distanceRange.max) {
-        return false;
-      }
-
-      // Features filters (multi-select)
-      if (activeFilters.includes("medal") && !race.medal) return false;
-      if (activeFilters.includes("reception") && !race.reception) return false;
-      if (activeFilters.includes("tshirt") && !race.shirt) return false;
-      
-      // Format filter (single select)
-      if (formatFilter === "funRun" && race.format !== "Fun") return false;
-      if (formatFilter === "competitive" && race.format !== "Competitive") return false;
-      
-      // Terrain filters (multi-select)
-      const terrainFilters = ["trail", "road", "gravel", "track"].filter(
-        (f) => activeFilters.includes(f)
-      );
-      if (terrainFilters.length > 0) {
-        const matchTerrain = terrainFilters.some((filter) => {
-          if (filter === "trail") return race.terrain === "Trail";
-          if (filter === "road") return race.terrain === "Road";
-          if (filter === "gravel") return race.terrain === "Gravel";
-          if (filter === "track") return race.terrain === "Track";
+        // Distance range filter (custom slider)
+        const distVal = toDistanceNumber(race.distance);
+        // Infinity distances should always pass through the range filter
+        if (!Number.isFinite(distVal)) {
+          // Keep infinity races visible
+        } else if (distVal < distanceRange.min || distVal > distanceRange.max) {
           return false;
-        });
-        if (!matchTerrain) return false;
-      }
+        }
 
-      // Multi-select distance filters
-      const distanceFilters = ["5k", "10k", "half", "full", "ultra"].filter(
-        (f) => activeFilters.includes(f)
-      );
-      if (distanceFilters.length > 0) {
-        const distanceMap = {
-          "5k": 5,
-          "10k": 10,
-          half: 21.1,
-          full: 42.2,
-          ultra: 42.3,
-        };
-        const matchDistance = distanceFilters.some((filter) => {
-          const dv = toDistanceNumber(race.distance);
-          if (filter === "ultra") return dv > 42.2;
-          return Math.abs(dv - distanceMap[filter]) < 1e-9;
-        });
-        if (!matchDistance) return false;
-      }
+        // Features filters (multi-select)
+        if (activeFilters.includes("medal") && !race.medal) return false;
+        if (activeFilters.includes("reception") && !race.reception) return false;
+        if (activeFilters.includes("tshirt") && !race.shirt) return false;
+        
+        // Format filter (single select)
+        if (formatFilter === "funRun" && race.format !== "Fun") return false;
+        if (formatFilter === "competitive" && race.format !== "Competitive") return false;
+        
+        // Terrain filters (multi-select)
+        const terrainFilters = ["trail", "road", "gravel", "track"].filter(
+          (f) => activeFilters.includes(f)
+        );
+        if (terrainFilters.length > 0) {
+          const matchTerrain = terrainFilters.some((filter) => {
+            if (filter === "trail") return race.terrain === "Trail";
+            if (filter === "road") return race.terrain === "Road";
+            if (filter === "gravel") return race.terrain === "Gravel";
+            if (filter === "track") return race.terrain === "Track";
+            return false;
+          });
+          if (!matchTerrain) return false;
+        }
 
-      return true;
-    })
-    .filter((race) => {
-      const term = searchTerm.toLowerCase();
-      return (
-        race.name.toLowerCase().includes(term) ||
-        race.location?.toLowerCase().includes(term)
-      );
-    })
-    .sort((a, b) => {
-      const dateA = parseUSDate(a.date);
-      const dateB = parseUSDate(b.date);
-      switch (sortOption) {
-        case "date-asc":
-          return compareMonthDay(dateA, dateB);
-        case "date-desc":
-          return compareMonthDay(dateB, dateA);
-        case "distance-asc":
-          return toDistanceNumber(a.distance) - toDistanceNumber(b.distance);
-        case "distance-desc":
-          return toDistanceNumber(b.distance) - toDistanceNumber(a.distance);
-        case "name-asc":
-          return a.name.localeCompare(b.name);
-        case "name-desc":
-          return b.name.localeCompare(a.name);
-        default:
-          return 0;
-      }
-    });
+        // Multi-select distance filters
+        const distanceFilters = ["5k", "10k", "half", "full", "ultra"].filter(
+          (f) => activeFilters.includes(f)
+        );
+        if (distanceFilters.length > 0) {
+          const distanceMap = {
+            "5k": 5,
+            "10k": 10,
+            half: 21.1,
+            full: 42.2,
+            ultra: 42.3,
+          };
+          const matchDistance = distanceFilters.some((filter) => {
+            const dv = toDistanceNumber(race.distance);
+            if (filter === "ultra") return dv > 42.2;
+            return Math.abs(dv - distanceMap[filter]) < 1e-9;
+          });
+          if (!matchDistance) return false;
+        }
+
+        return true;
+      })
+      .sort((a, b) => {
+        const dateA = parseUSDate(a.date);
+        const dateB = parseUSDate(b.date);
+        switch (sortOption) {
+          case "date-asc":
+            return compareMonthDay(dateA, dateB);
+          case "date-desc":
+            return compareMonthDay(dateB, dateA);
+          case "distance-asc":
+            return toDistanceNumber(a.distance) - toDistanceNumber(b.distance);
+          case "distance-desc":
+            return toDistanceNumber(b.distance) - toDistanceNumber(a.distance);
+          case "name-asc":
+            return a.name.localeCompare(b.name);
+          case "name-desc":
+            return b.name.localeCompare(a.name);
+          default:
+            return 0;
+        }
+      });
+  }, [activeFilters, formatFilter, sortOption, dateRange, distanceRange]);
+
+  // Apply fuzzy search to filtered races
+  const filteredRaces = useMemo(() => {
+    return applyFuzzySearch(debouncedSearchTerm, allFilteredRaces);
+  }, [debouncedSearchTerm, allFilteredRaces, applyFuzzySearch]);
 
   return (
     <div>
@@ -237,6 +310,9 @@ export default function Races() {
             <div className="races-header-bar">
               <div className="races-count">
                 {filteredRaces.length} race{filteredRaces.length !== 1 ? "s" : ""} found
+              </div>
+              <div className="races-search-controls">
+                <SearchFilter onSearch={handleSearch} initialValue={searchTerm} showDropdown={false} />
               </div>
               <div className="races-controls">
                 {/* Distance Dropdown */}

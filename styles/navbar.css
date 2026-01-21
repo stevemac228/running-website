@@ -20,6 +20,8 @@ header {
   align-items: center;
   justify-content: flex-start; /* keep left-aligned tools */
   padding-left: 10px;
+  padding-right:10px;
+  height: 10vh;
 }
 
 .header-text{
@@ -35,6 +37,20 @@ header {
   align-items: center;
   gap: 0.75rem;
   margin-left: auto;
+}
+
+.header-mobile-search {
+  display: none;
+  width: 100%;
+}
+
+.header-mobile-search .search-container {
+  margin-bottom: 0;
+}
+
+.header-mobile-search .search-wrapper {
+  width: 100%;
+  margin: 0;
 }
 
 .header-search {
@@ -224,10 +240,29 @@ header {
 
 /* Mobile: center the nav links horizontally and make them easier to tap */
 @media (max-width: 768px) {
+  /* Reduce header height on mobile */
+  .header-top {
+    height: auto;
+    padding: 0.5rem 0.5rem;
+  }
+
   /* hide the puffin logo on mobile to save header space */
   .puffin-icon {
     display: none;
   }
+
+  /* Show search bar in header on mobile */
+  .header-mobile-search {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    margin-right: 0.5rem;
+  }
+
+  .header-mobile-search .search-wrapper {
+    max-width: none;
+  }
+
   /* show hamburger toggle next to the search */
   .nav-menu-toggle {
     display: inline-flex;

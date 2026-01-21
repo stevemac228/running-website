@@ -50,10 +50,16 @@ export default function RegistrationsPage() {
       </Head>
       <Header />
       <main className="page-main-padding">
-        <h1>Open Registrations</h1>
-        <RaceList races={currentRegistrations} type="upcomingRegistrations" />
-        <h2>Upcoming Registrations</h2>
-        <RaceList races={upcomingRegistrations} type="upcomingRegistrations" />
+        <div className="registrations-container">
+          <div className="registrations-section">
+            <h2>Open Registrations</h2>
+            <RaceList races={currentRegistrations} type="upcomingRegistrations" />
+          </div>
+          <div className="registrations-section">
+            <h2>Upcoming Registrations</h2>
+            <RaceList races={upcomingRegistrations} type="upcomingRegistrations" />
+          </div>
+        </div>
       </main>
       <Footer />
     </div>

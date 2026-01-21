@@ -27,4 +27,15 @@ header, .nav-left, nav, .nav-link {
 	/* avoid persistent transforms on parent elements that can break Leaflet positioning */
 	-webkit-transform: none;
 	transform: none;
+	text-decoration: none;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+}
+
+.header-nav-desktop {
+  display: flex;
+  gap: 1.5rem;
 }

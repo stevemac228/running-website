@@ -1,11 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/router";
 import races from "../../data/races.json";
 import { getRaceId } from "../../utils/getRaceId";
 
 // Minimal, self-contained search with results dropdown.
-export default function SearchFilter({ onSearch, initialValue = "" }) {
+export default function SearchFilter({ onSearch, initialValue = "", showDropdown = true }) {
   const router = useRouter();
   const [inputValue, setInputValue] = useState(() => initialValue || "");
   const [results, setResults] = useState([]);
@@ -14,11 +14,22 @@ export default function SearchFilter({ onSearch, initialValue = "" }) {
   const wrapperRef = useRef(null);
   const [dropdownStyle, setDropdownStyle] = useState(null);
   const fuseRef = useRef(null);
+  const onSearchRef = useRef(onSearch);
+  const initialValueRef = useRef(initialValue);
 
   // sync when parent-provided initialValue changes (e.g. when arriving at /races?search=...)
+  // Only update if it's significantly different (from URL, not from typing)
   useEffect(() => {
-    setInputValue(initialValue || "");
+    if (initialValue && initialValue !== initialValueRef.current && !inputValue) {
+      setInputValue(initialValue);
+      initialValueRef.current = initialValue;
+    }
   }, [initialValue]);
+
+  // Keep onSearch ref up to date without triggering effects
+  useEffect(() => {
+    onSearchRef.current = onSearch;
+  }, [onSearch]);
 
   useEffect(() => {
     // close on click outside
@@ -95,10 +106,20 @@ export default function SearchFilter({ onSearch, initialValue = "" }) {
     // filter races client-side as user types
     const raw = String(inputValue || "").trim();
     const term = raw.toLowerCase();
+    
+    // If showDropdown is false, skip search results and just notify parent (for races page)
+    if (!showDropdown) {
+      if (typeof onSearchRef.current === "function") {
+        onSearchRef.current(inputValue);
+      }
+      return;
+    }
+
+    // For homepage with dropdown enabled:
     if (term === "") {
       setResults([]);
       setOpen(false);
-      if (typeof onSearch === "function") onSearch("");
+      if (typeof onSearchRef.current === "function") onSearchRef.current("");
       return;
     }
 
@@ -129,8 +150,8 @@ export default function SearchFilter({ onSearch, initialValue = "" }) {
     setHighlight(-1);
 
     // notify parent pages (e.g. races page) about the search term
-    if (typeof onSearch === "function") onSearch(inputValue);
-  }, [inputValue, onSearch]);
+    if (typeof onSearchRef.current === "function") onSearchRef.current(inputValue);
+  }, [inputValue, showDropdown]);
 
   const handleChange = (e) => {
     setInputValue(e.target.value);
@@ -142,7 +163,7 @@ export default function SearchFilter({ onSearch, initialValue = "" }) {
     setResults([]);
     setOpen(false);
     setHighlight(-1);
-    if (typeof onSearch === "function") onSearch("");
+    if (typeof onSearchRef.current === "function") onSearchRef.current("");
   };
 
   const navigateToRace = (race) => {
@@ -176,7 +197,7 @@ export default function SearchFilter({ onSearch, initialValue = "" }) {
         setOpen(false);
       } else {
         // no results -> still navigate to /races with search param
-        if (typeof onSearch === "function") onSearch(inputValue);
+        if (typeof onSearchRef.current === "function") onSearchRef.current(inputValue);
         router.push(`/races?search=${encodeURIComponent(inputValue)}`).catch(()=>{});
         setOpen(false);
       }

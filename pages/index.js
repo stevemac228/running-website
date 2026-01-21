@@ -3,8 +3,17 @@ import races from "../data/races.json";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import SearchFilter from "../components/SearchFilter/SearchFilter";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth > 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div>
@@ -44,7 +53,7 @@ export default function Home() {
             fill="none"
           />
           <div className="home-text-container">
-            <SearchFilter onSearch={() => {}} />
+            {isDesktop && <SearchFilter onSearch={() => {}} />}
             <p className="home-text">
               Welcome to Run NL, your go-to source for discovering running events across Newfoundland and Labrador.<br></br>
               Browse upcoming road and trail races as well as fun runs with detailed information on dates, distances and locations<br></br>

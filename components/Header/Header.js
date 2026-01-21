@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import SearchFilter from "../SearchFilter/SearchFilter";
 
 export default function Header() {
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const menuRef = useRef(null);
   const toggleRef = useRef(null);
 
@@ -64,15 +66,19 @@ export default function Header() {
         </button>
 
         <div className="header-tools">
+          {isMobile && (
+            <div className="header-mobile-search">
+              <SearchFilter onSearch={setSearchTerm} initialValue={searchTerm} />
+            </div>
+          )}
         </div>
 
         {/* Desktop navigation links (hidden on mobile) */}
         {!isMobile && (
           <nav className="header-nav-desktop">
-            <Link href="/" className="nav-link">Home</Link>
+            <Link href="/races/races" className="nav-link">All Races</Link>
             <Link href="/calendar/calendar" className="nav-link">Calendar</Link>
             <Link href="/maps/maps" className="nav-link">Map</Link>
-            <Link href="/races/races" className="nav-link">All Races</Link>
             <Link href="/upcoming-races/upcoming-races" className="nav-link">Upcoming Races</Link>
             <Link href="/registrations/registrations" className="nav-link">Registrations</Link>
           </nav>
