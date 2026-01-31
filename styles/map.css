@@ -23,19 +23,10 @@
 }
 
 /* Optionally remove transform on ancestor elements that may interfere (be conservative) */
-header, .nav-left, nav, .nav-link {
+header, .nav-left, nav {
 	/* avoid persistent transforms on parent elements that can break Leaflet positioning */
 	-webkit-transform: none;
 	transform: none;
-	text-decoration: none;
 }
 
-.nav-link {
-  color: white;
-  text-decoration: none;
-}
-
-.header-nav-desktop {
-  display: flex;
-  gap: 1.5rem;
-}
+/* Navigation link styling is handled in navbar.css */
