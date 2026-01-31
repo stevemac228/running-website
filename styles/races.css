@@ -12,17 +12,23 @@
   margin-bottom: 1rem;
 }
 
-/* Search input wrapper (with icon) */
+/* Search input wrapper (with icon) - Modern styling */
 .search-wrapper {
   display: flex;
   align-items: center;
   width: 100%;
   max-width: 500px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ccc;
-  padding: 0.2rem 0.5rem;
-  background-color: var(--runnl-background)
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--runnl-border);
+  padding: 0.35rem 0.75rem;
+  background-color: var(--runnl-background);
+  transition: all 0.2s ease;
+}
+
+.search-wrapper:focus-within {
+  border-color: var(--runnl-primary);
+  box-shadow: var(--shadow-md), 0 0 0 3px rgba(0, 106, 255, 0.1);
 }
 
 /* Input inside the wrapper */
@@ -33,23 +39,35 @@
   padding: 0.5rem;
   font-size: 1rem;
   margin-left: 0.5rem;
+  background: transparent;
 }
 
-/* Optional: search icon */
-.search-wrapper svg {
+/* Search icon */
+.search-wrapper svg,
+.search-icon {
   fill: var(--runnl-light-grey);
-  height: 24px;
-  width: 24px;
+  height: 20px;
+  width: 20px;
+  opacity: 0.6;
 }
 
-/* Optional: clear button */
+/* Clear button */
 .search-wrapper .clear-btn {
   border: none;
   background: transparent;
   cursor: pointer;
   color: var(--runnl-light-grey);
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   margin-left: 0.5rem;
+  padding: 0.25rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.search-wrapper .clear-btn:hover {
+  background-color: #f1f5f9;
+  color: var(--runnl-dark-text);
 }
 
 .filters-row {
@@ -655,18 +673,21 @@
 .races-controls .sort-dropdown,
 .races-controls .filter-dropdown {
   min-width: 95px;
-  padding: 0.5rem 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--runnl-border);
+  border-radius: 8px;
   background-color: white;
   cursor: pointer;
-  font-size: 0.95rem;
-  transition: border-color 0.2s;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
 }
 
 .races-controls .sort-dropdown:hover,
 .races-controls .filter-dropdown:hover {
-  border-color: var(--runnl-dark-blue);
+  border-color: var(--runnl-primary);
+  box-shadow: var(--shadow-md);
 }
 
 .races-controls .filter-dropdown option:disabled {
@@ -674,20 +695,20 @@
   color: #999;
 }
 
-/* Custom dropdown menu */
+/* Custom dropdown menu - Modern styling */
 .custom-dropdown {
   position: relative;
 }
 
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 4px);
+  top: calc(100% + 6px);
   left: 0;
-  min-width: 200px;
+  min-width: 220px;
   background: white;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--runnl-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
   z-index: 1000;
   max-height: 400px;
   overflow-y: auto;
@@ -890,38 +911,52 @@
 }
 .map-toggle-btn {
   margin-left: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--runnl-border);
   background: #fff;
-  padding: 0.4rem 0.6rem;
-  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-/* Segmented control for view (List / Mixed / Map) */
+.map-toggle-btn:hover {
+  border-color: var(--runnl-primary);
+}
+
+/* Segmented control for view (List / Mixed / Map) - Modern styling */
 .view-segment {
   display: inline-flex;
-  background: #efefef;
-  border-radius: 6px;
-  padding: 2px;
+  background: #f1f5f9;
+  border-radius: 10px;
+  padding: 4px;
   gap: 0;
   align-items: center;
 }
+
 .view-segment .seg-btn {
   border: none;
   background: transparent;
-  padding: 0.5rem 0.9rem;
+  padding: 0.5rem 1rem;
   cursor: pointer;
-  color: #666;
-  font-weight: 600;
-  border-radius: 4px;
+  color: var(--runnl-light-grey);
+  font-weight: 500;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
+
 .view-segment .seg-btn + .seg-btn {
-  margin-left: 0;
+  margin-left: 2px;
 }
+
+.view-segment .seg-btn:hover {
+  color: var(--runnl-dark-text);
+}
+
 .view-segment .seg-btn.active {
   background: #fff;
-  color: #111;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.06) inset;
+  color: var(--runnl-dark-text);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Layout variations */

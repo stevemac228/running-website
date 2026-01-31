@@ -1,35 +1,53 @@
+/* Modern Header - Zillow-inspired */
 header {
-  background-color: var(--runnl-dark-grey);
-  color: var(--runnl-light-text);
+  background-color: #ffffff;
+  color: var(--runnl-dark-text);
   display: flex;
   flex-direction: column;
   gap: 0;
-  position: relative; /* anchor absolute-positioned mobile drawer */
+  position: sticky;
+  top: 0;
   z-index: 11000;
+  border-bottom: 1px solid var(--runnl-border);
+  box-shadow: var(--shadow-sm);
 }
 
 .puffin-icon {
-  width: 50px;
-  height: 50px;
-  margin-right: 10px;
+  width: 42px;
+  height: 42px;
+  margin-right: 8px;
 }
 
 .header-top {
-  position: relative; /* make .header-search absolute relative to this */
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* keep left-aligned tools */
-  padding-left: 10px;
-  padding-right:10px;
-  height: 10vh;
+  justify-content: space-between;
+  padding: 0.75rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.header-text{
+.header-text {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   text-decoration: none;
-  color: inherit;
+  color: var(--runnl-dark-text);
+  transition: opacity 0.2s;
+}
+
+.header-text:hover {
+  opacity: 0.8;
+}
+
+.header-text h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.5px;
 }
 
 .header-tools {
@@ -78,6 +96,28 @@ header {
   box-sizing: border-box;
 }
 
+/* Modern navigation links */
+.header-nav-desktop {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.nav-link {
+  color: var(--runnl-dark-text);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  background-color: #f0f5ff;
+  color: var(--runnl-primary);
+}
+
 .nav-strip {
   width: 100%;
   background-color: #434b5b;
@@ -99,19 +139,26 @@ header {
   text-decoration: none;
   font-size: 0.95rem;
   letter-spacing: 0.02em;
+  transition: color 0.2s ease;
 }
 
 .nav-strip-link:hover {
-  border-bottom: 2px solid var(--runnl-dark-blue);
+  color: var(--runnl-primary);
 }
 
 .nav-menu-toggle {
   display: none;
   background: transparent;
   border: none;
-  color: var(--runnl-light-text);
-  padding: 0.35rem;
+  color: var(--runnl-dark-text);
+  padding: 0.5rem;
   cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.nav-menu-toggle:hover {
+  background-color: #f5f5f5;
 }
 
 .nav-menu-toggle .nav-menu-bar {
@@ -122,12 +169,13 @@ header {
   margin: 4px 0;
 }
 
-/* SVG hamburger icon styling (used instead of the three spans) */
+/* SVG hamburger icon styling */
 .nav-menu-icon {
   display: block;
   width: 22px;
   height: 18px;
 }
+
 .nav-menu-icon line {
   stroke: currentColor;
   stroke-width: 2;
@@ -150,48 +198,45 @@ header {
   max-width: none;
 }
 
-/* Search results dropdown (attached to .search-wrapper) */
+/* Search results dropdown */
 .search-wrapper {
-  position: relative; /* ensure dropdown anchors to this */
-  /* Raised high so search dropdown sits above other UI (maps, popups, etc.) */
+  position: relative;
   z-index: 2147483646;
 }
 
-/* Dropdown panel */
+/* Dropdown panel - Modern styling */
 .search-results {
   position: absolute;
-  top: calc(100% + 6px);
+  top: calc(100% + 8px);
   left: 0;
   right: 0;
   background: #fff;
-  border: 1px solid #e6e6e6;
-  border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-  max-height: 320px;
+  border: 1px solid var(--runnl-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  max-height: 360px;
   overflow-y: auto;
-  padding: 6px;
+  padding: 8px;
   margin: 0;
   font-family: inherit;
   color: var(--runnl-dark-text);
-  /* Very high z-index to ensure it isn't occluded by other stacking contexts */
   z-index: 2147483647;
 }
 
-/* Ensure the wrapper has a higher stacking context */
 .search-wrapper {
   position: relative;
   z-index: 99999999;
 }
 
-/* Individual result */
+/* Individual result - Modern card style */
 .search-result-item {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 8px;
-  border-radius: 6px;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.12s ease;
+  transition: all 0.15s ease;
 }
 
 .search-result-item .result-title {
@@ -201,13 +246,13 @@ header {
 }
 
 .search-result-item .result-sub {
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   color: var(--runnl-light-grey);
 }
 
 .search-result-item:hover,
 .search-result-item.highlight {
-  background-color: #f5f8ff;
+  background-color: #f0f7ff;
 }
 
 /* Keep clear button visible and clickable */
@@ -215,14 +260,19 @@ header {
   z-index: 40;
 }
 
-/* Sort dropdown styling */
+/* Sort dropdown styling - Modern */
 .sort-dropdown {
-  padding: 0.4rem 0.6rem;
-  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
   border: 1px solid var(--runnl-border);
-  background-color: var(--runnl-background);;
+  background-color: var(--runnl-background);
   font-size: 0.875rem;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sort-dropdown:hover {
+  border-color: var(--runnl-primary);
 }
 
 .nav-mobile-drawer {
@@ -234,24 +284,25 @@ header {
   .search-results {
     left: -6px;
     right: -6px;
-    border-radius: 0 0 8px 8px;
+    border-radius: 0 0 12px 12px;
   }
 }
 
-/* Mobile: center the nav links horizontally and make them easier to tap */
+/* Mobile styles */
 @media (max-width: 768px) {
-  /* Reduce header height on mobile */
-  .header-top {
-    height: auto;
-    padding: 0.5rem 0.5rem;
+  header {
+    background-color: #ffffff;
   }
 
-  /* hide the puffin logo on mobile to save header space */
+  .header-top {
+    height: auto;
+    padding: 0.75rem 1rem;
+  }
+
   .puffin-icon {
     display: none;
   }
 
-  /* Show search bar in header on mobile */
   .header-mobile-search {
     display: flex;
     align-items: center;
@@ -263,34 +314,37 @@ header {
     max-width: none;
   }
 
-  /* show hamburger toggle next to the search */
   .nav-menu-toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     margin-left: 0.5rem;
     position: relative;
-    z-index: 13000; /* ensure it is clickable above the search */
+    z-index: 13000;
     width: 44px;
     height: 44px;
     background: transparent;
     border-radius: 8px;
     border: none;
     padding: 6px;
+    color: var(--runnl-dark-text);
   }
 
-  /* hide the desktop nav strip on small screens; we'll show a mobile drawer */
   .nav-strip {
     display: none;
   }
+
   .nav-strip-links {
     justify-content: center;
     padding: 0.6rem 0.75rem;
     gap: 1rem;
   }
 
-  /* Hide site title on mobile so the hamburger can sit top-left */
   .header-text {
+    display: none;
+  }
+
+  .header-nav-desktop {
     display: none;
   }
 
@@ -300,19 +354,17 @@ header {
     text-align: center;
   }
 
-  /* Make the nav strip slightly taller for comfortable tapping */
   .nav-strip {
     min-height: 40px;
   }
 
-  /* Make the search fill the header and avoid overlaying the hamburger */
   .header-top {
     align-items: center;
-    padding: 10px 0px;
+    padding: 10px 12px;
   }
 
   .header-tools {
-    margin-left: 0; /* don't push tools to the far right on mobile */
+    margin-left: 0;
     flex: 1 1 auto;
     display: flex;
     align-items: center;
@@ -327,7 +379,7 @@ header {
     width: 100%;
     max-width: none;
     margin: 0 8px 0 0;
-    z-index: 1; /* sit below the hamburger */
+    z-index: 1;
   }
 
   .nav-menu-toggle {
@@ -340,7 +392,7 @@ header {
     padding-right: 50px;
   }
 
-  /* Mobile nav drawer rendered under the header */
+  /* Mobile nav drawer - Modern styling */
   .nav-mobile-drawer {
     display: none;
     position: absolute;
@@ -349,11 +401,12 @@ header {
     right: 0;
     width: 100%;
     max-width: none;
-    background: var(--runnl-dark-grey); /* match header so it connects visually */
-    color: var(--runnl-light-text);
+    background: #ffffff;
+    color: var(--runnl-dark-text);
     border-radius: 0;
     border: none;
-    box-shadow: none;
+    border-top: 1px solid var(--runnl-border);
+    box-shadow: var(--shadow-lg);
     z-index: 12000;
     overflow: hidden;
   }
@@ -366,17 +419,20 @@ header {
     display: flex;
     flex-direction: column;
     gap: 0;
-    padding: 0; /* full-bleed links, no inner margins */
+    padding: 0.5rem 0;
   }
 
   .nav-mobile-links .nav-strip-link {
-    padding: 14px 16px;
+    padding: 1rem 1.25rem;
     border-radius: 0;
-    color: var(--runnl-light-text);
+    color: var(--runnl-dark-text);
     display: block;
+    font-weight: 500;
+    transition: background-color 0.2s;
   }
 
   .nav-mobile-links .nav-strip-link:hover {
-    background: rgba(0,0,0,0.04);
+    background: #f0f7ff;
+    color: var(--runnl-primary);
   }
 }

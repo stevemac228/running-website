@@ -3,10 +3,12 @@ import races from "../data/races.json";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import SearchFilter from "../components/SearchFilter/SearchFilter";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const [isDesktop, setIsDesktop] = useState(false);
+  const raceCount = races.length;
 
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth > 768);
@@ -46,26 +48,50 @@ export default function Home() {
       </Head>
       <Header />
       <main className="homepage">
-          <img
-            src="/images/marathon-1236351.png"
-            alt="homepage running graphic"
-            className="home-image"
-            fill="none"
-          />
-          <div className="home-text-container">
-            {isDesktop && <SearchFilter onSearch={() => {}} />}
-            <p className="home-text">
-              Welcome to Run NL, your go-to source for discovering running events across Newfoundland and Labrador.<br></br>
-              Browse upcoming road and trail races as well as fun runs with detailed information on dates, distances and locations<br></br>
-              <i>Please use official race websites for the most accurate and up-to-date information.</i><br></br>
-              If anyting is missing or incorrect, please <a href="mailto:steven.macdonald228@gmail.com">let me know</a>!<br></br>
-            </p>
+        <div className="hero-section">
+          <span className="hero-tagline">Newfoundland & Labrador</span>
+          <h1 className="hero-title">
+            Find Your Next <span className="hero-title-highlight">Race</span>
+          </h1>
+          <p className="hero-subtitle">
+            Discover road races, trail runs, and fun runs across Newfoundland and Labrador. 
+            All the details you need in one place.
+          </p>
+          
+          <div className="hero-search-container">
+            <SearchFilter onSearch={() => {}} />
           </div>
-          {/* Blob SVG
-          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="home-blob">
-            <path fill="#48ff00ff" d="M34.2,-56.1C48.1,-51.2,65.6,-49.6,74.4,-40.8C83.2,-32,83.2,-16,78.3,-2.8C73.4,10.4,63.7,20.8,55.5,30.6C47.3,40.4,40.7,49.7,31.7,55.5C22.7,61.3,11.4,63.5,0,63.6C-11.5,63.7,-22.9,61.6,-32.4,56.1C-41.8,50.6,-49.3,41.7,-58.8,31.8C-68.3,21.8,-79.9,10.9,-82.9,-1.8C-86,-14.5,-80.5,-28.9,-72.2,-40.9C-63.9,-52.9,-52.7,-62.5,-40.2,-68.1C-27.7,-73.8,-13.9,-75.6,-1.8,-72.4C10.2,-69.2,20.3,-61,34.2,-56.1Z" transform="translate(100 100)" />
-          </svg>
-          */}
+          
+          <div className="hero-actions">
+            <Link href="/races/races" className="hero-action-btn">
+              Browse All Races
+            </Link>
+            <Link href="/calendar/calendar" className="hero-action-btn secondary">
+              View Calendar
+            </Link>
+          </div>
+
+          <div className="hero-stats">
+            <div className="hero-stat">
+              <div className="hero-stat-number">{raceCount}+</div>
+              <div className="hero-stat-label">Races</div>
+            </div>
+            <div className="hero-stat">
+              <div className="hero-stat-number">5K–Ultra</div>
+              <div className="hero-stat-label">Distances</div>
+            </div>
+            <div className="hero-stat">
+              <div className="hero-stat-number">All NL</div>
+              <div className="hero-stat-label">Locations</div>
+            </div>
+          </div>
+        </div>
+        
+        <img
+          src="/images/marathon-1236351.png"
+          alt="homepage running graphic"
+          className="home-image"
+        />
       </main>
       <Footer />
     </div>

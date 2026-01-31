@@ -1,48 +1,67 @@
 
 :root {
-  --runnl-dark-text:#232323;
-  --runnl-light-text:#ffffff;
-  --runnl-background:#ffffff;
-  --runnl-border:#ccc;
+  /* Modern Zillow-inspired color palette */
+  --runnl-dark-text: #2A2A33;
+  --runnl-light-text: #ffffff;
+  --runnl-background: #ffffff;
+  --runnl-border: #e0e0e0;
+  
+  /* Modern grays */
+  --runnl-dark-grey: #1a1a2e;
+  --runnl-light-grey: #6b7280;
+  --runnl-muted-grey: #9ca3af;
+  
+  /* Modern greens */
+  --runnl-dark-green: #047857;
+  --runnl-light-green: #10b981;
+  
+  /* Modern oranges */
+  --runnl-light-orange: #f97316;
+  --runnl-dark-orange: #ea580c;
+  
+  /* Modern blues - Zillow-inspired primary */
+  --runnl-primary: #006AFF;
+  --runnl-primary-dark: #0052cc;
+  --runnl-primary-light: #3b82f6;
+  --runnl-dark-blue: #006AFF;
+  --runnl-light-blue: #60a5fa;
+  
+  /* Modern pinks/reds */
+  --runnl-dark-pink: #db2777;
+  --runnl-light-pink: #ec4899;
+  --runnl-dark-red: #dc2626;
+  --runnl-light-red: #f87171;
+  
+  /* Modern purples */
+  --runnl-dark-purple: #7c3aed;
+  --runnl-light-purple: #a78bfa;
 
-  --runnl-dark-grey:#2e3440;
-  --runnl-light-grey: #5E6A82;
+  /* Badge colors */
+  --badge-road: #374151;
+  --badge-trail: #059669;
+  --badge-track: #dc2626;
+  --badge-gravel: #6b7280;
+  --badge-funrun: #f97316;
+  --badge-competitive: #006AFF;
 
-  --runnl-dark-green:#0f5c5b;
-  --runnl-light-green: #1dafad;
+  /* Footer */
+  --footer-bg: #f8fafc;
+  --footer-text: #1f2937;
+  --footer-accent: #006AFF;
+  --footer-border: #e5e7eb;
+  --footer-muted: #6b7280;
 
-  --runnl-light-orange:#ff4d00;
-  --runnl-dark-orange:#e83200;
-
-  --runnl-dark-blue:#006aac;
-  --runnl-light-blue: #3aaff8;
-
-  --runnl-dark-pink:#BA2C73;
-  --runnl-light-pink:#d85a99;
-
-  --runnl-dark-red:#b10000;
-  --runnl-light-red:#ff6161;
-
-  --runnl-dark-purple:#8332AC;
-  --runnl-light-purple:#A351CD;
-
-  --badge-road:#2c2c2c;
-  --badge-trail:#688f4e;
-  --badge-track:#d11;
-  --badge-gravel:#646065;
-  --badge-funrun:#ef470b;
-  --badge-competitive:#006aac;
-
-  --footer-bg: #f9f9f9;
-  --footer-text: #222;
-  --footer-accent: #0070f3;
-  --footer-border: #ddd;
-  --footer-muted: #555;
-
-  --puffin-orange: #ff6f00;
-  --puffin-yellow: #ffc059;
-  --puffin-dark-blue: #214cdc;
-  --puffin-green: #0f5c5b;
-  --puffin-teal: #189897;
-  --puffin-gray: #282828;
+  /* Puffin brand colors */
+  --puffin-orange: #f97316;
+  --puffin-yellow: #fbbf24;
+  --puffin-dark-blue: #1e40af;
+  --puffin-green: #047857;
+  --puffin-teal: #0d9488;
+  --puffin-gray: #1f2937;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
