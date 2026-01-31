@@ -874,6 +874,12 @@
 .races-list-map-flex.map-on .races-list-column {
   flex: 0 0 50%;
 }
+
+/* Footer styling when inside list column (mixed view) */
+.races-list-column .site-footer {
+  margin-top: 1rem;
+}
+
 .races-map-column {
   flex: 1 1 40%;
   min-width: 300px;
