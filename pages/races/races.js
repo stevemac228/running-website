@@ -9,6 +9,7 @@ import CompactRaceCard from "../../components/CompactRaceCard/CompactRaceCard";
 import DateRangeSelector from "../../components/DateRangeSelector/DateRangeSelector";
 import RacesMapView from "../../components/RacesMapView/RacesMapView";
 import DistanceRangeSlider from "../../components/DistanceRangeSlider/DistanceRangeSlider";
+import { filterRacesBySearch } from "../../utils/categorySearch";
 
 // Simple debounce hook
 function useDebounce(value, delay) {
@@ -103,28 +104,12 @@ export default function Races() {
   // Debounce search term to reduce re-renders from typing
   const debouncedSearchTerm = useDebounce(searchTerm, 150);
 
-  // Helper function to apply fuzzy search
+  // Helper function to apply fuzzy search with category matching
   const applyFuzzySearch = useCallback((term, raceList) => {
     if (!term || term.trim() === "") return raceList;
     
-    if (fuseRef.current) {
-      try {
-        const results = fuseRef.current.search(term, { limit: 1000 });
-        return results.map(r => r.item);
-      } catch (err) {
-        // Fallback to simple contains
-        return raceList.filter(r =>
-          r.name.toLowerCase().includes(term.toLowerCase()) ||
-          r.location?.toLowerCase().includes(term.toLowerCase())
-        );
-      }
-    } else {
-      // Fallback to simple contains
-      return raceList.filter(r =>
-        r.name.toLowerCase().includes(term.toLowerCase()) ||
-        r.location?.toLowerCase().includes(term.toLowerCase())
-      );
-    }
+    // Use the category-aware search utility
+    return filterRacesBySearch(raceList, term, fuseRef.current);
   }, []);
 
   // sync searchTerm from query param when arriving with ?search=...
