@@ -503,6 +503,7 @@ export default function Races() {
                       }
                     />
                   ))}
+                  {viewMode === "mixed" && <Footer />}
                 </div>
               )}
 
@@ -533,7 +534,7 @@ export default function Races() {
           </div>
         </div>
       </main>
-      <Footer />
+      {viewMode !== "mixed" && <Footer />}
     </div>
   );
 }
