@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { useRouter } from "next/router";
 import races from "../../data/races.json";
 import { getRaceId } from "../../utils/getRaceId";
+import { filterRacesBySearch } from "../../utils/categorySearch";
 
 // Minimal, self-contained search with results dropdown.
 export default function SearchFilter({ onSearch, initialValue = "", showDropdown = true }) {
@@ -123,27 +124,8 @@ export default function SearchFilter({ onSearch, initialValue = "", showDropdown
       return;
     }
 
-    // Use Fuse.js if available (gives fuzzy typo-tolerant matching), else fallback to simple contains
-    let matched = [];
-    if (fuseRef.current) {
-      try {
-        // Fuse returns list of {item, score}; map to item and keep the best matches
-        const fuseResults = fuseRef.current.search(raw, { limit: 20 });
-        matched = fuseResults.map((r) => r.item).slice(0, 20);
-      } catch (err) {
-        // fallback to simple contains if fuse search errors
-        matched = races
-          .filter((r) => `${r.name || ""} ${r.nickName || ""} ${r.location || ""}`.toLowerCase().includes(term))
-          .slice(0, 20);
-      }
-    } else {
-      matched = races
-        .filter((r) => {
-          const s = `${r.name || ""} ${r.nickName || ""} ${r.location || ""}`.toLowerCase();
-          return s.includes(term);
-        })
-        .slice(0, 20);
-    }
+    // Use category-aware search which combines fuzzy name/location search with category matching
+    let matched = filterRacesBySearch(races, raw, fuseRef.current).slice(0, 20);
 
     setResults(matched);
     setOpen(matched.length > 0);
@@ -213,7 +195,7 @@ export default function SearchFilter({ onSearch, initialValue = "", showDropdown
         <img src="/icons/search.svg" alt="Search" className="search-icon" />
         <input
           type="text"
-          placeholder="Search by name or city..."
+          placeholder="Search races, marathon, trail..."
           value={inputValue}
           onChange={handleChange}
           onKeyDown={onKeyDown}
