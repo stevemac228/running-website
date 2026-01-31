@@ -193,12 +193,12 @@ export default function SearchFilter({ onSearch, initialValue = "", showDropdown
         navigateToRace(results[0]);
       } else if (results.length > 1) {
         // multiple results -> go to /races with search param so All Races page filters
-        router.push(`/races?search=${encodeURIComponent(inputValue)}`).catch(()=>{});
+        router.push(`/races/races?search=${encodeURIComponent(inputValue)}`).catch(()=>{});
         setOpen(false);
       } else {
         // no results -> still navigate to /races with search param
         if (typeof onSearchRef.current === "function") onSearchRef.current(inputValue);
-        router.push(`/races?search=${encodeURIComponent(inputValue)}`).catch(()=>{});
+        router.push(`/races/races?search=${encodeURIComponent(inputValue)}`).catch(()=>{});
         setOpen(false);
       }
     } else if (e.key === "Escape") {
