@@ -595,12 +595,12 @@
   align-items: center;
   min-width: 200px;
   flex: 1 1 auto;
-  max-width: 500px;
   margin: 0 0.5rem;
 }
 
 .races-search-controls .search-wrapper {
   width: 100%;
+  max-width: none;
   margin: 0;
   z-index: 100;
 }
