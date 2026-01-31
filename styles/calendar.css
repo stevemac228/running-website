@@ -13,10 +13,6 @@
 }
 
 @media (max-width: 768px) {
-  .calendar-container {
-    display: none; /* hidden in home page right column on mobile */
-  }
-  
   .month-calendar {
     display: none; /* hide desktop calendar on mobile */
   }
