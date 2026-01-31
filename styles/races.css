@@ -600,6 +600,7 @@
 
 .races-search-controls .search-wrapper {
   width: 100%;
+  max-width: none;
   margin: 0;
   z-index: 100;
 }
