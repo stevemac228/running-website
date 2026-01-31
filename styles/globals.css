@@ -352,133 +352,80 @@ body::-webkit-scrollbar-track {
 /* #endregion */
 
 /* #region Race Detail Page */
-/* Race Detail Page - Modern styling */
 .race-detail-main {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  min-height: calc(100vh - 200px);
+  padding: 24px;
 }
 
 .race-detail-not-found-main {
-  padding: 3rem 2rem;
-  text-align: center;
+  padding: 24px;
 }
 
 .race-detail-not-found-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--runnl-dark-text);
-  margin-bottom: 1rem;
+  font-size: 28px;
 }
 
 .race-detail-header {
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--runnl-border);
+  margin-bottom: 20px;
+  background-color: #ffffff;
 }
 
 .race-detail-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--runnl-dark-text);
-  margin: 0 0 0.5rem 0;
-  letter-spacing: -0.5px;
+  font-size: 36px;
+  color: #444;
+  margin: 0;
 }
 
 .race-detail-subtitle {
-  color: var(--runnl-light-grey);
-  font-size: 1rem;
-  font-weight: 500;
+  color: #666;
+  margin-top: 6px;
 }
 
 .race-detail-grid {
   display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 2rem;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
   align-items: start;
 }
 
 .race-detail-section-title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0 0 1rem 0;
-  color: var(--runnl-dark-text);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-size: 20px;
+  margin-bottom: 12px;
 }
 
-/* Modern Info Grid */
 .race-detail-info-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0;
-  background: var(--runnl-background);
-  border-radius: 12px;
-  border: 1px solid var(--runnl-border);
-  overflow: hidden;
+  gap: 10px;
 }
 
 .race-detail-info-row {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 1rem;
-  border-bottom: 1px solid var(--runnl-border);
-  border-right: 1px solid var(--runnl-border);
-}
-
-.race-detail-info-row:nth-child(2n) {
-  border-right: none;
-}
-
-/* Remove bottom border from items in the last row (handles both even and odd totals) */
-.race-detail-info-row:nth-last-child(1),
-.race-detail-info-row:nth-last-child(2):nth-child(odd) {
-  border-bottom: none;
-}
-
-/* For even-positioned last items */
-.race-detail-info-row:nth-last-child(2):nth-child(even) {
-  border-bottom: none;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 8px 0;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.07);
 }
 
 .race-detail-info-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--runnl-light-grey);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  min-width: 200px;
+  font-weight: 700;
 }
 
 .race-detail-info-value {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--runnl-dark-text);
+  flex: 1;
 }
 
-.race-detail-info-value a {
-  color: var(--runnl-primary);
-  text-decoration: none;
-}
-
-.race-detail-info-value a:hover {
-  text-decoration: underline;
-}
-
-/* Map Container - Modern styling */
 .race-detail-map-container {
   width: 100%;
-  height: 350px;
-  border: 1px solid var(--runnl-border);
-  border-radius: 12px;
+  height: 320px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   overflow: hidden;
-  background: var(--runnl-background-alt);
+  background: #f7f7f7;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  box-shadow: var(--shadow-sm);
+  padding: 12px;
 }
 
 .race-detail-map {
@@ -488,18 +435,16 @@ body::-webkit-scrollbar-track {
 
 .race-detail-map-error {
   margin: 0;
-  color: var(--runnl-light-grey);
 }
 
 .race-detail-map-error-location {
-  margin-top: 0.5rem;
-  color: var(--runnl-muted-grey);
-  font-size: 0.875rem;
+  margin-top: 8px;
+  color: #666;
+  font-size: 13px;
 }
 
 .race-detail-map-no-location {
-  color: var(--runnl-light-grey);
-  padding: 1rem;
+  color: #666;
 }
 
 .race-detail-map-no-location p {
@@ -507,88 +452,39 @@ body::-webkit-scrollbar-track {
 }
 
 .race-detail-map-no-location p:last-child {
-  margin-top: 0.5rem;
-  font-size: 0.875rem;
+  margin-top: 8px;
+  font-size: 13px;
 }
 
 .race-detail-coordinates {
-  margin-top: 0.75rem;
-  font-size: 0.875rem;
-  color: var(--runnl-light-grey);
+  margin-top: 8px;
+  font-size: 13px;
+  color: #444;
 }
 
 .race-detail-map-links {
-  margin-top: 0.75rem;
+  margin-top: 6px;
   display: flex;
-  gap: 0.75rem;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .race-detail-map-link {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
+  display: inline-block;
+  padding: 6px 12px;
   color: white;
   text-decoration: none;
-  border-radius: 8px;
-  font-size: 0.875rem;
+  border-radius: 4px;
+  font-size: 13px;
   font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.race-detail-map-link:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
 }
 
 .race-detail-map-link-google {
   background: #4285f4;
 }
 
-.race-detail-map-link-google:hover {
-  background: #3367d6;
-}
-
 .race-detail-map-link-osm {
   background: #7ebc6f;
-}
-
-.race-detail-map-link-osm:hover {
-  background: #6ba85c;
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .race-detail-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .race-detail-info-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .race-detail-info-row {
-    border-right: none;
-  }
-  
-  /* In single column layout, only last item needs no bottom border */
-  .race-detail-info-row:last-child {
-    border-bottom: none;
-  }
-}
-
-@media (max-width: 600px) {
-  .race-detail-main {
-    padding: 1rem;
-  }
-  
-  .race-detail-title {
-    font-size: 1.5rem;
-  }
-  
-  .race-detail-map-container {
-    height: 280px;
-  }
 }
 /* #endregion */
 
