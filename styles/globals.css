@@ -516,7 +516,8 @@ body::-webkit-scrollbar-track {
   /* Map section comes first on mobile (order: 1), content second (order: 2) */
   .race-detail-grid > aside {
     order: 1;
-    padding: 0 12px;
+    padding: 0;
+    width: 100%;
   }
 
   .race-detail-grid > section {
@@ -524,11 +525,19 @@ body::-webkit-scrollbar-track {
     width: 100%;
   }
 
+  .race-detail-section-title {
+    padding: 0 12px;
+  }
+
   .race-detail-map-container {
     height: 280px;
     border-radius: 0;
-    border-left: none;
-    border-right: none;
+    border: none;
+    width: 100%;
+  }
+
+  .race-detail-coordinates {
+    padding: 8px 12px;
   }
 
   .race-detail-info-grid {
