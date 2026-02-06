@@ -86,12 +86,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        
-        <img
-          src="/images/marathon-1236351.png"
-          alt="homepage running graphic"
-          className="home-image"
-        />
+
       </main>
       <Footer />
     </div>
