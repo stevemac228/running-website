@@ -864,6 +864,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   scroll-behavior: smooth;
+  padding-top: 0.5rem;
 }
 
 /* Modern sleek scrollbar for races list */
