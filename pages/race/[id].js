@@ -451,14 +451,6 @@ export default function RaceDetail() {
                   >
                     Open in Google Maps
                   </a>
-                  <a
-                    href={`https://www.openstreetmap.org/?mlat=${coords.lat}&mlon=${coords.lon}#map=16/${coords.lat}/${coords.lon}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="race-detail-map-link race-detail-map-link-osm"
-                  >
-                    Open in OSM
-                  </a>
                 </div>
               </div>
             )}
