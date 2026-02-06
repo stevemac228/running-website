@@ -365,6 +365,7 @@ export default function RaceDetail() {
     <div>
       <Head>
         <title>{pageTitle}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
         <meta name="description" content={pageDescription} />
         <link rel="canonical" href={`${baseUrl}/race/${raceSlug}`} />
         <meta property="og:title" content={pageTitle} />

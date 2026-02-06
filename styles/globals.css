@@ -486,6 +486,74 @@ body::-webkit-scrollbar-track {
 .race-detail-map-link-osm {
   background: #7ebc6f;
 }
+
+/* Race Detail Page - Mobile Responsive */
+@media (max-width: 768px) {
+  .race-detail-main {
+    padding: 16px;
+  }
+
+  .race-detail-title {
+    font-size: 1.75rem;
+  }
+
+  .race-detail-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .race-detail-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Map section comes first on mobile (order: 1), content second (order: 2) */
+  .race-detail-grid > aside {
+    order: 1;
+  }
+
+  .race-detail-grid > section {
+    order: 2;
+  }
+
+  .race-detail-map-container {
+    height: 280px;
+  }
+
+  .race-detail-info-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .race-detail-info-label {
+    min-width: unset;
+    font-size: 0.85rem;
+    color: var(--runnl-light-grey);
+  }
+
+  .race-detail-info-value {
+    font-size: 1rem;
+  }
+
+  .race-detail-section-title {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+
+  .race-detail-map-links {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .race-detail-map-link {
+    text-align: center;
+    padding: 10px 16px;
+  }
+
+  .race-detail-coordinates {
+    font-size: 12px;
+  }
+}
 /* #endregion */
 
 /* #region RaceCard and UpcomingRaceCard Components */
