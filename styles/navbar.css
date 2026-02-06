@@ -297,6 +297,8 @@ header {
   .header-top {
     height: auto;
     padding: 0.75rem 1rem;
+    position: relative;
+    justify-content: center;
   }
 
   .puffin-icon {
@@ -304,22 +306,17 @@ header {
   }
 
   .header-mobile-search {
-    display: flex;
-    align-items: center;
-    flex: 1 1 auto;
-    margin-right: 0.5rem;
-  }
-
-  .header-mobile-search .search-wrapper {
-    max-width: none;
+    display: none;
   }
 
   .nav-menu-toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-left: 0.5rem;
-    position: relative;
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
     z-index: 13000;
     width: 44px;
     height: 44px;
@@ -341,7 +338,12 @@ header {
   }
 
   .header-text {
-    display: none;
+    display: flex;
+    margin: 0 auto;
+  }
+
+  .header-text h1 {
+    font-size: 1.25rem;
   }
 
   .header-nav-desktop {
@@ -358,17 +360,8 @@ header {
     min-height: 40px;
   }
 
-  .header-top {
-    align-items: center;
-    padding: 10px 12px;
-  }
-
   .header-tools {
-    margin-left: 0;
-    flex: 1 1 auto;
-    display: flex;
-    align-items: center;
-    order: 1;
+    display: none;
   }
 
   .header-search {
@@ -380,10 +373,6 @@ header {
     max-width: none;
     margin: 0 8px 0 0;
     z-index: 1;
-  }
-
-  .nav-menu-toggle {
-    order: 0;
   }
 
   .header-search .search-wrapper {

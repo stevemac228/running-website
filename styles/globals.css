@@ -486,6 +486,105 @@ body::-webkit-scrollbar-track {
 .race-detail-map-link-osm {
   background: #7ebc6f;
 }
+
+/* Race Detail Page - Mobile Responsive */
+@media (max-width: 768px) {
+  .race-detail-main {
+    padding: 12px 0;
+  }
+
+  .race-detail-header {
+    padding: 0 12px;
+    margin-bottom: 16px;
+  }
+
+  .race-detail-title {
+    font-size: 1.75rem;
+  }
+
+  .race-detail-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .race-detail-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
+  /* Map section comes first on mobile (order: 1), content second (order: 2) */
+  .race-detail-grid > aside {
+    order: 1;
+    padding: 0;
+    width: 100%;
+  }
+
+  .race-detail-grid > section {
+    order: 2;
+    width: 100%;
+  }
+
+  .race-detail-section-title {
+    padding: 0 12px;
+  }
+
+  .race-detail-map-container {
+    height: 280px;
+    border-radius: 0;
+    border: none;
+    width: 100%;
+  }
+
+  .race-detail-coordinates {
+    padding: 8px 12px;
+  }
+
+  .race-detail-info-grid {
+    width: 100%;
+  }
+
+  .race-detail-info-row {
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px;
+    margin: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  }
+
+  .race-detail-info-label {
+    min-width: unset;
+    font-size: 0.8rem;
+    color: var(--runnl-light-grey);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .race-detail-info-value {
+    font-size: 1rem;
+    word-break: break-word;
+  }
+
+  .race-detail-section-title {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+
+  .race-detail-map-links {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .race-detail-map-link {
+    text-align: center;
+    padding: 12px 16px;
+  }
+
+  .race-detail-coordinates {
+    font-size: 12px;
+    padding: 0;
+  }
+}
 /* #endregion */
 
 /* #region RaceCard and UpcomingRaceCard Components */

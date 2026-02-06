@@ -365,6 +365,7 @@ export default function RaceDetail() {
     <div>
       <Head>
         <title>{pageTitle}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
         <meta name="description" content={pageDescription} />
         <link rel="canonical" href={`${baseUrl}/race/${raceSlug}`} />
         <meta property="og:title" content={pageTitle} />
@@ -449,14 +450,6 @@ export default function RaceDetail() {
                     className="race-detail-map-link race-detail-map-link-google"
                   >
                     Open in Google Maps
-                  </a>
-                  <a
-                    href={`https://www.openstreetmap.org/?mlat=${coords.lat}&mlon=${coords.lon}#map=16/${coords.lat}/${coords.lon}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="race-detail-map-link race-detail-map-link-osm"
-                  >
-                    Open in OSM
                   </a>
                 </div>
               </div>
