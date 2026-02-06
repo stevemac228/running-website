@@ -210,10 +210,13 @@ br {
   .homepage {
     min-height: auto;
     padding-bottom: 2rem;
+    overflow-x: hidden;
   }
 
   .hero-section {
     padding: 2rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .hero-title {
@@ -234,11 +237,14 @@ br {
     flex-direction: column;
     width: 100%;
     margin-top: 0;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
   }
 
   .hero-action-btn {
     width: 100%;
     justify-content: center;
+    box-sizing: border-box;
   }
 
   .hero-stats {
