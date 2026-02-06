@@ -66,11 +66,7 @@ export default function Header() {
         </button>
 
         <div className="header-tools">
-          {isMobile && (
-            <div className="header-mobile-search">
-              <SearchFilter onSearch={setSearchTerm} initialValue={searchTerm} />
-            </div>
-          )}
+          {/* Search bar only shown on desktop, not mobile */}
         </div>
 
         {/* Desktop navigation links (hidden on mobile) */}

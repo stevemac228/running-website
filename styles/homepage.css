@@ -228,9 +228,20 @@ br {
     margin-bottom: 1.5rem;
   }
 
-  /* Hide hero search on mobile - header already provides search functionality */
+  /* Show hero search on mobile with adjusted styling */
   .hero-search-container {
-    display: none;
+    display: block;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-search-container .search-wrapper {
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+  }
+
+  .hero-search-container .search-wrapper input {
+    font-size: 1rem;
+    padding: 0.5rem 0.25rem;
   }
 
   .hero-actions {
