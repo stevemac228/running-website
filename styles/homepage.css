@@ -225,19 +225,15 @@ br {
     margin-bottom: 1.5rem;
   }
 
-  .hero-search-container .search-wrapper {
-    padding: 0.5rem 1rem;
-    border-radius: 12px;
-  }
-
-  .hero-search-container .search-wrapper input {
-    font-size: 1rem;
-    padding: 0.5rem 0.25rem;
+  /* Hide hero search on mobile - header already provides search functionality */
+  .hero-search-container {
+    display: none;
   }
 
   .hero-actions {
     flex-direction: column;
     width: 100%;
+    margin-top: 0;
   }
 
   .hero-action-btn {
