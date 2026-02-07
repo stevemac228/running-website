@@ -94,17 +94,6 @@ body::-webkit-scrollbar-track {
   box-shadow: var(--shadow-lg);
 }
 
-/* Adjust expanded section margins and add borders when card is expanded */
-.compact-race-card.expanded .compact-race-expanded {
-  margin-left: calc(-1.25rem + 1px);
-  margin-right: calc(-1.25rem + 1px);
-  margin-bottom: calc(-1.25rem + 1px);
-  border-left: 2px solid var(--runnl-primary);
-  border-right: 2px solid var(--runnl-primary);
-  border-bottom: 2px solid var(--runnl-primary);
-  border-top: none; /* Remove inner border to keep only outer border */
-}
-
 .compact-race-card-main {
   display: grid;
   grid-template-columns: 450px 1fr auto;
@@ -357,6 +346,17 @@ body::-webkit-scrollbar-track {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+  }
+
+  /* Adjust expanded section margins and add borders when card is expanded (mobile only) */
+  .compact-race-card.expanded .compact-race-expanded {
+    margin-left: calc(-0.875rem + 1px);
+    margin-right: calc(-0.875rem + 1px);
+    margin-bottom: calc(-0.875rem + 1px);
+    border-left: 2px solid var(--runnl-primary);
+    border-right: 2px solid var(--runnl-primary);
+    border-bottom: 2px solid var(--runnl-primary);
+    border-top: none; /* Remove inner border to keep only outer border */
   }
 }
 
