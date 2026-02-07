@@ -66,6 +66,7 @@ export default function DateRangeSelector({ onChange, isOpen, onToggle }) {
     );
 
   const daysInMonth = getDaysInMonth(currentMonth);
+  const firstDayOfCurrentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
 
   const formatDisplay = () => {
     const formatDayMonth = (date) =>
@@ -118,24 +119,21 @@ export default function DateRangeSelector({ onChange, isOpen, onToggle }) {
           </div>
 
           <div className="date-range-selector-calendar-grid">
-            {(() => {
-              const firstDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
-              return daysInMonth.map((date, i) => {
-                const isPrevMonth = date < firstDayOfMonth;
-                return (
-                  <div
-                    key={i}
-                    className={`date-range-selector-calendar-day 
+            {daysInMonth.map((date, i) => {
+              const isPrevMonth = date < firstDayOfCurrentMonth;
+              return (
+                <div
+                  key={i}
+                  className={`date-range-selector-calendar-day 
             ${isSelected(date) ? "selected" : ""}
             ${isInRange(date) ? "in-range" : ""}
             ${isPrevMonth ? "prev-month" : ""}`}
-                    onClick={() => handleDateClick(date)}
-                  >
-                    {date.getDate()}
-                  </div>
-                );
-              });
-            })()}
+                  onClick={() => handleDateClick(date)}
+                >
+                  {date.getDate()}
+                </div>
+              );
+            })}
           </div>
           
           {(start || end) && (

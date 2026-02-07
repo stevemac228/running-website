@@ -99,7 +99,6 @@ export default function Calendar() {
 
   const daysInMonth = [];
   const firstDayOfWeek = startOfMonth.getDay(); // 0 = Sunday
-  const prevMonthDaysCount = firstDayOfWeek; // Track number of previous month days
 
   // Fill days from previous month before the 1st
   if (firstDayOfWeek > 0) {
@@ -333,7 +332,7 @@ export default function Calendar() {
             ? `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day.getDate()}-${index}`
             : `empty-${currentDate.getFullYear()}-${currentDate.getMonth()}-${index}`;
 
-          const isPrevMonth = index < prevMonthDaysCount;
+          const isPrevMonth = index < firstDayOfWeek;
           
           return (
             <div
