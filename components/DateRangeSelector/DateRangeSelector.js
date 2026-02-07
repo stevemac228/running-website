@@ -119,7 +119,8 @@ export default function DateRangeSelector({ onChange, isOpen, onToggle }) {
 
           <div className="date-range-selector-calendar-grid">
             {daysInMonth.map((date, i) => {
-              const isPrevMonth = date.getMonth() !== currentMonth.getMonth() || date.getFullYear() !== currentMonth.getFullYear();
+              const firstDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+              const isPrevMonth = date < firstDayOfMonth;
               return (
                 <div
                   key={i}
