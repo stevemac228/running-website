@@ -737,12 +737,18 @@
   z-index: 1300;
   max-height: 400px;
   overflow-y: auto;
+  max-width: calc(100vw - 2rem);
 }
 
 /* Date dropdown specific styling */
 .date-dropdown-menu {
   min-width: 280px;
+  max-width: calc(100vw - 2rem);
   padding: 0.75rem;
+  box-sizing: border-box;
+  /* Align to right edge to prevent overflow */
+  left: auto;
+  right: 0;
 }
 
 .date-range-selector-header {
@@ -1143,15 +1149,17 @@
   .date-dropdown-menu {
     min-width: 100%;
     width: 100%;
+    left: 0;
+    right: 0;
   }
 
   .date-range-selector-calendar-grid {
-    gap: 6px;
+    gap: 4px;
   }
 
   .date-range-selector-calendar-day {
-    font-size: 0.9rem;
-    padding: 0.6rem;
+    font-size: 0.85rem;
+    padding: 0.4rem;
   }
 
   .dropdown-item {
