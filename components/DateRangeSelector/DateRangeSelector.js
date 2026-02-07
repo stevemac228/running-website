@@ -18,6 +18,21 @@ export default function DateRangeSelector({ onChange, isOpen, onToggle }) {
   };
 
   const handleDateClick = (date) => {
+    // Check if clicking the same date to un-select it
+    if (start && date.getTime() === start.getTime() && !end) {
+      // Un-select the start date
+      setStart(null);
+      onChange({ start: null, end: null });
+      return;
+    }
+    
+    if (end && date.getTime() === end.getTime()) {
+      // Un-select the end date
+      setEnd(null);
+      onChange({ start, end: null });
+      return;
+    }
+    
     if (!start || (start && end)) {
       setStart(date);
       setEnd(null);
