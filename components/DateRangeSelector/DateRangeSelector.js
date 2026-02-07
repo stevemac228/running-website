@@ -31,7 +31,7 @@ export default function DateRangeSelector({ onChange, isOpen, onToggle }) {
     for (let i = 1; i <= lastDay.getDate(); i++) {
       days.push(new Date(year, monthIndex, i));
     }
-    return days;
+    return { days, firstDayOfMonth: firstDay };
   };
 
   const handleDateClick = (date) => {
@@ -65,8 +65,7 @@ export default function DateRangeSelector({ onChange, isOpen, onToggle }) {
       new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1)
     );
 
-  const daysInMonth = getDaysInMonth(currentMonth);
-  const firstDayOfCurrentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+  const { days: daysInMonth, firstDayOfMonth: firstDayOfCurrentMonth } = getDaysInMonth(currentMonth);
 
   const formatDisplay = () => {
     const formatDayMonth = (date) =>
