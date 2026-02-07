@@ -704,7 +704,6 @@
   position: absolute;
   top: calc(100% + 6px);
   left: 0;
-  right: auto;
   min-width: 220px;
   background: white;
   border: 1px solid var(--runnl-border);
@@ -723,7 +722,6 @@
   padding: 0.75rem;
   box-sizing: border-box;
   /* Align to right edge to prevent overflow */
-  left: auto;
   right: 0;
 }
 
