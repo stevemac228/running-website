@@ -350,6 +350,7 @@ body::-webkit-scrollbar-track {
 
   /* Adjust expanded section margins and add borders when card is expanded (mobile only) */
   .compact-race-card.expanded .compact-race-expanded {
+    /* Margins compensate for mobile card padding (0.875rem) + border increase (1px) */
     margin-left: calc(-0.875rem + 1px);
     margin-right: calc(-0.875rem + 1px);
     margin-bottom: calc(-0.875rem + 1px);
