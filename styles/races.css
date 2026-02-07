@@ -314,6 +314,27 @@
   color: var(--runnl-dark-text);
 }
 
+.date-range-selector-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1.75rem);
+  gap: 0.25rem;
+  justify-items: center;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.date-range-selector-weekday-label {
+  width: 1.75rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--runnl-dark-grey);
+  text-transform: uppercase;
+}
+
 .date-range-selector-calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1.75rem);
@@ -357,6 +378,12 @@
   background-color: #f5f5f5;
   border-color: #ccc;
   transform: scale(1.05);
+}
+
+/* Empty days (padding before first day of month) */
+.date-range-selector-calendar-day.empty {
+  cursor: default;
+  pointer-events: none;
 }
 
 /* Main container for races page */

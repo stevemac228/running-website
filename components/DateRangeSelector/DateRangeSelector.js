@@ -5,11 +5,22 @@ export default function DateRangeSelector({ onChange, isOpen, onToggle }) {
   const [end, setEnd] = useState(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  // Helper: get all days for the current month
+  // Helper: get all days for the current month with padding
   const getDaysInMonth = (month) => {
     const year = month.getFullYear();
     const monthIndex = month.getMonth();
     const days = [];
+    
+    // Get the first day of the month and its day of week
+    const firstDay = new Date(year, monthIndex, 1);
+    const firstDayOfWeek = firstDay.getDay(); // 0 = Sunday
+    
+    // Add null padding for days before the first day
+    for (let i = 0; i < firstDayOfWeek; i++) {
+      days.push(null);
+    }
+    
+    // Add all days of the month
     const lastDay = new Date(year, monthIndex + 1, 0);
     for (let i = 1; i <= lastDay.getDate(); i++) {
       days.push(new Date(year, monthIndex, i));
@@ -92,16 +103,24 @@ export default function DateRangeSelector({ onChange, isOpen, onToggle }) {
             <button onClick={nextMonth} type="button">&gt;</button>
           </div>
 
+          <div className="date-range-selector-weekdays">
+            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+              <div key={day} className="date-range-selector-weekday-label">
+                {day}
+              </div>
+            ))}
+          </div>
+
           <div className="date-range-selector-calendar-grid">
             {daysInMonth.map((date, i) => (
               <div
                 key={i}
                 className={`date-range-selector-calendar-day 
-            ${isSelected(date) ? "selected" : ""}
-            ${isInRange(date) ? "in-range" : ""}`}
-                onClick={() => handleDateClick(date)}
+            ${date ? (isSelected(date) ? "selected" : "") : "empty"}
+            ${date && isInRange(date) ? "in-range" : ""}`}
+                onClick={() => date && handleDateClick(date)}
               >
-                {date.getDate()}
+                {date ? date.getDate() : ""}
               </div>
             ))}
           </div>
