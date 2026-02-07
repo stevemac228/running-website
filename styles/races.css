@@ -1014,6 +1014,10 @@
   display: none;
 }
 
+.mobile-only-inline {
+  display: none;
+}
+
 /* Mobile: hide custom dropdowns, show native selects */
 @media (max-width: 768px) {
   .desktop-only {
@@ -1022,6 +1026,10 @@
 
   .mobile-only {
     display: block;
+  }
+
+  .mobile-only-inline {
+    display: inline;
   }
 }
 
