@@ -332,7 +332,7 @@ export default function Calendar() {
             ? `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day.getDate()}-${index}`
             : `empty-${currentDate.getFullYear()}-${currentDate.getMonth()}-${index}`;
 
-          const isPrevMonth = day && day.getMonth() !== currentDate.getMonth();
+          const isPrevMonth = day && (day.getMonth() !== currentDate.getMonth() || day.getFullYear() !== currentDate.getFullYear());
           
           return (
             <div
