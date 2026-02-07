@@ -94,7 +94,7 @@ export default function DateRangeSelector({ onChange, isOpen, onToggle }) {
         className="filter-dropdown"
         onClick={onToggle}
       >
-        Dates{formatDisplay()}<span className="mobile-only-inline"> ▾</span>
+        Dates{formatDisplay()}<span className="mobile-only-inline"> ▼</span>
       </button>
       {isOpen && (
         <div className="dropdown-menu date-dropdown-menu">
