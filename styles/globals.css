@@ -348,12 +348,17 @@ body::-webkit-scrollbar-track {
     justify-content: center;
   }
 
+  /* Remove border from main card on mobile - only expanded section should have border */
+  .compact-race-card.expanded {
+    border: none;
+  }
+
   /* Adjust expanded section margins and add borders when card is expanded (mobile only) */
   .compact-race-card.expanded .compact-race-expanded {
-    /* Margins compensate for mobile card padding (0.875rem) + border increase (1px) */
-    margin-left: calc(-0.875rem + 1px);
-    margin-right: calc(-0.875rem + 1px);
-    margin-bottom: calc(-0.875rem + 1px);
+    /* Margins compensate for mobile card padding (0.875rem) only - no border on card */
+    margin-left: -0.875rem;
+    margin-right: -0.875rem;
+    margin-bottom: -0.875rem;
     border-left: 2px solid var(--runnl-primary);
     border-right: 2px solid var(--runnl-primary);
     border-bottom: 2px solid var(--runnl-primary);
