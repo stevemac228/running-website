@@ -5,16 +5,33 @@ export default function DateRangeSelector({ onChange, isOpen, onToggle }) {
   const [end, setEnd] = useState(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  // Helper: get all days for the current month
+  // Helper: get all days for the current month including previous month days
   const getDaysInMonth = (month) => {
     const year = month.getFullYear();
     const monthIndex = month.getMonth();
     const days = [];
+    
+    // Get first day of the month
+    const firstDay = new Date(year, monthIndex, 1);
+    const firstDayOfWeek = firstDay.getDay(); // 0 = Sunday
+    
+    // Add previous month's days if month doesn't start on Sunday
+    if (firstDayOfWeek > 0) {
+      const prevMonthEnd = new Date(year, monthIndex, 0);
+      const prevMonthLastDay = prevMonthEnd.getDate();
+      const startDay = prevMonthLastDay - firstDayOfWeek + 1;
+      
+      for (let d = startDay; d <= prevMonthLastDay; d++) {
+        days.push(new Date(year, monthIndex - 1, d));
+      }
+    }
+    
+    // Add current month's days
     const lastDay = new Date(year, monthIndex + 1, 0);
     for (let i = 1; i <= lastDay.getDate(); i++) {
       days.push(new Date(year, monthIndex, i));
     }
-    return days;
+    return { days, prevMonthDaysCount: firstDayOfWeek };
   };
 
   const handleDateClick = (date) => {
@@ -48,7 +65,7 @@ export default function DateRangeSelector({ onChange, isOpen, onToggle }) {
       new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1)
     );
 
-  const daysInMonth = getDaysInMonth(currentMonth);
+  const { days: daysInMonth, prevMonthDaysCount } = getDaysInMonth(currentMonth);
 
   const formatDisplay = () => {
     const formatDayMonth = (date) =>
@@ -92,18 +109,30 @@ export default function DateRangeSelector({ onChange, isOpen, onToggle }) {
             <button onClick={nextMonth} type="button">&gt;</button>
           </div>
 
-          <div className="date-range-selector-calendar-grid">
-            {daysInMonth.map((date, i) => (
-              <div
-                key={i}
-                className={`date-range-selector-calendar-day 
-            ${isSelected(date) ? "selected" : ""}
-            ${isInRange(date) ? "in-range" : ""}`}
-                onClick={() => handleDateClick(date)}
-              >
-                {date.getDate()}
+          <div className="date-range-selector-weekdays">
+            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
+              <div key={d} className="date-range-selector-weekday">
+                {d}
               </div>
             ))}
+          </div>
+
+          <div className="date-range-selector-calendar-grid">
+            {daysInMonth.map((date, i) => {
+              const isPrevMonth = i < prevMonthDaysCount;
+              return (
+                <div
+                  key={i}
+                  className={`date-range-selector-calendar-day 
+            ${isSelected(date) ? "selected" : ""}
+            ${isInRange(date) ? "in-range" : ""}
+            ${isPrevMonth ? "prev-month" : ""}`}
+                  onClick={() => handleDateClick(date)}
+                >
+                  {date.getDate()}
+                </div>
+              );
+            })}
           </div>
           
           {(start || end) && (

@@ -100,9 +100,21 @@ export default function Calendar() {
   const daysInMonth = [];
   const firstDayOfWeek = startOfMonth.getDay(); // 0 = Sunday
 
-  // Fill empty days before the 1st
-  for (let i = 0; i < firstDayOfWeek; i++) {
-    daysInMonth.push(null);
+  // Fill days from previous month before the 1st
+  if (firstDayOfWeek > 0) {
+    const prevMonthEnd = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      0
+    );
+    const prevMonthLastDay = prevMonthEnd.getDate();
+    const startDay = prevMonthLastDay - firstDayOfWeek + 1;
+    
+    for (let d = startDay; d <= prevMonthLastDay; d++) {
+      daysInMonth.push(
+        new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, d)
+      );
+    }
   }
 
   // Fill the days of the month
@@ -320,12 +332,14 @@ export default function Calendar() {
             ? `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day.getDate()}-${index}`
             : `empty-${currentDate.getFullYear()}-${currentDate.getMonth()}-${index}`;
 
+          const isPrevMonth = index < firstDayOfWeek;
+          
           return (
             <div
               key={uniqueKey}
               className={`calendar-day ${isWeekend(day) ? "weekend" : ""} ${
                 isTodayDate ? "today" : ""
-              }`}
+              } ${isPrevMonth ? "prev-month" : ""}`}
             >
               {day ? day.getDate() : ""}
               {getRacesForDay(day).map((race) => (
