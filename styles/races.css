@@ -709,7 +709,7 @@
   border: 1px solid var(--runnl-border);
   border-radius: 12px;
   box-shadow: var(--shadow-lg);
-  z-index: 1000;
+  z-index: 1300;
   max-height: 400px;
   overflow-y: auto;
 }
