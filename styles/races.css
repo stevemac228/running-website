@@ -704,6 +704,7 @@
   position: absolute;
   top: calc(100% + 6px);
   left: 0;
+  right: auto;
   min-width: 220px;
   background: white;
   border: 1px solid var(--runnl-border);
@@ -712,12 +713,18 @@
   z-index: 1000;
   max-height: 400px;
   overflow-y: auto;
+  max-width: calc(100vw - 2rem);
 }
 
 /* Date dropdown specific styling */
 .date-dropdown-menu {
   min-width: 280px;
+  max-width: min(320px, calc(100vw - 2rem));
   padding: 0.75rem;
+  box-sizing: border-box;
+  /* Align to right edge to prevent overflow */
+  left: auto;
+  right: 0;
 }
 
 .date-range-selector-header {
