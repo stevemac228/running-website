@@ -424,18 +424,43 @@ export default function Races() {
                   />
                 </div>
 
-                <select
-                  className="sort-dropdown"
-                  value={sortOption}
-                  onChange={(e) => setSortOption(e.target.value)}
-                >
-                  <option value="date-asc">Date (Soonest)</option>
-                  <option value="date-desc">Date (Latest)</option>
-                  <option value="distance-asc">Distance (Shortest)</option>
-                  <option value="distance-desc">Distance (Longest)</option>
-                  <option value="name-asc">Name (A–Z)</option>
-                  <option value="name-desc">Name (Z–A)</option>
-                </select>
+                {/* Sort Dropdown */}
+                <div className="custom-dropdown" style={{position: 'relative'}}>
+                  <button 
+                    className="filter-dropdown"
+                    onClick={() => setOpenDropdown(openDropdown === 'sort' ? null : 'sort')}
+                  >
+                    Sort
+                  </button>
+                  {openDropdown === 'sort' && (
+                    <div className="dropdown-menu">
+                      <div className="dropdown-item" onClick={() => setSortOption('date-asc')}>
+                        <input type="radio" checked={sortOption === 'date-asc'} readOnly />
+                        <span>Date (Soonest)</span>
+                      </div>
+                      <div className="dropdown-item" onClick={() => setSortOption('date-desc')}>
+                        <input type="radio" checked={sortOption === 'date-desc'} readOnly />
+                        <span>Date (Latest)</span>
+                      </div>
+                      <div className="dropdown-item" onClick={() => setSortOption('distance-asc')}>
+                        <input type="radio" checked={sortOption === 'distance-asc'} readOnly />
+                        <span>Distance (Shortest)</span>
+                      </div>
+                      <div className="dropdown-item" onClick={() => setSortOption('distance-desc')}>
+                        <input type="radio" checked={sortOption === 'distance-desc'} readOnly />
+                        <span>Distance (Longest)</span>
+                      </div>
+                      <div className="dropdown-item" onClick={() => setSortOption('name-asc')}>
+                        <input type="radio" checked={sortOption === 'name-asc'} readOnly />
+                        <span>Name (A–Z)</span>
+                      </div>
+                      <div className="dropdown-item" onClick={() => setSortOption('name-desc')}>
+                        <input type="radio" checked={sortOption === 'name-desc'} readOnly />
+                        <span>Name (Z–A)</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
 
                 <div className="view-segment" role="tablist" aria-label="View mode">
                   <button
