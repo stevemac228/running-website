@@ -340,6 +340,7 @@ header {
   .header-text {
     display: flex;
     margin: 0 auto;
+    margin-left: 56px;
   }
 
   .header-text h1 {
