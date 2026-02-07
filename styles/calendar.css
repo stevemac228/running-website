@@ -209,11 +209,6 @@
 .today {
   border: #0b3af5 thin solid;
 }
-
-.prev-month {
-  opacity: 0.5;
-  background-color: #f9f9f9;
-}
 /* #endregion */
 
 /* #region Calendar-Racechip*/

@@ -300,8 +300,8 @@ export default function Races() {
                 <SearchFilter onSearch={handleSearch} initialValue={searchTerm} showDropdown={false} />
               </div>
               <div className="races-controls">
-                {/* Distance Dropdown - Desktop Custom Dropdown */}
-                <div className="custom-dropdown desktop-only" style={{position: 'relative'}}>
+                {/* Distance Dropdown */}
+                <div className="custom-dropdown" style={{position: 'relative'}}>
                   <button 
                     className="filter-dropdown"
                     onClick={() => setOpenDropdown(openDropdown === 'distance' ? null : 'distance')}
@@ -337,30 +337,8 @@ export default function Races() {
                   )}
                 </div>
 
-                {/* Distance Dropdown - Mobile Native Select */}
-                <select
-                  className="filter-dropdown mobile-only"
-                  value={activeFilters.find(f => ["5k", "10k", "half", "full", "ultra"].includes(f)) || ""}
-                  onChange={(e) => {
-                    // Clear all distance filters first
-                    const newFilters = activeFilters.filter(f => !["5k", "10k", "half", "full", "ultra"].includes(f));
-                    if (e.target.value) {
-                      setActiveFilters([...newFilters, e.target.value]);
-                    } else {
-                      setActiveFilters(newFilters);
-                    }
-                  }}
-                >
-                  <option value="">Distance (All)</option>
-                  <option value="5k">5K</option>
-                  <option value="10k">10K</option>
-                  <option value="half">Half Marathon</option>
-                  <option value="full">Marathon</option>
-                  <option value="ultra">Ultra</option>
-                </select>
-
-                {/* Format Dropdown - Desktop Custom Dropdown */}
-                <div className="custom-dropdown desktop-only" style={{position: 'relative'}}>
+                {/* Format Dropdown (Single Select) */}
+                <div className="custom-dropdown" style={{position: 'relative'}}>
                   <button 
                     className="filter-dropdown"
                     onClick={() => setOpenDropdown(openDropdown === 'format' ? null : 'format')}
@@ -381,19 +359,8 @@ export default function Races() {
                   )}
                 </div>
 
-                {/* Format Dropdown - Mobile Native Select */}
-                <select
-                  className="filter-dropdown mobile-only"
-                  value={formatFilter}
-                  onChange={(e) => setFormatFilter(e.target.value)}
-                >
-                  <option value="">Format (All)</option>
-                  <option value="funRun">Fun Run</option>
-                  <option value="competitive">Competitive</option>
-                </select>
-
-                {/* Terrain Dropdown - Desktop Custom Dropdown */}
-                <div className="custom-dropdown desktop-only" style={{position: 'relative'}}>
+                {/* Terrain Dropdown */}
+                <div className="custom-dropdown" style={{position: 'relative'}}>
                   <button 
                     className="filter-dropdown"
                     onClick={() => setOpenDropdown(openDropdown === 'terrain' ? null : 'terrain')}
@@ -422,29 +389,8 @@ export default function Races() {
                   )}
                 </div>
 
-                {/* Terrain Dropdown - Mobile Native Select */}
-                <select
-                  className="filter-dropdown mobile-only"
-                  value={activeFilters.find(f => ["trail", "road", "gravel", "track"].includes(f)) || ""}
-                  onChange={(e) => {
-                    // Clear all terrain filters first
-                    const newFilters = activeFilters.filter(f => !["trail", "road", "gravel", "track"].includes(f));
-                    if (e.target.value) {
-                      setActiveFilters([...newFilters, e.target.value]);
-                    } else {
-                      setActiveFilters(newFilters);
-                    }
-                  }}
-                >
-                  <option value="">Terrain (All)</option>
-                  <option value="trail">Trail</option>
-                  <option value="road">Road</option>
-                  <option value="gravel">Gravel</option>
-                  <option value="track">Track</option>
-                </select>
-
-                {/* Features Dropdown - Desktop Custom Dropdown */}
-                <div className="custom-dropdown desktop-only" style={{position: 'relative'}}>
+                {/* Features Dropdown */}
+                <div className="custom-dropdown" style={{position: 'relative'}}>
                   <button 
                     className="filter-dropdown"
                     onClick={() => setOpenDropdown(openDropdown === 'features' ? null : 'features')}
@@ -468,26 +414,6 @@ export default function Races() {
                     </div>
                   )}
                 </div>
-
-                {/* Features Dropdown - Mobile Native Select */}
-                <select
-                  className="filter-dropdown mobile-only"
-                  value={activeFilters.find(f => ["medal", "reception", "tshirt"].includes(f)) || ""}
-                  onChange={(e) => {
-                    // Clear all feature filters first
-                    const newFilters = activeFilters.filter(f => !["medal", "reception", "tshirt"].includes(f));
-                    if (e.target.value) {
-                      setActiveFilters([...newFilters, e.target.value]);
-                    } else {
-                      setActiveFilters(newFilters);
-                    }
-                  }}
-                >
-                  <option value="">Features (All)</option>
-                  <option value="medal">Medal</option>
-                  <option value="reception">Reception</option>
-                  <option value="tshirt">T-Shirt</option>
-                </select>
 
                 {/* Date Range Dropdown */}
                 <div className="custom-dropdown" style={{position: 'relative'}}>
