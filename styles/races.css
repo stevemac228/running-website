@@ -1053,6 +1053,7 @@
     max-width: unset;
     margin: 0;
     padding: 0 0.75rem;
+    box-sizing: border-box; /* Ensure padding is included in width calculation */
   }
 
   .races-search-controls .search-wrapper {
@@ -1174,6 +1175,21 @@
   /* Distance slider in dropdown */
   .dropdown-menu .distance-range-slider {
     padding: 0.5rem;
+    /* Ensure slider doesn't cause horizontal overflow on mobile */
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Contain slider within bounds on mobile to prevent overflow */
+  .dropdown-menu .slider-container {
+    padding: 0 10px; /* Add padding to contain the thumb at edges */
+    box-sizing: border-box;
+  }
+  
+  .dropdown-menu .slider-track,
+  .dropdown-menu .range-slider {
+    width: calc(100% - 20px); /* Account for thumb width at edges */
+    left: 10px; /* Center the slider track */
   }
 
   /* Dropdown items more compact */
