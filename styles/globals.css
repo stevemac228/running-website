@@ -102,6 +102,7 @@ body::-webkit-scrollbar-track {
   border-left: 2px solid var(--runnl-primary);
   border-right: 2px solid var(--runnl-primary);
   border-bottom: 2px solid var(--runnl-primary);
+  border-top: none; /* Remove inner border to keep only outer border */
 }
 
 .compact-race-card-main {
