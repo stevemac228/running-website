@@ -94,11 +94,14 @@ body::-webkit-scrollbar-track {
   box-shadow: var(--shadow-lg);
 }
 
-/* Adjust expanded section margins when card is expanded to account for thicker border */
+/* Adjust expanded section margins and add borders when card is expanded */
 .compact-race-card.expanded .compact-race-expanded {
   margin-left: calc(-1.25rem + 1px);
   margin-right: calc(-1.25rem + 1px);
   margin-bottom: calc(-1.25rem + 1px);
+  border-left: 2px solid var(--runnl-primary);
+  border-right: 2px solid var(--runnl-primary);
+  border-bottom: 2px solid var(--runnl-primary);
 }
 
 .compact-race-card-main {
