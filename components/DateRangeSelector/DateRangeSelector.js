@@ -118,22 +118,24 @@ export default function DateRangeSelector({ onChange, isOpen, onToggle }) {
           </div>
 
           <div className="date-range-selector-calendar-grid">
-            {daysInMonth.map((date, i) => {
+            {(() => {
               const firstDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
-              const isPrevMonth = date < firstDayOfMonth;
-              return (
-                <div
-                  key={i}
-                  className={`date-range-selector-calendar-day 
+              return daysInMonth.map((date, i) => {
+                const isPrevMonth = date < firstDayOfMonth;
+                return (
+                  <div
+                    key={i}
+                    className={`date-range-selector-calendar-day 
             ${isSelected(date) ? "selected" : ""}
             ${isInRange(date) ? "in-range" : ""}
             ${isPrevMonth ? "prev-month" : ""}`}
-                  onClick={() => handleDateClick(date)}
-                >
-                  {date.getDate()}
-                </div>
-              );
-            })}
+                    onClick={() => handleDateClick(date)}
+                  >
+                    {date.getDate()}
+                  </div>
+                );
+              });
+            })()}
           </div>
           
           {(start || end) && (
