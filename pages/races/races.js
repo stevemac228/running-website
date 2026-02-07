@@ -393,7 +393,7 @@ export default function Races() {
                       </div>
                       <div className="dropdown-item" onClick={() => toggleFilter('track')}>
                         <input type="checkbox" checked={activeFilters.includes('track')} readOnly />
-                        <span style={{fontSize: '18px', flexShrink: 0}}>🏃</span>
+                        <span style={{fontSize: '18px', flexShrink: 0}}>🏟️</span>
                         <span>Track</span>
                       </div>
                     </div>
