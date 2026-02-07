@@ -19,10 +19,11 @@ export default function DateRangeSelector({ onChange, isOpen, onToggle }) {
 
   const handleDateClick = (date) => {
     // Check if clicking the same date to un-select it
-    if (start && date.getTime() === start.getTime() && !end) {
+    if (start && date.getTime() === start.getTime()) {
       // Un-select the start date
-      setStart(null);
-      onChange({ start: null, end: null });
+      setStart(end);
+      setEnd(null);
+      onChange({ start: end, end: null });
       return;
     }
     
