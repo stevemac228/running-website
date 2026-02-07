@@ -21,9 +21,16 @@ export default function DateRangeSelector({ onChange, isOpen, onToggle }) {
     // Check if clicking the same date to un-select it
     if (start && date.getTime() === start.getTime()) {
       // Un-select the start date
-      setStart(end);
-      setEnd(null);
-      onChange({ start: end, end: null });
+      if (end) {
+        // If end exists, promote it to start
+        setStart(end);
+        setEnd(null);
+        onChange({ start: end, end: null });
+      } else {
+        // If no end, clear the start
+        setStart(null);
+        onChange({ start: null, end: null });
+      }
       return;
     }
     
