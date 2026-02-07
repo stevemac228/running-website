@@ -354,6 +354,8 @@ body::-webkit-scrollbar-track {
 /* #region Race Detail Page */
 .race-detail-main {
   padding: 24px;
+  position: relative;
+  z-index: 1;
 }
 
 .race-detail-not-found-main {
