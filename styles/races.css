@@ -1002,6 +1002,30 @@
 }
 
 /* ========================================
+   DESKTOP/MOBILE VISIBILITY
+   ======================================== */
+
+/* Desktop: show custom dropdowns, hide native selects */
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+/* Mobile: hide custom dropdowns, show native selects */
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+}
+
+/* ========================================
    MOBILE RESPONSIVE STYLES
    ======================================== */
 
