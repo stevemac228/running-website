@@ -340,7 +340,6 @@
   grid-template-columns: repeat(7, 1.75rem);
   gap: 0.25rem;
   justify-items: center;
-  margin-top: 0.5rem;
 }
 
 .date-range-selector-calendar-day {
