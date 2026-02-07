@@ -312,22 +312,27 @@ export default function Races() {
                     <div className="dropdown-menu">
                       <div className="dropdown-item" onClick={() => toggleFilter('5k')}>
                         <input type="checkbox" checked={activeFilters.includes('5k')} readOnly />
+                        <span style={{fontSize: '18px', flexShrink: 0}}>🏃</span>
                         <span>5K</span>
                       </div>
                       <div className="dropdown-item" onClick={() => toggleFilter('10k')}>
                         <input type="checkbox" checked={activeFilters.includes('10k')} readOnly />
+                        <span style={{fontSize: '18px', flexShrink: 0}}>🏃‍♂️</span>
                         <span>10K</span>
                       </div>
                       <div className="dropdown-item" onClick={() => toggleFilter('half')}>
                         <input type="checkbox" checked={activeFilters.includes('half')} readOnly />
+                        <span style={{fontSize: '18px', flexShrink: 0}}>🏃‍♀️</span>
                         <span>Half Marathon</span>
                       </div>
                       <div className="dropdown-item" onClick={() => toggleFilter('full')}>
                         <input type="checkbox" checked={activeFilters.includes('full')} readOnly />
+                        <span style={{fontSize: '18px', flexShrink: 0}}>🏅</span>
                         <span>Marathon</span>
                       </div>
                       <div className="dropdown-item" onClick={() => toggleFilter('ultra')}>
                         <input type="checkbox" checked={activeFilters.includes('ultra')} readOnly />
+                        <span style={{fontSize: '18px', flexShrink: 0}}>⚡</span>
                         <span>Ultra</span>
                       </div>
                       <div style={{padding: '10px', borderTop: '1px solid #ddd'}}>
@@ -349,10 +354,12 @@ export default function Races() {
                     <div className="dropdown-menu">
                       <div className="dropdown-item" onClick={() => setFormatFilter(formatFilter === 'funRun' ? '' : 'funRun')}>
                         <input type="radio" checked={formatFilter === 'funRun'} readOnly />
+                        <span style={{fontSize: '18px', flexShrink: 0}}>🎉</span>
                         <span>Fun Run</span>
                       </div>
                       <div className="dropdown-item" onClick={() => setFormatFilter(formatFilter === 'competitive' ? '' : 'competitive')}>
                         <input type="radio" checked={formatFilter === 'competitive'} readOnly />
+                        <span style={{fontSize: '18px', flexShrink: 0}}>🏆</span>
                         <span>Competitive</span>
                       </div>
                     </div>
@@ -371,18 +378,22 @@ export default function Races() {
                     <div className="dropdown-menu">
                       <div className="dropdown-item" onClick={() => toggleFilter('trail')}>
                         <input type="checkbox" checked={activeFilters.includes('trail')} readOnly />
+                        <span style={{fontSize: '18px', flexShrink: 0}}>🏔️</span>
                         <span>Trail</span>
                       </div>
                       <div className="dropdown-item" onClick={() => toggleFilter('road')}>
                         <input type="checkbox" checked={activeFilters.includes('road')} readOnly />
+                        <span style={{fontSize: '18px', flexShrink: 0}}>🛣️</span>
                         <span>Road</span>
                       </div>
                       <div className="dropdown-item" onClick={() => toggleFilter('gravel')}>
                         <input type="checkbox" checked={activeFilters.includes('gravel')} readOnly />
+                        <span style={{fontSize: '18px', flexShrink: 0}}>🪨</span>
                         <span>Gravel</span>
                       </div>
                       <div className="dropdown-item" onClick={() => toggleFilter('track')}>
                         <input type="checkbox" checked={activeFilters.includes('track')} readOnly />
+                        <span style={{fontSize: '18px', flexShrink: 0}}>🏃</span>
                         <span>Track</span>
                       </div>
                     </div>
@@ -401,14 +412,23 @@ export default function Races() {
                     <div className="dropdown-menu">
                       <div className="dropdown-item" onClick={() => toggleFilter('medal')}>
                         <input type="checkbox" checked={activeFilters.includes('medal')} readOnly />
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{flexShrink: 0}}>
+                          <path d="M15.9201 12.8959L19.2583 8.89003C19.533 8.5604 19.6704 8.39557 19.7681 8.21065C19.8548 8.0466 19.9183 7.87128 19.9567 7.68973C20 7.48508 20 7.27053 20 6.84144V6.2C20 5.07989 20 4.51984 19.782 4.09202C19.5903 3.71569 19.2843 3.40973 18.908 3.21799C18.4802 3 17.9201 3 16.8 3H7.2C6.0799 3 5.51984 3 5.09202 3.21799C4.71569 3.40973 4.40973 3.71569 4.21799 4.09202C4 4.51984 4 5.07989 4 6.2V6.84144C4 7.27053 4 7.48508 4.04328 7.68973C4.08168 7.87128 4.14515 8.0466 4.23188 8.21065C4.32964 8.39557 4.467 8.5604 4.74169 8.89003L8.07995 12.8959M13.4009 11.1989L19.3668 3.53988M10.5991 11.1989L4.6394 3.53414M6.55673 6H17.4505M17 16C17 18.7614 14.7614 21 12 21C9.23858 21 7 18.7614 7 16C7 13.2386 9.23858 11 12 11C14.7614 11 17 13.2386 17 16Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+                        </svg>
                         <span>Medal</span>
                       </div>
                       <div className="dropdown-item" onClick={() => toggleFilter('reception')}>
                         <input type="checkbox" checked={activeFilters.includes('reception')} readOnly />
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{flexShrink: 0}}>
+                          <path d="M5.5713 14.5L9.46583 18.4141M18.9996 3.60975C17.4044 3.59505 16.6658 4.33233 16.4236 5.07743C16.2103 5.73354 16.4052 7.07735 15.896 8.0727C15.4091 9.02443 14.1204 9.5617 12.6571 9.60697M20 7.6104L20.01 7.61049M19 15.96L19.01 15.9601M7.00001 3.94926L7.01001 3.94936M19 11.1094C17.5 11.1094 16.5 11.6094 15.5949 12.5447M10.2377 7.18796C11 6.10991 11.5 5.10991 11.0082 3.52734M3.53577 20.4645L7.0713 9.85791L14.1424 16.929L3.53577 20.4645Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
                         <span>Reception</span>
                       </div>
                       <div className="dropdown-item" onClick={() => toggleFilter('tshirt')}>
                         <input type="checkbox" checked={activeFilters.includes('tshirt')} readOnly />
+                        <svg width="18" height="18" viewBox="0 0 470.381 470.381" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style={{flexShrink: 0}}>
+                          <path d="M462.158,96.555L294.402,47.959c-1.033-0.3-2.098-0.45-3.17-0.45H179.155c-1.074,0-2.142,0.15-3.171,0.45L8.224,96.555C3.355,97.968,0,102.425,0,107.499v97.198c0,3.511,1.619,6.833,4.396,8.991c2.771,2.159,6.376,2.927,9.787,2.059l73.95-18.65v214.38c0,6.293,5.103,11.395,11.396,11.395h271.329c6.293,0,11.396-5.102,11.396-11.395V197.096l73.943,18.65c3.41,0.868,7.021,0.1,9.793-2.059s4.391-5.48,4.391-8.991v-97.198C470.381,102.424,467.031,97.968,462.158,96.555z M283.236,70.298c-3.311,23.586-23.564,41.808-48.045,41.808c-24.482,0-44.734-18.222-48.045-41.808H283.236z M447.592,190.069l-73.945-18.65c-3.406-0.868-7.023-0.095-9.793,2.059c-2.771,2.159-4.391,5.48-4.391,8.991v217.614H110.924V182.468c0-3.511-1.619-6.833-4.396-8.991c-2.771-2.153-6.376-2.927-9.787-2.059l-73.951,18.65v-74.007l142.032-41.146c5.481,33.945,34.903,59.98,70.368,59.98c35.47,0,64.886-26.035,70.369-59.98l142.033,41.147V190.069z" />
+                        </svg>
                         <span>T-Shirt</span>
                       </div>
                     </div>
