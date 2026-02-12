@@ -361,7 +361,7 @@
 
 /* Main container for races page */
 .races-page-container {
-  padding: 1rem;
+  padding-bottom: 1rem;
 }
 
 /* Search bar - centered */
@@ -858,7 +858,6 @@
 /* List + Map flex container inside the right content area */
 .races-list-map-flex {
   display: flex;
-  gap: 1rem;
   align-items: flex-start;
   height: calc(100vh - 250px);
   min-height: 500px;
@@ -896,7 +895,6 @@
 /* Firefox scrollbar */
 .races-list-column {
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
 }
 
 .races-list-map-flex.map-on .races-list-column {
