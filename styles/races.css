@@ -859,9 +859,9 @@
 .races-list-map-flex {
   display: flex;
   align-items: flex-start;
-  height: calc(100vh - 250px);
+  height: calc(100vh - 170px);
   min-height: 500px;
-  max-height: calc(100vh - 250px);
+  max-height: calc(100vh - 170px);
 }
 .races-list-column {
   flex: 1 1 100%;
@@ -987,8 +987,8 @@
 /* Tablet and below */
 @media (max-width: 1024px) {
   .races-list-map-flex {
-    height: calc(100vh - 280px);
-    max-height: calc(100vh - 280px);
+    height: calc(100vh - 180px);
+    max-height: calc(100vh - 180px);
   }
 
   .races-list-map-flex.map-on .races-list-column {
