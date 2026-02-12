@@ -592,6 +592,10 @@
   margin-bottom: 1rem;
   gap: 1rem;
   flex-wrap: wrap;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0;
 }
 
 .races-count {
@@ -859,9 +863,9 @@
 .races-list-map-flex {
   display: flex;
   align-items: flex-start;
-  height: calc(100vh - 170px);
+  height: 100vh;
   min-height: 500px;
-  max-height: calc(100vh - 170px);
+  max-height: calc(100vh - 140px);
 }
 .races-list-column {
   flex: 1 1 100%;
@@ -872,25 +876,6 @@
   padding-top: 0.5rem;
 }
 
-/* Modern sleek scrollbar for races list */
-.races-list-column::-webkit-scrollbar {
-  width: 8px;
-}
-
-.races-list-column::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
-}
-
-.races-list-column::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  transition: background 0.2s;
-}
-
-.races-list-column::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.35);
-}
 
 /* Firefox scrollbar */
 .races-list-column {

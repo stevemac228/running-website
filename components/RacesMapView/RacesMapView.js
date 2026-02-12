@@ -424,7 +424,6 @@ export default function RacesMapView({ filteredRaces = [], expandedRaceId = null
         width: "100%",
         height: "100%",
         minHeight: "500px",
-        borderRadius: "8px",
         overflow: "hidden",
         backgroundColor: "#f0f0f0",
         position: "relative",
