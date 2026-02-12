@@ -387,7 +387,7 @@
 
 /* Main container for races page */
 .races-page-container {
-  padding: 1rem;
+  padding-bottom: 1rem;
 }
 
 /* Search bar - centered */
@@ -618,6 +618,10 @@
   margin-bottom: 1rem;
   gap: 1rem;
   flex-wrap: wrap;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0;
 }
 
 .races-count {
@@ -738,12 +742,22 @@
   z-index: 1000;
   max-height: 400px;
   overflow-y: auto;
+  max-width: calc(100vw - 2rem);
 }
 
 /* Date dropdown specific styling */
 .date-dropdown-menu {
   min-width: 280px;
+<<<<<<< copilot/add-weekday-labels-to-calendar
   padding: 0.5rem;
+=======
+  max-width: calc(100vw - 2rem);
+  padding: 0.75rem;
+  box-sizing: border-box;
+  /* Align to right edge to prevent overflow */
+  left: auto;
+  right: 0;
+>>>>>>> main
 }
 
 .date-range-selector-header {
@@ -881,11 +895,10 @@
 /* List + Map flex container inside the right content area */
 .races-list-map-flex {
   display: flex;
-  gap: 1rem;
   align-items: flex-start;
-  height: calc(100vh - 250px);
+  height: 100vh;
   min-height: 500px;
-  max-height: calc(100vh - 250px);
+  max-height: calc(100vh - 140px);
 }
 .races-list-column {
   flex: 1 1 100%;
@@ -896,30 +909,10 @@
   padding-top: 0.5rem;
 }
 
-/* Modern sleek scrollbar for races list */
-.races-list-column::-webkit-scrollbar {
-  width: 8px;
-}
-
-.races-list-column::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
-}
-
-.races-list-column::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  transition: background 0.2s;
-}
-
-.races-list-column::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.35);
-}
 
 /* Firefox scrollbar */
 .races-list-column {
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
 }
 
 .races-list-map-flex.map-on .races-list-column {
@@ -1012,8 +1005,8 @@
 /* Tablet and below */
 @media (max-width: 1024px) {
   .races-list-map-flex {
-    height: calc(100vh - 280px);
-    max-height: calc(100vh - 280px);
+    height: calc(100vh - 180px);
+    max-height: calc(100vh - 180px);
   }
 
   .races-list-map-flex.map-on .races-list-column {
@@ -1082,6 +1075,7 @@
     max-width: unset;
     margin: 0;
     padding: 0 0.75rem;
+    box-sizing: border-box; /* Ensure padding is included in width calculation */
   }
 
   .races-search-controls .search-wrapper {
@@ -1123,6 +1117,7 @@
   .date-dropdown-menu {
     min-width: 100%;
     width: 100%;
+<<<<<<< copilot/add-weekday-labels-to-calendar
     padding: 0.25rem;
     box-sizing: border-box;
   }
@@ -1137,13 +1132,25 @@
 
   .date-range-selector-calendar-grid {
     grid-template-columns: repeat(7, 1fr);
+=======
+    left: 0;
+    right: 0;
+  }
+
+  .date-range-selector-calendar-grid {
+>>>>>>> main
     gap: 4px;
   }
 
   .date-range-selector-calendar-day {
+<<<<<<< copilot/add-weekday-labels-to-calendar
     width: 100%;
     aspect-ratio: 1;
     font-size: 0.9rem;
+=======
+    font-size: 0.85rem;
+    padding: 0.4rem;
+>>>>>>> main
   }
 
   .dropdown-item {
@@ -1215,6 +1222,21 @@
   /* Distance slider in dropdown */
   .dropdown-menu .distance-range-slider {
     padding: 0.5rem;
+    /* Ensure slider doesn't cause horizontal overflow on mobile */
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Contain slider within bounds on mobile to prevent overflow */
+  .dropdown-menu .slider-container {
+    padding: 0 10px; /* Add padding to contain the thumb at edges */
+    box-sizing: border-box;
+  }
+  
+  .dropdown-menu .slider-track,
+  .dropdown-menu .range-slider {
+    width: calc(100% - 20px); /* Account for thumb width at edges */
+    left: 10px; /* Center the slider track */
   }
 
   /* Dropdown items more compact */
