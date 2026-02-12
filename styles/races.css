@@ -1126,21 +1126,21 @@
   }
 
   .date-range-selector-weekdays {
-    grid-template-columns: repeat(7, 3.1rem);
+    grid-template-columns: repeat(7, 1fr);
   }
 
   .date-range-selector-weekday-label {
-    width: 3.1rem;
+    width: 100%;
   }
 
   .date-range-selector-calendar-grid {
-    grid-template-columns: repeat(7, 3.1rem);
+    grid-template-columns: repeat(7, 1fr);
     gap: 6px;
   }
 
   .date-range-selector-calendar-day {
-    width: 3.1rem;
-    height: 3.1rem;
+    width: 100%;
+    aspect-ratio: 1;
     font-size: 0.9rem;
   }
 
