@@ -1123,6 +1123,8 @@
   .date-dropdown-menu {
     min-width: 100%;
     width: 100%;
+    padding: 0.25rem;
+    box-sizing: border-box;
   }
 
   .date-range-selector-weekdays {
@@ -1135,7 +1137,7 @@
 
   .date-range-selector-calendar-grid {
     grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
+    gap: 4px;
   }
 
   .date-range-selector-calendar-day {
