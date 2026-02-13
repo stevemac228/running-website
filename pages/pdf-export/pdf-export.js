@@ -27,6 +27,21 @@ function useDebounce(value, delay) {
   return debouncedValue;
 }
 
+// Format date with day of week and ordinal suffix (e.g., "Thu 12th")
+function formatDateWithDay(dateString) {
+  const date = new Date(dateString);
+  const dayOfWeek = date.toLocaleString('en-US', { weekday: 'short' });
+  const dayOfMonth = date.getDate();
+  
+  // Add ordinal suffix
+  let suffix = 'th';
+  if (dayOfMonth % 10 === 1 && dayOfMonth !== 11) suffix = 'st';
+  else if (dayOfMonth % 10 === 2 && dayOfMonth !== 12) suffix = 'nd';
+  else if (dayOfMonth % 10 === 3 && dayOfMonth !== 13) suffix = 'rd';
+  
+  return `${dayOfWeek} ${dayOfMonth}${suffix}`;
+}
+
 export default function PDFExport() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRaces, setSelectedRaces] = useState([]);
@@ -260,8 +275,7 @@ export default function PDFExport() {
           // Build compact info line
           let infoLine = "";
           if (selectedFields.date) {
-            const date = new Date(race.date);
-            infoLine += `${date.getDate()}`;
+            infoLine += formatDateWithDay(race.date);
           }
           if (selectedFields.distance) {
             const distanceText = race.distance === "∞" ? "∞" : `${race.distance}km`;
