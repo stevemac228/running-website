@@ -312,22 +312,7 @@ export default function PDFExport() {
             yPosition += 5;
           }
 
-          // Registration and cost fields with separator
-          const hasRegOrCostFields = (
-            (selectedFields.registrationCost && race.registrationCost) ||
-            (selectedFields.earlyBirdCost && race.earlyBirdCost) ||
-            (selectedFields.registrationStart && race.registrationStart) ||
-            (selectedFields.registrationDeadline && race.registrationDeadline)
-          );
-
-          if (hasRegOrCostFields) {
-            // Add small separator line
-            yPosition += 2;
-            doc.setLineWidth(0.3);
-            doc.line(margin + 10, yPosition, pageWidth - margin - 10, yPosition);
-            yPosition += 3;
-          }
-
+          // Registration and cost fields
           if (selectedFields.registrationCost && race.registrationCost) {
             doc.text(`Cost: ${race.registrationCost}`, margin + 10, yPosition);
             yPosition += 4;
