@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { createPortal } from "react-dom";
 import Head from "next/head";
 import races from "../../data/races.json";
 import Header from "../../components/Header/Header";
@@ -27,6 +28,9 @@ export default function PDFExport() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRaces, setSelectedRaces] = useState([]);
   const [exportType, setExportType] = useState("list"); // "list" or "calendar"
+  const [showResults, setShowResults] = useState(false);
+  const [dropdownStyle, setDropdownStyle] = useState(null);
+  const searchWrapperRef = useRef(null);
   const [selectedFields, setSelectedFields] = useState({
     name: true,
     date: true,
@@ -72,19 +76,57 @@ export default function PDFExport() {
 
   const debouncedSearchTerm = useDebounce(searchTerm, 150);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchWrapperRef.current && !searchWrapperRef.current.contains(e.target)) {
+        setShowResults(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Compute dropdown position
+  useEffect(() => {
+    if (!showResults || !searchWrapperRef.current) {
+      setDropdownStyle(null);
+      return;
+    }
+
+    const update = () => {
+      const rect = searchWrapperRef.current.getBoundingClientRect();
+      setDropdownStyle({
+        left: Math.max(rect.left, 0) + window.scrollX,
+        top: rect.bottom + window.scrollY,
+        width: rect.width,
+      });
+    };
+
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("scroll", update, true);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update, true);
+    };
+  }, [showResults]);
+
   // Memoized search handler
   const handleSearch = useCallback((term) => {
     setSearchTerm(term);
+    setShowResults(term.trim().length > 0);
   }, []);
 
   // Apply fuzzy search
   const applyFuzzySearch = useCallback((term, raceList) => {
-    if (!term || term.trim() === "") return raceList;
+    if (!term || term.trim() === "") return [];
     return filterRacesBySearch(raceList, term, fuseRef.current);
   }, []);
 
   // Filter races based on search term
   const filteredRaces = useMemo(() => {
+    if (!debouncedSearchTerm.trim()) return [];
     return applyFuzzySearch(debouncedSearchTerm, races);
   }, [debouncedSearchTerm, applyFuzzySearch]);
 
@@ -92,6 +134,8 @@ export default function PDFExport() {
   const addRace = (race) => {
     if (!selectedRaces.find(r => r.id === race.id)) {
       setSelectedRaces([...selectedRaces, race]);
+      setShowResults(false);
+      setSearchTerm("");
     }
   };
 
@@ -281,49 +325,61 @@ export default function PDFExport() {
       </Head>
       <Header />
       <main className="pdf-export-page">
-        <div className="pdf-export-container">
+        <div className="pdf-export-hero">
           <h1 className="pdf-export-title">PDF Export</h1>
           <p className="pdf-export-subtitle">
             Search for races, add them to your list, select which information to include, and export to PDF.
           </p>
+        </div>
 
+        <div className="pdf-export-container">
           {/* Search Section */}
-          <div className="pdf-export-section">
-            <h2 className="section-title">Search Races</h2>
-            <div className="pdf-search-wrapper">
-              <img src="/icons/search.svg" alt="Search" className="pdf-search-icon" />
+          <div className="pdf-search-section">
+            <div className="pdf-search-wrapper" ref={searchWrapperRef}>
+              <img src="/icons/search.svg" alt="Search" className="search-icon" />
               <input
                 type="text"
                 placeholder="Search races, marathon, trail..."
                 value={searchTerm}
                 onChange={(e) => handleSearch(e.target.value)}
+                onFocus={() => { if (filteredRaces.length > 0) setShowResults(true); }}
                 className="pdf-search-input"
               />
               {searchTerm && (
-                <button className="pdf-search-clear" onClick={() => handleSearch("")} aria-label="Clear search">
+                <button className="clear-btn" onClick={() => { setSearchTerm(""); setShowResults(false); }} aria-label="Clear search">
                   ×
                 </button>
               )}
             </div>
-            <div className="search-results">
-              {debouncedSearchTerm && filteredRaces.length > 0 && (
-                <div className="search-results-list">
-                  {filteredRaces.slice(0, 10).map((race) => (
-                    <div key={race.id} className="search-result-item" onClick={() => addRace(race)}>
-                      <div className="search-result-info">
-                        <span className="search-result-name">{race.name}</span>
-                        <span className="search-result-details">
-                          {race.distance === "∞" ? "∞" : `${race.distance}km`} - {race.location} - {formatDate(race.date)}
-                        </span>
-                      </div>
-                      <button className="add-race-btn" onClick={(e) => { e.stopPropagation(); addRace(race); }}>
-                        Add
-                      </button>
+
+            {/* Search results dropdown - rendered via portal */}
+            {showResults && filteredRaces.length > 0 && dropdownStyle && typeof window !== 'undefined' && createPortal(
+              <div
+                className="search-results pdf-search-results"
+                style={{
+                  position: "absolute",
+                  left: `${dropdownStyle.left}px`,
+                  top: `${dropdownStyle.top}px`,
+                  width: `${dropdownStyle.width}px`,
+                  boxSizing: "border-box",
+                  zIndex: 2147483647,
+                }}
+              >
+                {filteredRaces.slice(0, 10).map((race) => (
+                  <div
+                    key={race.id}
+                    className="search-result-item"
+                    onClick={() => addRace(race)}
+                  >
+                    <div className="result-title">{race.name}</div>
+                    <div className="result-sub">
+                      {race.distance === "∞" ? "∞" : `${race.distance}km`} · {race.location} · {formatDate(race.date)}
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                  </div>
+                ))}
+              </div>,
+              document.body
+            )}
           </div>
 
           {/* Selected Races Section */}
