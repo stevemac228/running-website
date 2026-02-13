@@ -183,14 +183,39 @@ export default function PDFExport() {
     if (exportType === "list") {
       // Simple list format (previously "calendar" - month-grouped condensed view)
       const racesByMonth = {};
+      const raceCountByYear = {};
+      
       selectedRaces.forEach(race => {
         const date = new Date(race.date);
+        const year = date.getFullYear();
         const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+        
+        // Count races by year
+        raceCountByYear[year] = (raceCountByYear[year] || 0) + 1;
+        
         if (!racesByMonth[monthYear]) {
           racesByMonth[monthYear] = [];
         }
         racesByMonth[monthYear].push(race);
       });
+
+      // Determine which years to show
+      const years = Object.keys(raceCountByYear).map(Number);
+      const showYearFor = new Set();
+      
+      if (years.length > 1) {
+        // Multiple years - show year only for the minority
+        const sortedYears = years.sort((a, b) => raceCountByYear[a] - raceCountByYear[b]);
+        const minCount = raceCountByYear[sortedYears[0]];
+        
+        // Add all years with the minimum count (in case of ties)
+        sortedYears.forEach(year => {
+          if (raceCountByYear[year] === minCount) {
+            showYearFor.add(year);
+          }
+        });
+      }
+      // If single year, showYearFor remains empty (don't show year)
 
       Object.keys(racesByMonth).sort((a, b) => {
         const dateA = new Date(racesByMonth[a][0].date);
@@ -205,7 +230,14 @@ export default function PDFExport() {
 
         doc.setFontSize(14);
         doc.setFont(undefined, 'bold');
-        doc.text(monthYear, margin, yPosition);
+        
+        // Format header based on year display logic
+        const date = new Date(racesByMonth[monthYear][0].date);
+        const year = date.getFullYear();
+        const monthName = date.toLocaleString('default', { month: 'long' });
+        
+        const header = showYearFor.has(year) ? `${monthName} ${year}` : monthName;
+        doc.text(header, margin, yPosition);
         yPosition += 8;
 
         doc.setFontSize(10);
