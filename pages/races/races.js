@@ -275,15 +275,13 @@ export default function Races() {
         const earlyBirdPrice = parsePriceToNumber(race.earlyBirdCost);
         const regPrice = parsePriceToNumber(race.registrationCost);
         
-        // Consider a race if either price exists and is within range
-        if (earlyBirdPrice !== null || regPrice !== null) {
-          const lowestPrice = earlyBirdPrice !== null && regPrice !== null 
-            ? Math.min(earlyBirdPrice, regPrice)
-            : (earlyBirdPrice !== null ? earlyBirdPrice : regPrice);
-          
-          if (lowestPrice < priceRange.min || lowestPrice > priceRange.max) {
-            return false;
-          }
+        // If both prices are null, treat as free ($0) race
+        const lowestPrice = earlyBirdPrice !== null && regPrice !== null 
+          ? Math.min(earlyBirdPrice, regPrice)
+          : (earlyBirdPrice !== null ? earlyBirdPrice : (regPrice !== null ? regPrice : 0));
+        
+        if (lowestPrice < priceRange.min || lowestPrice > priceRange.max) {
+          return false;
         }
 
         return true;
@@ -532,7 +530,7 @@ export default function Races() {
                     className="filter-dropdown"
                     onClick={() => setOpenDropdown(openDropdown === 'additional' ? null : 'additional')}
                   >
-                    More Filters {(openRegistrationsOnly || selectedOrganizers.length > 0) && `(${(openRegistrationsOnly ? 1 : 0) + selectedOrganizers.length})`}
+                    More Filters {(openRegistrationsOnly || selectedOrganizers.length > 0 || priceRange.min !== 0 || priceRange.max !== 200) && `(${(openRegistrationsOnly ? 1 : 0) + selectedOrganizers.length + ((priceRange.min !== 0 || priceRange.max !== 200) ? 1 : 0)})`}
                   </button>
                   {openDropdown === 'additional' && (
                     <div className="dropdown-menu" style={{minWidth: '280px'}}>
