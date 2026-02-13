@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo, useState, useRef } from "react";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import PaceCalculator from "../../components/PaceCalculator/PaceCalculator";
 import racesData from "../../data/races.json";
 import { formatDate } from "../../utils/formatDate";
 import { formatTime } from "../../utils/formatTime";
@@ -452,6 +453,11 @@ export default function RaceDetail() {
                   </a>
                 </div>
               </div>
+            )}
+
+            {/* Pace Calculator */}
+            {race.distance && (
+              <PaceCalculator distance={race.distance} />
             )}
           </aside>
         </div>

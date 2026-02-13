@@ -77,6 +77,7 @@ export default function Header() {
             <Link href="/maps/maps" className="nav-link">Map</Link>
             <Link href="/upcoming-races/upcoming-races" className="nav-link">Upcoming Races</Link>
             <Link href="/registrations/registrations" className="nav-link">Registrations</Link>
+            <Link href="/pdf-export/pdf-export" className="nav-link">PDF Export</Link>
           </nav>
         )}
       </div>
@@ -95,6 +96,7 @@ export default function Header() {
           <Link href="/races/races" className="nav-strip-link" onClick={() => setMenuOpen(false)}>All Races</Link>
           <Link href="/upcoming-races/upcoming-races" className="nav-strip-link" onClick={() => setMenuOpen(false)}>Upcoming Races</Link>
           <Link href="/registrations/registrations" className="nav-strip-link" onClick={() => setMenuOpen(false)}>Registrations</Link>
+          <Link href="/pdf-export/pdf-export" className="nav-strip-link" onClick={() => setMenuOpen(false)}>PDF Export</Link>
         </nav>
       </div>
     </header>

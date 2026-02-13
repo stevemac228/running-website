@@ -1,0 +1,147 @@
+.pace-calculator {
+  background-color: var(--runnl-background);
+  border: 1px solid var(--runnl-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.pace-calculator-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--runnl-dark-text);
+  margin: 0 0 1.25rem 0;
+}
+
+.pace-calculator-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.pace-calculator-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pace-calculator-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--runnl-dark-text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pace-calculator-unit-toggle {
+  background-color: var(--runnl-primary);
+  color: var(--runnl-light-text);
+  border: none;
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pace-calculator-unit-toggle:hover {
+  background-color: var(--runnl-primary-dark);
+}
+
+.pace-calculator-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--runnl-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  background-color: var(--runnl-background);
+}
+
+.pace-calculator-input:focus {
+  outline: none;
+  border-color: var(--runnl-primary);
+  box-shadow: 0 0 0 3px rgba(0, 106, 255, 0.1);
+}
+
+.pace-calculator-time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pace-calculator-time-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.pace-calculator-input-small {
+  width: 100%;
+  padding: 0.65rem;
+  text-align: center;
+}
+
+.pace-calculator-time-unit {
+  font-size: 0.85rem;
+  color: var(--runnl-light-grey);
+  white-space: nowrap;
+}
+
+.pace-calculator-time-separator {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--runnl-light-grey);
+  margin: 0 0.25rem;
+}
+
+.pace-calculator-clear {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: var(--runnl-background-hover);
+  border: 1px solid var(--runnl-border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--runnl-dark-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pace-calculator-clear:hover {
+  background-color: var(--runnl-border);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .pace-calculator {
+    padding: 1rem;
+  }
+
+  .pace-calculator-title {
+    font-size: 1.1rem;
+  }
+
+  .pace-calculator-time-inputs {
+    gap: 0.35rem;
+  }
+
+  .pace-calculator-input-small {
+    padding: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .pace-calculator-time-unit {
+    font-size: 0.75rem;
+  }
+
+  .pace-calculator-time-separator {
+    font-size: 1rem;
+  }
+}
