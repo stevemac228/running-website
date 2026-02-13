@@ -58,7 +58,9 @@ export default function PDFExport() {
     startTime: false,
     registrationCost: false,
     earlyBirdCost: false,
-    website: false,
+    startLineLocation: false,
+    registrationStart: false,
+    registrationDeadline: false,
     terrain: false,
     format: false,
     medal: false,
@@ -253,7 +255,12 @@ export default function PDFExport() {
         
         const header = showYearFor.has(year) ? `${monthName} ${year}` : monthName;
         doc.text(header, margin, yPosition);
-        yPosition += 8;
+        yPosition += 2;
+        
+        // Add horizontal line under month header
+        doc.setLineWidth(0.5);
+        doc.line(margin, yPosition, pageWidth - margin, yPosition);
+        yPosition += 6;
 
         doc.setFontSize(10);
         doc.setFont(undefined, 'normal');
@@ -313,10 +320,16 @@ export default function PDFExport() {
             doc.text(`Early Bird: ${race.earlyBirdCost}`, margin + 10, yPosition);
             yPosition += 4;
           }
-          if (selectedFields.website && race.website) {
-            doc.setTextColor(0, 0, 255);
-            doc.textWithLink(`${race.website}`, margin + 10, yPosition, { url: race.website });
-            doc.setTextColor(0, 0, 0);
+          if (selectedFields.startLineLocation && race.startLineLocation) {
+            doc.text(`Start Line: ${race.startLineLocation}`, margin + 10, yPosition);
+            yPosition += 4;
+          }
+          if (selectedFields.registrationStart && race.registrationStart) {
+            doc.text(`Registration Opens: ${formatDate(race.registrationStart)}`, margin + 10, yPosition);
+            yPosition += 4;
+          }
+          if (selectedFields.registrationDeadline && race.registrationDeadline) {
+            doc.text(`Registration Closes: ${formatDate(race.registrationDeadline)}`, margin + 10, yPosition);
             yPosition += 4;
           }
           
@@ -397,10 +410,18 @@ export default function PDFExport() {
           yPosition += 5;
         }
 
-        if (selectedFields.website && race.website) {
-          doc.setTextColor(0, 0, 255);
-          doc.textWithLink(`Website: ${race.website}`, margin + 5, yPosition, { url: race.website });
-          doc.setTextColor(0, 0, 0);
+        if (selectedFields.startLineLocation && race.startLineLocation) {
+          doc.text(`Start Line Location: ${race.startLineLocation}`, margin + 5, yPosition);
+          yPosition += 5;
+        }
+
+        if (selectedFields.registrationStart && race.registrationStart) {
+          doc.text(`Registration Opens: ${formatDate(race.registrationStart)}`, margin + 5, yPosition);
+          yPosition += 5;
+        }
+
+        if (selectedFields.registrationDeadline && race.registrationDeadline) {
+          doc.text(`Registration Closes: ${formatDate(race.registrationDeadline)}`, margin + 5, yPosition);
           yPosition += 5;
         }
 
@@ -674,10 +695,26 @@ export default function PDFExport() {
               <label className="field-checkbox">
                 <input
                   type="checkbox"
-                  checked={selectedFields.website}
-                  onChange={() => toggleField("website")}
+                  checked={selectedFields.startLineLocation}
+                  onChange={() => toggleField("startLineLocation")}
                 />
-                <span>Website</span>
+                <span>Start Line Location</span>
+              </label>
+              <label className="field-checkbox">
+                <input
+                  type="checkbox"
+                  checked={selectedFields.registrationStart}
+                  onChange={() => toggleField("registrationStart")}
+                />
+                <span>Registration Start</span>
+              </label>
+              <label className="field-checkbox">
+                <input
+                  type="checkbox"
+                  checked={selectedFields.registrationDeadline}
+                  onChange={() => toggleField("registrationDeadline")}
+                />
+                <span>Registration Deadline</span>
               </label>
               <label className="field-checkbox">
                 <input
