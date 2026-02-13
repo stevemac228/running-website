@@ -1,0 +1,289 @@
+/* PDF Export Page Styles */
+
+.pdf-export-page {
+  min-height: calc(100vh - 160px);
+  padding: 2rem 1rem;
+  background-color: var(--color-background);
+}
+
+.pdf-export-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pdf-export-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.pdf-export-subtitle {
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.pdf-export-section {
+  background: var(--color-card-background);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+}
+
+/* Search Section */
+.search-container {
+  margin-bottom: 1rem;
+}
+
+.search-results {
+  margin-top: 1rem;
+}
+
+.search-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.search-result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: var(--color-background);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.search-result-item:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-result-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.search-result-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+}
+
+.search-result-details {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.add-race-btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-race-btn:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* Selected Races Section */
+.no-races-message {
+  text-align: center;
+  color: var(--color-text-secondary);
+  padding: 2rem;
+  font-style: italic;
+}
+
+.selected-races-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.selected-race-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: var(--color-background);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.selected-race-info {
+  flex: 1;
+}
+
+.selected-race-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  margin: 0 0 0.25rem 0;
+}
+
+.selected-race-details {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.remove-race-btn {
+  padding: 0.5rem 1rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.remove-race-btn:hover {
+  background-color: #c82333;
+}
+
+/* Field Selection Section */
+.field-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.field-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.field-checkbox:hover {
+  background-color: var(--color-background);
+}
+
+.field-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.field-checkbox span {
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+}
+
+/* Export Type Toggle */
+.export-type-toggle {
+  display: flex;
+  gap: 1rem;
+}
+
+.export-type-btn {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.export-type-btn:hover {
+  border-color: var(--color-primary);
+}
+
+.export-type-btn.active {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+/* Export Actions */
+.pdf-export-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.export-pdf-btn {
+  padding: 1rem 2rem;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.export-pdf-btn:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.export-pdf-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .pdf-export-title {
+    font-size: 2rem;
+  }
+
+  .pdf-export-subtitle {
+    font-size: 1rem;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+  }
+
+  .field-selection-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .export-type-toggle {
+    flex-direction: column;
+  }
+
+  .search-result-item,
+  .selected-race-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .add-race-btn,
+  .remove-race-btn {
+    width: 100%;
+  }
+}

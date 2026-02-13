@@ -7,6 +7,7 @@
 @import "./races.css";
 @import "./footer.css";
 @import "./map.css";
+@import "./pdfExport.css";
 
 /* App container - inherits font from body */
 .app-container {
