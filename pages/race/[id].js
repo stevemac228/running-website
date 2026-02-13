@@ -3,12 +3,14 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo, useState, useRef } from "react";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import PaceCalculator from "../../components/PaceCalculator/PaceCalculator";
 import racesData from "../../data/races.json";
 import { formatDate } from "../../utils/formatDate";
 import { formatTime } from "../../utils/formatTime";
 import { getRaceId } from "../../utils/getRaceId";
 import { parseGpxToSegments } from "../../utils/parseGpx";
 import { isPreviousYear } from "../../utils/isPreviousYear"; // <-- new import
+import "../../components/PaceCalculator/PaceCalculator.css";
 
 export default function RaceDetail() {
   const router = useRouter();
@@ -407,6 +409,11 @@ export default function RaceDetail() {
                 </div>
               ))}
             </div>
+            
+            {/* Pace Calculator */}
+            {race.distance && (
+              <PaceCalculator distance={race.distance} />
+            )}
           </section>
 
           <aside>
