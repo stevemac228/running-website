@@ -10,7 +10,6 @@ import { formatTime } from "../../utils/formatTime";
 import { getRaceId } from "../../utils/getRaceId";
 import { parseGpxToSegments } from "../../utils/parseGpx";
 import { isPreviousYear } from "../../utils/isPreviousYear"; // <-- new import
-import "../../components/PaceCalculator/PaceCalculator.css";
 
 export default function RaceDetail() {
   const router = useRouter();
