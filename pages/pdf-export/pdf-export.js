@@ -129,10 +129,17 @@ export default function PDFExport() {
     return filterRacesBySearch(raceList, term, fuseRef.current);
   }, []);
 
-  // Filter races based on search term
+  // Filter races based on search term and exclude past races
   const filteredRaces = useMemo(() => {
     if (!debouncedSearchTerm.trim()) return [];
-    return applyFuzzySearch(debouncedSearchTerm, races);
+    const searchResults = applyFuzzySearch(debouncedSearchTerm, races);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    // Filter out races with dates in the past
+    return searchResults.filter(race => {
+      const raceDate = new Date(race.date);
+      return raceDate >= today;
+    });
   }, [debouncedSearchTerm, applyFuzzySearch]);
 
   // Add race to selection
@@ -157,7 +164,7 @@ export default function PDFExport() {
     });
   };
 
-  // Generate PDF
+  // Generate PDF with simple list format
   const generatePDF = () => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -169,12 +176,71 @@ export default function PDFExport() {
     // Title
     doc.setFontSize(18);
     doc.setFont(undefined, 'bold');
-    const title = exportType === "calendar" ? "Race Calendar" : "Race List";
+    const title = exportType === "list" ? "Race List" : "Race Calendar";
     doc.text(title, margin, yPosition);
     yPosition += 10;
 
     if (exportType === "list") {
-      // List format
+      // Simple list format (previously "calendar" - month-grouped condensed view)
+      const racesByMonth = {};
+      selectedRaces.forEach(race => {
+        const date = new Date(race.date);
+        const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+        if (!racesByMonth[monthYear]) {
+          racesByMonth[monthYear] = [];
+        }
+        racesByMonth[monthYear].push(race);
+      });
+
+      Object.keys(racesByMonth).sort((a, b) => {
+        const dateA = new Date(racesByMonth[a][0].date);
+        const dateB = new Date(racesByMonth[b][0].date);
+        return dateA - dateB;
+      }).forEach(monthYear => {
+        // Check if we need a new page
+        if (yPosition > pageHeight - 40) {
+          doc.addPage();
+          yPosition = margin;
+        }
+
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.text(monthYear, margin, yPosition);
+        yPosition += 8;
+
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'normal');
+
+        racesByMonth[monthYear].forEach(race => {
+          if (yPosition > pageHeight - 40) {
+            doc.addPage();
+            yPosition = margin;
+          }
+
+          let line = "";
+          if (selectedFields.date) {
+            const date = new Date(race.date);
+            line += `${date.getDate()}`;
+          }
+          if (selectedFields.name) {
+            line += ` - ${race.name}`;
+          }
+          if (selectedFields.distance) {
+            const distanceText = race.distance === "∞" ? "∞" : `${race.distance}km`;
+            line += ` (${distanceText})`;
+          }
+          if (selectedFields.location) {
+            line += ` - ${race.location}`;
+          }
+
+          doc.text(line, margin + 5, yPosition);
+          yPosition += 5;
+        });
+
+        yPosition += 5; // Space between months
+      });
+    } else {
+      // Detailed format (previously "list")
       selectedRaces.forEach((race, index) => {
         // Check if we need a new page
         if (yPosition > pageHeight - 40) {
@@ -253,69 +319,88 @@ export default function PDFExport() {
 
         yPosition += 5; // Space between races
       });
-    } else {
-      // Calendar format - group by month
-      const racesByMonth = {};
-      selectedRaces.forEach(race => {
-        const date = new Date(race.date);
-        const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
-        if (!racesByMonth[monthYear]) {
-          racesByMonth[monthYear] = [];
-        }
-        racesByMonth[monthYear].push(race);
-      });
-
-      Object.keys(racesByMonth).sort((a, b) => {
-        const dateA = new Date(racesByMonth[a][0].date);
-        const dateB = new Date(racesByMonth[b][0].date);
-        return dateA - dateB;
-      }).forEach(monthYear => {
-        // Check if we need a new page
-        if (yPosition > pageHeight - 40) {
-          doc.addPage();
-          yPosition = margin;
-        }
-
-        doc.setFontSize(14);
-        doc.setFont(undefined, 'bold');
-        doc.text(monthYear, margin, yPosition);
-        yPosition += 8;
-
-        doc.setFontSize(10);
-        doc.setFont(undefined, 'normal');
-
-        racesByMonth[monthYear].forEach(race => {
-          if (yPosition > pageHeight - 40) {
-            doc.addPage();
-            yPosition = margin;
-          }
-
-          let line = "";
-          if (selectedFields.date) {
-            const date = new Date(race.date);
-            line += `${date.getDate()}`;
-          }
-          if (selectedFields.name) {
-            line += ` - ${race.name}`;
-          }
-          if (selectedFields.distance) {
-            const distanceText = race.distance === "∞" ? "∞" : `${race.distance}km`;
-            line += ` (${distanceText})`;
-          }
-          if (selectedFields.location) {
-            line += ` - ${race.location}`;
-          }
-
-          doc.text(line, margin + 5, yPosition);
-          yPosition += 5;
-        });
-
-        yPosition += 5; // Space between months
-      });
     }
 
     // Save the PDF
     doc.save("races-export.pdf");
+  };
+
+  // Generate ICS calendar file
+  const generateCalendar = () => {
+    // Create ICS format
+    let icsContent = 'BEGIN:VCALENDAR\r\n';
+    icsContent += 'VERSION:2.0\r\n';
+    icsContent += 'PRODID:-//Run NL//Race Calendar//EN\r\n';
+    icsContent += 'CALSCALE:GREGORIAN\r\n';
+    icsContent += 'METHOD:PUBLISH\r\n';
+    icsContent += 'X-WR-CALNAME:Run NL Races\r\n';
+    icsContent += 'X-WR-TIMEZONE:America/St_Johns\r\n';
+
+    selectedRaces.forEach(race => {
+      const raceDate = new Date(race.date);
+      const year = raceDate.getFullYear();
+      const month = String(raceDate.getMonth() + 1).padStart(2, '0');
+      const day = String(raceDate.getDate()).padStart(2, '0');
+      
+      // Format date for ICS (YYYYMMDD)
+      const dateStr = `${year}${month}${day}`;
+      
+      // Start time - if specified, otherwise default to 8:00 AM
+      let startTime = '080000';
+      if (race.startTime) {
+        const timeParts = race.startTime.match(/(\d+):(\d+)/);
+        if (timeParts) {
+          startTime = `${timeParts[1].padStart(2, '0')}${timeParts[2].padStart(2, '0')}00`;
+        }
+      }
+
+      // Create event
+      icsContent += 'BEGIN:VEVENT\r\n';
+      icsContent += `UID:${race.id}-${Date.now()}@runnl.ca\r\n`;
+      icsContent += `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z\r\n`;
+      icsContent += `DTSTART:${dateStr}T${startTime}\r\n`;
+      // Duration: assume 4 hours for race event
+      icsContent += `DTEND:${dateStr}T${(parseInt(startTime.substring(0, 2)) + 4).toString().padStart(2, '0')}${startTime.substring(2)}\r\n`;
+      icsContent += `SUMMARY:${race.name}\r\n`;
+      
+      // Description with race details
+      let description = '';
+      if (race.distance) {
+        const distanceText = race.distance === "∞" ? "∞" : `${race.distance}km`;
+        description += `Distance: ${distanceText}\\n`;
+      }
+      if (race.location) {
+        description += `Location: ${race.location}\\n`;
+      }
+      if (race.website) {
+        description += `Website: ${race.website}\\n`;
+      }
+      if (description) {
+        icsContent += `DESCRIPTION:${description}\r\n`;
+      }
+      
+      if (race.location) {
+        icsContent += `LOCATION:${race.location}\r\n`;
+      }
+      
+      if (race.website) {
+        icsContent += `URL:${race.website}\r\n`;
+      }
+      
+      icsContent += 'STATUS:CONFIRMED\r\n';
+      icsContent += 'END:VEVENT\r\n';
+    });
+
+    icsContent += 'END:VCALENDAR\r\n';
+
+    // Create blob and download
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.setAttribute('download', 'races-calendar.ics');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -524,34 +609,33 @@ export default function PDFExport() {
             </div>
           </div>
 
-          {/* Export Type Toggle Section */}
+          {/* Export Actions Section */}
           <div className="pdf-export-section">
-            <h2 className="section-title">Export Format</h2>
-            <div className="export-type-toggle">
+            <h2 className="section-title">Export</h2>
+            <div className="export-actions-grid">
               <button
-                className={`export-type-btn ${exportType === "list" ? "active" : ""}`}
-                onClick={() => setExportType("list")}
+                className="export-action-btn export-pdf-btn"
+                onClick={generatePDF}
+                disabled={selectedRaces.length === 0}
               >
-                List View
+                <span className="export-btn-icon">📄</span>
+                <span className="export-btn-text">
+                  <strong>Export to PDF</strong>
+                  <small>Simple list format</small>
+                </span>
               </button>
               <button
-                className={`export-type-btn ${exportType === "calendar" ? "active" : ""}`}
-                onClick={() => setExportType("calendar")}
+                className="export-action-btn export-calendar-btn"
+                onClick={generateCalendar}
+                disabled={selectedRaces.length === 0}
               >
-                Calendar View
+                <span className="export-btn-icon">📅</span>
+                <span className="export-btn-text">
+                  <strong>Export to Calendar</strong>
+                  <small>Download .ics file</small>
+                </span>
               </button>
             </div>
-          </div>
-
-          {/* Export Button */}
-          <div className="pdf-export-actions">
-            <button
-              className="export-pdf-btn"
-              onClick={generatePDF}
-              disabled={selectedRaces.length === 0}
-            >
-              Export to PDF
-            </button>
           </div>
         </div>
       </main>

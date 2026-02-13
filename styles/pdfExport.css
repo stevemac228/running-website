@@ -252,71 +252,68 @@
   font-weight: 500;
 }
 
-/* Export Type Toggle */
-.export-type-toggle {
-  display: flex;
-  gap: 0.75rem;
-  max-width: 500px;
+/* Export Actions */
+.export-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 700px;
   margin: 0 auto;
 }
 
-.export-type-btn {
-  flex: 1;
-  padding: 1rem 1.5rem;
-  background-color: var(--runnl-background);
-  color: var(--runnl-dark-text);
+.export-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: white;
   border: 2px solid var(--runnl-border);
   border-radius: 12px;
-  font-weight: 600;
-  font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  text-align: left;
 }
 
-.export-type-btn:hover {
-  border-color: var(--runnl-primary);
-  background: white;
-}
-
-.export-type-btn.active {
-  background-color: var(--runnl-primary);
-  color: white;
+.export-action-btn:hover:not(:disabled) {
   border-color: var(--runnl-primary);
   box-shadow: var(--shadow-md);
-}
-
-/* Export Actions */
-.pdf-export-actions {
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--runnl-border);
-}
-
-.export-pdf-btn {
-  padding: 1rem 3rem;
-  background: linear-gradient(135deg, var(--runnl-primary) 0%, #0056cc 100%);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: var(--shadow-lg);
-}
-
-.export-pdf-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-xl);
 }
 
-.export-pdf-btn:disabled {
-  background: #ddd;
+.export-action-btn:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
-  box-shadow: none;
-  opacity: 0.6;
+}
+
+.export-btn-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.export-btn-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.export-btn-text strong {
+  font-size: 1.1rem;
+  color: var(--runnl-dark-text);
+  font-weight: 700;
+}
+
+.export-btn-text small {
+  font-size: 0.875rem;
+  color: var(--runnl-light-grey);
+  font-weight: 400;
+}
+
+.export-pdf-btn:hover:not(:disabled) strong {
+  color: var(--runnl-primary);
+}
+
+.export-calendar-btn:hover:not(:disabled) strong {
+  color: var(--runnl-primary);
 }
 
 /* Responsive Design */
@@ -347,8 +344,12 @@
     grid-template-columns: 1fr;
   }
 
-  .export-type-toggle {
-    flex-direction: column;
+  .export-actions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .export-action-btn {
+    padding: 1.25rem;
   }
 
   .selected-races-list {
@@ -364,10 +365,5 @@
   .remove-race-btn {
     width: 100%;
     margin-left: 0;
-  }
-
-  .export-pdf-btn {
-    width: 100%;
-    padding: 1rem 2rem;
   }
 }
