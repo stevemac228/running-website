@@ -62,6 +62,9 @@ export default function Races() {
   const [viewMode, setViewMode] = useState("mixed"); // 'list' | 'mixed' | 'map'
   const [expandedRaceId, setExpandedRaceId] = useState(null);
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [openRegistrationsOnly, setOpenRegistrationsOnly] = useState(false);
+  const [selectedOrganizers, setSelectedOrganizers] = useState([]);
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 200 });
   const raceCardRefs = useRef({});
 
   // Initialize Fuse.js for fuzzy search
@@ -130,6 +133,44 @@ export default function Races() {
     setActiveFilters((prev) =>
       prev.includes(key) ? prev.filter((f) => f !== key) : [...prev, key]
     );
+  };
+
+  const toggleOrganizer = (org) => {
+    setSelectedOrganizers((prev) =>
+      prev.includes(org) ? prev.filter((o) => o !== org) : [...prev, org]
+    );
+  };
+
+  // Extract unique organizers from races data
+  const uniqueOrganizers = useMemo(() => {
+    const orgs = new Set();
+    races.forEach((race) => {
+      if (race.organization) {
+        orgs.add(race.organization);
+      }
+    });
+    return Array.from(orgs).sort();
+  }, []);
+
+  // Helper to parse price string to number
+  const parsePriceToNumber = (priceStr) => {
+    if (!priceStr) return null;
+    const numStr = priceStr.replace(/[$,]/g, "");
+    const num = parseFloat(numStr);
+    return isNaN(num) ? null : num;
+  };
+
+  // Helper to check if registration is open
+  const isRegistrationOpen = (race) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to start of day for comparison
+    
+    const regStart = race.registrationStart ? parseUSDate(race.registrationStart) : null;
+    const regDeadline = race.registrationDeadline ? parseUSDate(race.registrationDeadline) : null;
+    
+    if (!regStart || !regDeadline) return false;
+    
+    return today >= regStart && today <= regDeadline;
   };
 
   // helper: extract month/day from Date or string
@@ -222,6 +263,29 @@ export default function Races() {
           if (!matchDistance) return false;
         }
 
+        // Open registrations filter
+        if (openRegistrationsOnly && !isRegistrationOpen(race)) return false;
+
+        // Organizer filter (multi-select)
+        if (selectedOrganizers.length > 0 && !selectedOrganizers.includes(race.organization)) {
+          return false;
+        }
+
+        // Price range filter
+        const earlyBirdPrice = parsePriceToNumber(race.earlyBirdCost);
+        const regPrice = parsePriceToNumber(race.registrationCost);
+        
+        // Consider a race if either price exists and is within range
+        if (earlyBirdPrice !== null || regPrice !== null) {
+          const lowestPrice = earlyBirdPrice !== null && regPrice !== null 
+            ? Math.min(earlyBirdPrice, regPrice)
+            : (earlyBirdPrice !== null ? earlyBirdPrice : regPrice);
+          
+          if (lowestPrice < priceRange.min || lowestPrice > priceRange.max) {
+            return false;
+          }
+        }
+
         return true;
       })
       .sort((a, b) => {
@@ -244,7 +308,7 @@ export default function Races() {
             return 0;
         }
       });
-  }, [activeFilters, formatFilter, sortOption, dateRange, distanceRange]);
+  }, [activeFilters, formatFilter, sortOption, dateRange, distanceRange, openRegistrationsOnly, selectedOrganizers, priceRange]);
 
   // Apply fuzzy search to filtered races
   const filteredRaces = useMemo(() => {
@@ -457,6 +521,102 @@ export default function Races() {
                       <div className="dropdown-item" onClick={() => setSortOption('name-desc')}>
                         <input type="radio" checked={sortOption === 'name-desc'} readOnly />
                         <span>Name (Z–A)</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Additional Filters Dropdown */}
+                <div className="custom-dropdown" style={{position: 'relative'}}>
+                  <button 
+                    className="filter-dropdown"
+                    onClick={() => setOpenDropdown(openDropdown === 'additional' ? null : 'additional')}
+                  >
+                    More Filters {(openRegistrationsOnly || selectedOrganizers.length > 0) && `(${(openRegistrationsOnly ? 1 : 0) + selectedOrganizers.length})`}
+                  </button>
+                  {openDropdown === 'additional' && (
+                    <div className="dropdown-menu" style={{minWidth: '280px'}}>
+                      {/* Open Registrations */}
+                      <div className="dropdown-item" onClick={() => setOpenRegistrationsOnly(!openRegistrationsOnly)}>
+                        <input type="checkbox" checked={openRegistrationsOnly} readOnly />
+                        <span>Open Registrations Only</span>
+                      </div>
+                      
+                      <div style={{padding: '0.5rem 1rem', borderBottom: '1px solid #f0f0f0', fontWeight: '600', fontSize: '0.85rem', color: 'var(--runnl-dark-grey)'}}>
+                        Organizers
+                      </div>
+                      
+                      {/* Organizers - scrollable list */}
+                      <div style={{maxHeight: '200px', overflowY: 'auto'}}>
+                        {uniqueOrganizers.map((org) => (
+                          <div key={org} className="dropdown-item" onClick={() => toggleOrganizer(org)}>
+                            <input type="checkbox" checked={selectedOrganizers.includes(org)} readOnly />
+                            <span>{org}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div style={{padding: '0.5rem 1rem', borderTop: '1px solid #f0f0f0', fontWeight: '600', fontSize: '0.85rem', color: 'var(--runnl-dark-grey)'}}>
+                        Price Range
+                      </div>
+                      
+                      {/* Price Range Slider */}
+                      <div style={{padding: '0.5rem 1rem'}}>
+                        <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.85rem'}}>
+                          <span>${priceRange.min}</span>
+                          <span>${priceRange.max === 200 ? '200+' : priceRange.max}</span>
+                        </div>
+                        <div style={{position: 'relative', height: '30px', display: 'flex', alignItems: 'center'}}>
+                          <div style={{position: 'absolute', width: '100%', height: '6px', background: '#ddd', borderRadius: '3px'}}></div>
+                          <input
+                            type="range"
+                            min="0"
+                            max="200"
+                            step="5"
+                            value={priceRange.min}
+                            onChange={(e) => {
+                              const newMin = Number(e.target.value);
+                              if (newMin <= priceRange.max) {
+                                setPriceRange({...priceRange, min: newMin});
+                              }
+                            }}
+                            style={{
+                              position: 'absolute',
+                              width: '100%',
+                              appearance: 'none',
+                              background: 'transparent',
+                              pointerEvents: 'none',
+                              margin: 0,
+                              padding: 0,
+                              zIndex: 3
+                            }}
+                            className="range-slider range-slider-min"
+                          />
+                          <input
+                            type="range"
+                            min="0"
+                            max="200"
+                            step="5"
+                            value={priceRange.max}
+                            onChange={(e) => {
+                              const newMax = Number(e.target.value);
+                              if (newMax >= priceRange.min) {
+                                setPriceRange({...priceRange, max: newMax});
+                              }
+                            }}
+                            style={{
+                              position: 'absolute',
+                              width: '100%',
+                              appearance: 'none',
+                              background: 'transparent',
+                              pointerEvents: 'none',
+                              margin: 0,
+                              padding: 0,
+                              zIndex: 4
+                            }}
+                            className="range-slider range-slider-max"
+                          />
+                        </div>
                       </div>
                     </div>
                   )}
