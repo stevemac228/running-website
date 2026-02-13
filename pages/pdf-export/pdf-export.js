@@ -217,24 +217,75 @@ export default function PDFExport() {
             yPosition = margin;
           }
 
-          let line = "";
+          // Race name/title
+          if (selectedFields.name) {
+            doc.setFont(undefined, 'bold');
+            doc.text(race.name, margin + 5, yPosition);
+            yPosition += 5;
+            doc.setFont(undefined, 'normal');
+          }
+
+          // Build compact info line
+          let infoLine = "";
           if (selectedFields.date) {
             const date = new Date(race.date);
-            line += `${date.getDate()}`;
-          }
-          if (selectedFields.name) {
-            line += ` - ${race.name}`;
+            infoLine += `${date.getDate()}`;
           }
           if (selectedFields.distance) {
             const distanceText = race.distance === "∞" ? "∞" : `${race.distance}km`;
-            line += ` (${distanceText})`;
+            if (infoLine) infoLine += " • ";
+            infoLine += distanceText;
           }
           if (selectedFields.location) {
-            line += ` - ${race.location}`;
+            if (infoLine) infoLine += " • ";
+            infoLine += race.location;
+          }
+          if (selectedFields.startTime && race.startTime) {
+            if (infoLine) infoLine += " • ";
+            infoLine += formatTime(race.startTime);
+          }
+          
+          if (infoLine) {
+            doc.text(infoLine, margin + 10, yPosition);
+            yPosition += 5;
           }
 
-          doc.text(line, margin + 5, yPosition);
-          yPosition += 5;
+          // Additional fields
+          if (selectedFields.terrain && race.terrain) {
+            doc.text(`Terrain: ${race.terrain}`, margin + 10, yPosition);
+            yPosition += 4;
+          }
+          if (selectedFields.format && race.format) {
+            doc.text(`Format: ${race.format}`, margin + 10, yPosition);
+            yPosition += 4;
+          }
+          if (selectedFields.registrationCost && race.registrationCost) {
+            doc.text(`Cost: ${race.registrationCost}`, margin + 10, yPosition);
+            yPosition += 4;
+          }
+          if (selectedFields.earlyBirdCost && race.earlyBirdCost) {
+            doc.text(`Early Bird: ${race.earlyBirdCost}`, margin + 10, yPosition);
+            yPosition += 4;
+          }
+          if (selectedFields.website && race.website) {
+            doc.setTextColor(0, 0, 255);
+            doc.textWithLink(`${race.website}`, margin + 10, yPosition, { url: race.website });
+            doc.setTextColor(0, 0, 0);
+            yPosition += 4;
+          }
+          
+          // Features
+          const features = [];
+          if (selectedFields.medal && race.medal) features.push("Medal");
+          if (selectedFields.shirt && race.shirt) features.push("T-Shirt");
+          if (selectedFields.reception && race.reception) features.push("Reception");
+          
+          if (features.length > 0) {
+            doc.text(`Features: ${features.join(", ")}`, margin + 10, yPosition);
+            yPosition += 4;
+          }
+
+          yPosition += 3; // Space between races
         });
 
         yPosition += 5; // Space between months
