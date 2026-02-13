@@ -271,36 +271,78 @@ export default function PDFExport() {
             yPosition = margin;
           }
 
-          // Race name/title
+          // Line 1: name • distance
+          let line1 = "";
           if (selectedFields.name) {
             doc.setFont(undefined, 'bold');
-            doc.text(race.name, margin + 5, yPosition);
+            line1 += race.name;
+          }
+          if (selectedFields.distance) {
+            const distanceText = race.distance === "∞" ? "∞" : `${race.distance}km`;
+            if (line1) line1 += " • ";
+            line1 += distanceText;
+          }
+          
+          if (line1) {
+            doc.text(line1, margin + 5, yPosition);
             yPosition += 5;
             doc.setFont(undefined, 'normal');
           }
 
-          // Build compact info line
-          let infoLine = "";
-          if (selectedFields.date) {
-            infoLine += formatDateWithDay(race.date);
+          // Line 2: starttime date @startlocation, location
+          let line2 = "";
+          if (selectedFields.startTime && race.startTime) {
+            line2 += formatTime(race.startTime);
           }
-          if (selectedFields.distance) {
-            const distanceText = race.distance === "∞" ? "∞" : `${race.distance}km`;
-            if (infoLine) infoLine += " • ";
-            infoLine += distanceText;
+          if (selectedFields.date) {
+            if (line2) line2 += " ";
+            line2 += formatDateWithDay(race.date);
+          }
+          if (selectedFields.startLineLocation && race.startLineLocation) {
+            if (line2) line2 += " @";
+            line2 += race.startLineLocation;
           }
           if (selectedFields.location) {
-            if (infoLine) infoLine += " • ";
-            infoLine += race.location;
-          }
-          if (selectedFields.startTime && race.startTime) {
-            if (infoLine) infoLine += " • ";
-            infoLine += formatTime(race.startTime);
+            if (line2) line2 += ", ";
+            line2 += race.location;
           }
           
-          if (infoLine) {
-            doc.text(infoLine, margin + 10, yPosition);
+          if (line2) {
+            doc.text(line2, margin + 10, yPosition);
             yPosition += 5;
+          }
+
+          // Registration and cost fields with separator
+          const hasRegOrCostFields = (
+            (selectedFields.registrationCost && race.registrationCost) ||
+            (selectedFields.earlyBirdCost && race.earlyBirdCost) ||
+            (selectedFields.registrationStart && race.registrationStart) ||
+            (selectedFields.registrationDeadline && race.registrationDeadline)
+          );
+
+          if (hasRegOrCostFields) {
+            // Add small separator line
+            yPosition += 2;
+            doc.setLineWidth(0.3);
+            doc.line(margin + 10, yPosition, pageWidth - margin - 10, yPosition);
+            yPosition += 3;
+          }
+
+          if (selectedFields.registrationCost && race.registrationCost) {
+            doc.text(`Cost: ${race.registrationCost}`, margin + 10, yPosition);
+            yPosition += 4;
+          }
+          if (selectedFields.earlyBirdCost && race.earlyBirdCost) {
+            doc.text(`Early Bird: ${race.earlyBirdCost}`, margin + 10, yPosition);
+            yPosition += 4;
+          }
+          if (selectedFields.registrationStart && race.registrationStart) {
+            doc.text(`Registration Opens: ${formatDate(race.registrationStart)}`, margin + 10, yPosition);
+            yPosition += 4;
+          }
+          if (selectedFields.registrationDeadline && race.registrationDeadline) {
+            doc.text(`Registration Closes: ${formatDate(race.registrationDeadline)}`, margin + 10, yPosition);
+            yPosition += 4;
           }
 
           // Additional fields
@@ -310,26 +352,6 @@ export default function PDFExport() {
           }
           if (selectedFields.format && race.format) {
             doc.text(`Format: ${race.format}`, margin + 10, yPosition);
-            yPosition += 4;
-          }
-          if (selectedFields.registrationCost && race.registrationCost) {
-            doc.text(`Cost: ${race.registrationCost}`, margin + 10, yPosition);
-            yPosition += 4;
-          }
-          if (selectedFields.earlyBirdCost && race.earlyBirdCost) {
-            doc.text(`Early Bird: ${race.earlyBirdCost}`, margin + 10, yPosition);
-            yPosition += 4;
-          }
-          if (selectedFields.startLineLocation && race.startLineLocation) {
-            doc.text(`Start Line: ${race.startLineLocation}`, margin + 10, yPosition);
-            yPosition += 4;
-          }
-          if (selectedFields.registrationStart && race.registrationStart) {
-            doc.text(`Registration Opens: ${formatDate(race.registrationStart)}`, margin + 10, yPosition);
-            yPosition += 4;
-          }
-          if (selectedFields.registrationDeadline && race.registrationDeadline) {
-            doc.text(`Registration Closes: ${formatDate(race.registrationDeadline)}`, margin + 10, yPosition);
             yPosition += 4;
           }
           
