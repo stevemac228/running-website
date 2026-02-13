@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function PaceCalculator({ distance }) {
-  const [paceMinutes, setPaceMinutes] = useState("");
-  const [paceSeconds, setPaceSeconds] = useState("");
+  const [paceMinutes, setPaceMinutes] = useState("5");
+  const [paceSeconds, setPaceSeconds] = useState("30");
   const [timeHours, setTimeHours] = useState("");
   const [timeMinutes, setTimeMinutes] = useState("");
   const [timeSeconds, setTimeSeconds] = useState("");
-  const [lastEdited, setLastEdited] = useState(null); // "pace" or "time"
+  const [lastEdited, setLastEdited] = useState("pace"); // "pace" or "time"
+
+  // Calculate time from pace on initial load
+  useEffect(() => {
+    if (distance) {
+      calculateTimeFromPace(distance, "5", "30");
+    }
+  }, [distance]);
 
   // Calculate time from pace
   const calculateTimeFromPace = (dist, paceMin, paceSec) => {
