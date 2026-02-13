@@ -34,6 +34,7 @@ export default function PDFExport() {
   const [showResults, setShowResults] = useState(false);
   const [dropdownStyle, setDropdownStyle] = useState(null);
   const searchWrapperRef = useRef(null);
+  const dropdownRef = useRef(null);
   const [selectedFields, setSelectedFields] = useState({
     name: true,
     date: true,
@@ -82,7 +83,8 @@ export default function PDFExport() {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (searchWrapperRef.current && !searchWrapperRef.current.contains(e.target)) {
+      if (searchWrapperRef.current && !searchWrapperRef.current.contains(e.target) &&
+          dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setShowResults(false);
       }
     };
@@ -358,6 +360,7 @@ export default function PDFExport() {
             {/* Search results dropdown - rendered via portal */}
             {showResults && filteredRaces.length > 0 && dropdownStyle && typeof window !== 'undefined' && createPortal(
               <div
+                ref={dropdownRef}
                 className="search-results pdf-search-results"
                 style={{
                   position: "absolute",
@@ -372,6 +375,7 @@ export default function PDFExport() {
                   <div
                     key={race.id}
                     className="search-result-item"
+                    onMouseDown={(e) => e.preventDefault()}
                     onClick={() => addRace(race)}
                   >
                     <div className="result-title">{race.name}</div>
