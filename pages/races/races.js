@@ -129,6 +129,15 @@ export default function Races() {
     setSearchTerm(term);
   }, []);
 
+  // Calculate active filter count for "More Filters" badge
+  const additionalFilterCount = useMemo(() => {
+    let count = 0;
+    if (openRegistrationsOnly) count++;
+    if (selectedOrganizers.length > 0) count += selectedOrganizers.length;
+    if (priceRange.min !== 0 || priceRange.max !== 200) count++;
+    return count;
+  }, [openRegistrationsOnly, selectedOrganizers, priceRange]);
+
   const toggleFilter = (key) => {
     setActiveFilters((prev) =>
       prev.includes(key) ? prev.filter((f) => f !== key) : [...prev, key]
@@ -275,10 +284,15 @@ export default function Races() {
         const earlyBirdPrice = parsePriceToNumber(race.earlyBirdCost);
         const regPrice = parsePriceToNumber(race.registrationCost);
         
-        // If both prices are null, treat as free ($0) race
-        const lowestPrice = earlyBirdPrice !== null && regPrice !== null 
-          ? Math.min(earlyBirdPrice, regPrice)
-          : (earlyBirdPrice !== null ? earlyBirdPrice : (regPrice !== null ? regPrice : 0));
+        // Determine lowest price (treat races with no price as free)
+        let lowestPrice = 0; // Default to free
+        if (earlyBirdPrice !== null && regPrice !== null) {
+          lowestPrice = Math.min(earlyBirdPrice, regPrice);
+        } else if (earlyBirdPrice !== null) {
+          lowestPrice = earlyBirdPrice;
+        } else if (regPrice !== null) {
+          lowestPrice = regPrice;
+        }
         
         if (lowestPrice < priceRange.min || lowestPrice > priceRange.max) {
           return false;
@@ -530,7 +544,7 @@ export default function Races() {
                     className="filter-dropdown"
                     onClick={() => setOpenDropdown(openDropdown === 'additional' ? null : 'additional')}
                   >
-                    More Filters {(openRegistrationsOnly || selectedOrganizers.length > 0 || priceRange.min !== 0 || priceRange.max !== 200) && `(${(openRegistrationsOnly ? 1 : 0) + selectedOrganizers.length + ((priceRange.min !== 0 || priceRange.max !== 200) ? 1 : 0)})`}
+                    More Filters {additionalFilterCount > 0 && `(${additionalFilterCount})`}
                   </button>
                   {openDropdown === 'additional' && (
                     <div className="dropdown-menu" style={{minWidth: '280px'}}>
