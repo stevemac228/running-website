@@ -299,7 +299,7 @@ export default function PDFExport() {
             line2 += formatDateWithDay(race.date);
           }
           if (selectedFields.startLineLocation && race.startLineLocation) {
-            if (line2) line2 += " @";
+            if (line2) line2 += " @ ";
             line2 += race.startLineLocation;
           }
           if (selectedFields.location) {
