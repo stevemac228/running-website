@@ -3,8 +3,6 @@ import Head from "next/head";
 import races from "../../data/races.json";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
-import SearchFilter from "../../components/SearchFilter/SearchFilter";
-import CompactRaceCard from "../../components/CompactRaceCard/CompactRaceCard";
 import { filterRacesBySearch } from "../../utils/categorySearch";
 import jsPDF from "jspdf";
 import { formatDate } from "../../utils/formatDate";
@@ -292,8 +290,20 @@ export default function PDFExport() {
           {/* Search Section */}
           <div className="pdf-export-section">
             <h2 className="section-title">Search Races</h2>
-            <div className="search-container">
-              <SearchFilter onSearch={handleSearch} initialValue={searchTerm} showDropdown={false} />
+            <div className="pdf-search-wrapper">
+              <img src="/icons/search.svg" alt="Search" className="pdf-search-icon" />
+              <input
+                type="text"
+                placeholder="Search races, marathon, trail..."
+                value={searchTerm}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="pdf-search-input"
+              />
+              {searchTerm && (
+                <button className="pdf-search-clear" onClick={() => handleSearch("")} aria-label="Clear search">
+                  ×
+                </button>
+              )}
             </div>
             <div className="search-results">
               {debouncedSearchTerm && filteredRaces.length > 0 && (
