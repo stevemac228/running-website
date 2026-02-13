@@ -100,10 +100,6 @@
   margin-top: 1rem;
 }
 
-.search-results {
-  margin-top: 1rem;
-}
-
 .search-results-list {
   display: flex;
   flex-direction: column;
