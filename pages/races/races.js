@@ -150,11 +150,11 @@ export default function Races() {
       }
     });
     return Array.from(orgs).sort();
-  }, []);
+  }, [races]);
 
   // Helper to parse price string to number
   const parsePriceToNumber = (priceStr) => {
-    if (!priceStr) return null;
+    if (!priceStr || typeof priceStr !== 'string') return null;
     const numStr = priceStr.replace(/[$,]/g, "");
     const num = parseFloat(numStr);
     return isNaN(num) ? null : num;
@@ -580,12 +580,12 @@ export default function Races() {
                                 setPriceRange({...priceRange, min: newMin});
                               }
                             }}
+                            aria-label="Minimum price"
                             style={{
                               position: 'absolute',
                               width: '100%',
                               appearance: 'none',
                               background: 'transparent',
-                              pointerEvents: 'none',
                               margin: 0,
                               padding: 0,
                               zIndex: 3
@@ -604,12 +604,12 @@ export default function Races() {
                                 setPriceRange({...priceRange, max: newMax});
                               }
                             }}
+                            aria-label="Maximum price"
                             style={{
                               position: 'absolute',
                               width: '100%',
                               appearance: 'none',
                               background: 'transparent',
-                              pointerEvents: 'none',
                               margin: 0,
                               padding: 0,
                               zIndex: 4
