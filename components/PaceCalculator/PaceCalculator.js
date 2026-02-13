@@ -64,9 +64,9 @@ export default function PaceCalculator({ distance }) {
     const value = e.target.value;
     setDistanceValue(value);
 
-    if (lastEdited === "pace" && paceMinutes) {
+    if (lastEdited === "pace" && (paceMinutes || paceSeconds)) {
       calculateTimeFromPace(value, paceMinutes, paceSeconds, unit);
-    } else if (lastEdited === "time" && timeMinutes) {
+    } else if (lastEdited === "time" && (timeHours || timeMinutes || timeSeconds)) {
       calculatePaceFromTime(value, timeHours, timeMinutes, timeSeconds, unit);
     }
   };
@@ -106,9 +106,9 @@ export default function PaceCalculator({ distance }) {
     setUnit(newUnit);
 
     // Recalculate based on last edited field
-    if (lastEdited === "pace" && paceMinutes) {
+    if (lastEdited === "pace" && (paceMinutes || paceSeconds)) {
       calculateTimeFromPace(distanceValue, paceMinutes, paceSeconds, newUnit);
-    } else if (lastEdited === "time" && timeMinutes) {
+    } else if (lastEdited === "time" && (timeHours || timeMinutes || timeSeconds)) {
       calculatePaceFromTime(distanceValue, timeHours, timeMinutes, timeSeconds, newUnit);
     }
   };
