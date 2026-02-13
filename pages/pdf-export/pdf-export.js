@@ -9,6 +9,9 @@ import jsPDF from "jspdf";
 import { formatDate } from "../../utils/formatDate";
 import { formatTime } from "../../utils/formatTime";
 
+// Maximum z-index for dropdown overlay
+const DROPDOWN_Z_INDEX = 9999;
+
 // Simple debounce hook
 function useDebounce(value, delay) {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -362,7 +365,7 @@ export default function PDFExport() {
                   top: `${dropdownStyle.top}px`,
                   width: `${dropdownStyle.width}px`,
                   boxSizing: "border-box",
-                  zIndex: 2147483647,
+                  zIndex: DROPDOWN_Z_INDEX,
                 }}
               >
                 {filteredRaces.slice(0, 10).map((race) => (
