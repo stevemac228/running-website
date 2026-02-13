@@ -748,16 +748,7 @@
 /* Date dropdown specific styling */
 .date-dropdown-menu {
   min-width: 280px;
-<<<<<<< copilot/add-weekday-labels-to-calendar
   padding: 0.5rem;
-=======
-  max-width: calc(100vw - 2rem);
-  padding: 0.75rem;
-  box-sizing: border-box;
-  /* Align to right edge to prevent overflow */
-  left: auto;
-  right: 0;
->>>>>>> main
 }
 
 .date-range-selector-header {
@@ -1117,7 +1108,6 @@
   .date-dropdown-menu {
     min-width: 100%;
     width: 100%;
-<<<<<<< copilot/add-weekday-labels-to-calendar
     padding: 0.25rem;
     box-sizing: border-box;
   }
@@ -1132,25 +1122,13 @@
 
   .date-range-selector-calendar-grid {
     grid-template-columns: repeat(7, 1fr);
-=======
-    left: 0;
-    right: 0;
-  }
-
-  .date-range-selector-calendar-grid {
->>>>>>> main
     gap: 4px;
   }
 
   .date-range-selector-calendar-day {
-<<<<<<< copilot/add-weekday-labels-to-calendar
     width: 100%;
     aspect-ratio: 1;
     font-size: 0.9rem;
-=======
-    font-size: 0.85rem;
-    padding: 0.4rem;
->>>>>>> main
   }
 
   .dropdown-item {
