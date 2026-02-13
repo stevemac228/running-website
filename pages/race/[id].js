@@ -408,11 +408,6 @@ export default function RaceDetail() {
                 </div>
               ))}
             </div>
-            
-            {/* Pace Calculator */}
-            {race.distance && (
-              <PaceCalculator distance={race.distance} />
-            )}
           </section>
 
           <aside>
@@ -459,6 +454,11 @@ export default function RaceDetail() {
                   </a>
                 </div>
               </div>
+            )}
+
+            {/* Pace Calculator */}
+            {race.distance && (
+              <PaceCalculator distance={race.distance} />
             )}
           </aside>
         </div>

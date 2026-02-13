@@ -1,24 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function PaceCalculator({ distance }) {
-  const [distanceValue, setDistanceValue] = useState(distance || "");
   const [paceMinutes, setPaceMinutes] = useState("");
   const [paceSeconds, setPaceSeconds] = useState("");
   const [timeHours, setTimeHours] = useState("");
   const [timeMinutes, setTimeMinutes] = useState("");
   const [timeSeconds, setTimeSeconds] = useState("");
-  const [unit, setUnit] = useState("km"); // "km" or "mi"
   const [lastEdited, setLastEdited] = useState(null); // "pace" or "time"
 
-  // Update distance when prop changes
-  useEffect(() => {
-    if (distance) {
-      setDistanceValue(distance);
-    }
-  }, [distance]);
-
   // Calculate time from pace
-  const calculateTimeFromPace = (dist, paceMin, paceSec, currentUnit) => {
+  const calculateTimeFromPace = (dist, paceMin, paceSec) => {
     if (!dist || (!paceMin && !paceSec)) return;
 
     const distNum = parseFloat(dist);
@@ -26,10 +17,7 @@ export default function PaceCalculator({ distance }) {
 
     if (distNum <= 0 || paceInSeconds <= 0) return;
 
-    // Convert distance to km if in miles
-    const distInKm = currentUnit === "mi" ? distNum * 1.60934 : distNum;
-
-    const totalSeconds = distInKm * paceInSeconds;
+    const totalSeconds = distNum * paceInSeconds;
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = Math.floor(totalSeconds % 60);
@@ -40,7 +28,7 @@ export default function PaceCalculator({ distance }) {
   };
 
   // Calculate pace from time
-  const calculatePaceFromTime = (dist, hrs, mins, secs, currentUnit) => {
+  const calculatePaceFromTime = (dist, hrs, mins, secs) => {
     if (!dist || (!hrs && !mins && !secs)) return;
 
     const distNum = parseFloat(dist);
@@ -48,27 +36,12 @@ export default function PaceCalculator({ distance }) {
 
     if (distNum <= 0 || totalTimeSeconds <= 0) return;
 
-    // Convert distance to km if in miles
-    const distInKm = currentUnit === "mi" ? distNum * 1.60934 : distNum;
-
-    const paceInSeconds = totalTimeSeconds / distInKm;
+    const paceInSeconds = totalTimeSeconds / distNum;
     const paceMin = Math.floor(paceInSeconds / 60);
     const paceSec = Math.floor(paceInSeconds % 60);
 
     setPaceMinutes(paceMin.toString());
     setPaceSeconds(paceSec.toString());
-  };
-
-  // Handle distance change
-  const handleDistanceChange = (e) => {
-    const value = e.target.value;
-    setDistanceValue(value);
-
-    if (lastEdited === "pace" && (paceMinutes || paceSeconds)) {
-      calculateTimeFromPace(value, paceMinutes, paceSeconds, unit);
-    } else if (lastEdited === "time" && (timeHours || timeMinutes || timeSeconds)) {
-      calculatePaceFromTime(value, timeHours, timeMinutes, timeSeconds, unit);
-    }
   };
 
   // Handle pace changes
@@ -77,10 +50,10 @@ export default function PaceCalculator({ distance }) {
 
     if (field === "minutes") {
       setPaceMinutes(value);
-      calculateTimeFromPace(distanceValue, value, paceSeconds, unit);
+      calculateTimeFromPace(distance, value, paceSeconds);
     } else {
       setPaceSeconds(value);
-      calculateTimeFromPace(distanceValue, paceMinutes, value, unit);
+      calculateTimeFromPace(distance, paceMinutes, value);
     }
   };
 
@@ -90,26 +63,13 @@ export default function PaceCalculator({ distance }) {
 
     if (field === "hours") {
       setTimeHours(value);
-      calculatePaceFromTime(distanceValue, value, timeMinutes, timeSeconds, unit);
+      calculatePaceFromTime(distance, value, timeMinutes, timeSeconds);
     } else if (field === "minutes") {
       setTimeMinutes(value);
-      calculatePaceFromTime(distanceValue, timeHours, value, timeSeconds, unit);
+      calculatePaceFromTime(distance, timeHours, value, timeSeconds);
     } else {
       setTimeSeconds(value);
-      calculatePaceFromTime(distanceValue, timeHours, timeMinutes, value, unit);
-    }
-  };
-
-  // Handle unit toggle
-  const handleUnitToggle = () => {
-    const newUnit = unit === "km" ? "mi" : "km";
-    setUnit(newUnit);
-
-    // Recalculate based on last edited field
-    if (lastEdited === "pace" && (paceMinutes || paceSeconds)) {
-      calculateTimeFromPace(distanceValue, paceMinutes, paceSeconds, newUnit);
-    } else if (lastEdited === "time" && (timeHours || timeMinutes || timeSeconds)) {
-      calculatePaceFromTime(distanceValue, timeHours, timeMinutes, timeSeconds, newUnit);
+      calculatePaceFromTime(distance, timeHours, timeMinutes, value);
     }
   };
 
@@ -128,33 +88,10 @@ export default function PaceCalculator({ distance }) {
       <h2 className="pace-calculator-title">Pace / Time Calculator</h2>
 
       <div className="pace-calculator-grid">
-        {/* Distance */}
-        <div className="pace-calculator-field">
-          <label className="pace-calculator-label">
-            Distance ({unit})
-          </label>
-          <input
-            type="number"
-            step="0.01"
-            min="0"
-            value={distanceValue}
-            onChange={handleDistanceChange}
-            className="pace-calculator-input"
-            placeholder="10"
-          />
-        </div>
-
         {/* Pace */}
         <div className="pace-calculator-field">
           <label className="pace-calculator-label">
-            Pace (per {unit})
-            <button
-              onClick={handleUnitToggle}
-              className="pace-calculator-unit-toggle"
-              type="button"
-            >
-              Switch to {unit === "km" ? "mi" : "km"}
-            </button>
+            Pace (per km)
           </label>
           <div className="pace-calculator-time-inputs">
             <div className="pace-calculator-time-input-group">
