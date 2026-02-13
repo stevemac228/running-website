@@ -441,7 +441,6 @@ export default function RaceDetail() {
             {/* Show coordinates and links when map is loaded */}
             {coords && (
               <div className="race-detail-coordinates">
-                Coordinates: {coords.lat.toFixed(5)}, {coords.lon.toFixed(5)}
                 <div className="race-detail-map-links">
                   <a
                     href={`https://www.google.com/maps?q=${coords.lat},${coords.lon}`}
