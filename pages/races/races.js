@@ -65,6 +65,7 @@ export default function Races() {
   const [openRegistrationsOnly, setOpenRegistrationsOnly] = useState(false);
   const [selectedOrganizers, setSelectedOrganizers] = useState([]);
   const [priceRange, setPriceRange] = useState({ min: 0, max: 200 });
+  const [organizersDropdownOpen, setOrganizersDropdownOpen] = useState(false);
   const raceCardRefs = useRef({});
 
   // Initialize Fuse.js for fuzzy search
@@ -554,18 +555,28 @@ export default function Races() {
                         <span>Open Registrations Only</span>
                       </div>
                       
-                      <div style={{padding: '0.5rem 1rem', borderBottom: '1px solid #f0f0f0', fontWeight: '600', fontSize: '0.85rem', color: 'var(--runnl-dark-grey)'}}>
-                        Organizers
-                      </div>
-                      
-                      {/* Organizers - scrollable list */}
-                      <div style={{maxHeight: '200px', overflowY: 'auto'}}>
-                        {uniqueOrganizers.map((org) => (
-                          <div key={org} className="dropdown-item" onClick={() => toggleOrganizer(org)}>
-                            <input type="checkbox" checked={selectedOrganizers.includes(org)} readOnly />
-                            <span>{org}</span>
+                      {/* Organizers Dropdown */}
+                      <div style={{borderBottom: '1px solid #f0f0f0'}}>
+                        <div 
+                          className="dropdown-item" 
+                          onClick={() => setOrganizersDropdownOpen(!organizersDropdownOpen)}
+                          style={{cursor: 'pointer', fontWeight: '600', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
+                        >
+                          <span>Organizers {selectedOrganizers.length > 0 && `(${selectedOrganizers.length})`}</span>
+                          <span style={{fontSize: '0.8rem'}}>{organizersDropdownOpen ? '▲' : '▼'}</span>
+                        </div>
+                        
+                        {/* Organizers - scrollable list */}
+                        {organizersDropdownOpen && (
+                          <div style={{maxHeight: '200px', overflowY: 'auto', backgroundColor: '#f9f9f9'}}>
+                            {uniqueOrganizers.map((org) => (
+                              <div key={org} className="dropdown-item" onClick={() => toggleOrganizer(org)} style={{paddingLeft: '2rem'}}>
+                                <input type="checkbox" checked={selectedOrganizers.includes(org)} readOnly />
+                                <span>{org}</span>
+                              </div>
+                            ))}
                           </div>
-                        ))}
+                        )}
                       </div>
 
                       <div style={{padding: '0.5rem 1rem', borderTop: '1px solid #f0f0f0', fontWeight: '600', fontSize: '0.85rem', color: 'var(--runnl-dark-grey)'}}>
