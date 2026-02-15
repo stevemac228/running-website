@@ -2,9 +2,6 @@ import { formatDate } from "../utils/formatDate";
 
 export function getExpandedFields(race, cardType) {
   const fieldLabels = {
-    earlyBirdDeadline: "Early Bird Deadline",
-    earlyBirdCost: "Early Bird Cost",
-    registrationCost: "Registration Cost",
     fundraiser: "Fundraiser",
     location: "Location",
     startLineLocation: "Start Line Location",
