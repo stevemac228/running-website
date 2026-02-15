@@ -62,6 +62,10 @@ export default function Races() {
   const [viewMode, setViewMode] = useState("mixed"); // 'list' | 'mixed' | 'map'
   const [expandedRaceId, setExpandedRaceId] = useState(null);
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [openRegistrationsOnly, setOpenRegistrationsOnly] = useState(false);
+  const [selectedOrganizers, setSelectedOrganizers] = useState([]);
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 200 });
+  const [organizersDropdownOpen, setOrganizersDropdownOpen] = useState(false);
   const raceCardRefs = useRef({});
 
   // Initialize Fuse.js for fuzzy search
@@ -126,10 +130,57 @@ export default function Races() {
     setSearchTerm(term);
   }, []);
 
+  // Calculate active filter count for "More Filters" badge
+  const additionalFilterCount = useMemo(() => {
+    let count = 0;
+    if (openRegistrationsOnly) count++;
+    if (selectedOrganizers.length > 0) count += selectedOrganizers.length;
+    if (priceRange.min !== 0 || priceRange.max !== 200) count++;
+    return count;
+  }, [openRegistrationsOnly, selectedOrganizers, priceRange]);
+
   const toggleFilter = (key) => {
     setActiveFilters((prev) =>
       prev.includes(key) ? prev.filter((f) => f !== key) : [...prev, key]
     );
+  };
+
+  const toggleOrganizer = (org) => {
+    setSelectedOrganizers((prev) =>
+      prev.includes(org) ? prev.filter((o) => o !== org) : [...prev, org]
+    );
+  };
+
+  // Extract unique organizers from races data
+  const uniqueOrganizers = useMemo(() => {
+    const orgs = new Set();
+    races.forEach((race) => {
+      if (race.organization) {
+        orgs.add(race.organization);
+      }
+    });
+    return Array.from(orgs).sort();
+  }, [races]);
+
+  // Helper to parse price string to number
+  const parsePriceToNumber = (priceStr) => {
+    if (!priceStr || typeof priceStr !== 'string') return null;
+    const numStr = priceStr.replace(/[$,]/g, "");
+    const num = parseFloat(numStr);
+    return isNaN(num) ? null : num;
+  };
+
+  // Helper to check if registration is open
+  const isRegistrationOpen = (race) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to start of day for comparison
+    
+    const regStart = race.registrationStart ? parseUSDate(race.registrationStart) : null;
+    const regDeadline = race.registrationDeadline ? parseUSDate(race.registrationDeadline) : null;
+    
+    if (!regStart || !regDeadline) return false;
+    
+    return today >= regStart && today <= regDeadline;
   };
 
   // helper: extract month/day from Date or string
@@ -222,6 +273,32 @@ export default function Races() {
           if (!matchDistance) return false;
         }
 
+        // Open registrations filter
+        if (openRegistrationsOnly && !isRegistrationOpen(race)) return false;
+
+        // Organizer filter (multi-select)
+        if (selectedOrganizers.length > 0 && !selectedOrganizers.includes(race.organization)) {
+          return false;
+        }
+
+        // Price range filter
+        const earlyBirdPrice = parsePriceToNumber(race.earlyBirdCost);
+        const regPrice = parsePriceToNumber(race.registrationCost);
+        
+        // Determine lowest price (treat races with no price as free)
+        let lowestPrice = 0; // Default to free
+        if (earlyBirdPrice !== null && regPrice !== null) {
+          lowestPrice = Math.min(earlyBirdPrice, regPrice);
+        } else if (earlyBirdPrice !== null) {
+          lowestPrice = earlyBirdPrice;
+        } else if (regPrice !== null) {
+          lowestPrice = regPrice;
+        }
+        
+        if (lowestPrice < priceRange.min || lowestPrice > priceRange.max) {
+          return false;
+        }
+
         return true;
       })
       .sort((a, b) => {
@@ -244,7 +321,7 @@ export default function Races() {
             return 0;
         }
       });
-  }, [activeFilters, formatFilter, sortOption, dateRange, distanceRange]);
+  }, [activeFilters, formatFilter, sortOption, dateRange, distanceRange, openRegistrationsOnly, selectedOrganizers, priceRange]);
 
   // Apply fuzzy search to filtered races
   const filteredRaces = useMemo(() => {
@@ -457,6 +534,112 @@ export default function Races() {
                       <div className="dropdown-item" onClick={() => setSortOption('name-desc')}>
                         <input type="radio" checked={sortOption === 'name-desc'} readOnly />
                         <span>Name (Z–A)</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Additional Filters Dropdown */}
+                <div className="custom-dropdown" style={{position: 'relative'}}>
+                  <button 
+                    className="filter-dropdown"
+                    onClick={() => setOpenDropdown(openDropdown === 'additional' ? null : 'additional')}
+                  >
+                    More Filters {additionalFilterCount > 0 && `(${additionalFilterCount})`}
+                  </button>
+                  {openDropdown === 'additional' && (
+                    <div className="dropdown-menu" style={{minWidth: '280px'}}>
+                      {/* Open Registrations */}
+                      <div className="dropdown-item" onClick={() => setOpenRegistrationsOnly(!openRegistrationsOnly)}>
+                        <input type="checkbox" checked={openRegistrationsOnly} readOnly />
+                        <span>Open Registrations Only</span>
+                      </div>
+                      
+                      {/* Organizers Dropdown */}
+                      <div style={{borderBottom: '1px solid #f0f0f0'}}>
+                        <div 
+                          className="dropdown-item" 
+                          onClick={() => setOrganizersDropdownOpen(!organizersDropdownOpen)}
+                          style={{cursor: 'pointer', fontWeight: '600', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
+                        >
+                          <span>Organizers {selectedOrganizers.length > 0 && `(${selectedOrganizers.length})`}</span>
+                          <span style={{fontSize: '0.8rem'}}>{organizersDropdownOpen ? '▲' : '▼'}</span>
+                        </div>
+                        
+                        {/* Organizers - scrollable list */}
+                        {organizersDropdownOpen && (
+                          <div style={{maxHeight: '200px', overflowY: 'auto', backgroundColor: '#f9f9f9'}}>
+                            {uniqueOrganizers.map((org) => (
+                              <div key={org} className="dropdown-item" onClick={() => toggleOrganizer(org)} style={{paddingLeft: '2rem'}}>
+                                <input type="checkbox" checked={selectedOrganizers.includes(org)} readOnly />
+                                <span>{org}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <div style={{padding: '0.5rem 1rem', borderTop: '1px solid #f0f0f0', fontWeight: '600', fontSize: '0.85rem', color: 'var(--runnl-dark-grey)'}}>
+                        Price Range
+                      </div>
+                      
+                      {/* Price Range Slider */}
+                      <div style={{padding: '0.5rem 1rem'}}>
+                        <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.85rem'}}>
+                          <span>${priceRange.min}</span>
+                          <span>${priceRange.max === 200 ? '200+' : priceRange.max}</span>
+                        </div>
+                        <div style={{position: 'relative', height: '30px', display: 'flex', alignItems: 'center'}}>
+                          <div style={{position: 'absolute', width: '100%', height: '6px', background: '#ddd', borderRadius: '3px'}}></div>
+                          <input
+                            type="range"
+                            min="0"
+                            max="200"
+                            step="5"
+                            value={priceRange.min}
+                            onChange={(e) => {
+                              const newMin = Number(e.target.value);
+                              if (newMin <= priceRange.max) {
+                                setPriceRange({...priceRange, min: newMin});
+                              }
+                            }}
+                            aria-label="Minimum price"
+                            style={{
+                              position: 'absolute',
+                              width: '100%',
+                              appearance: 'none',
+                              background: 'transparent',
+                              margin: 0,
+                              padding: 0,
+                              zIndex: 3
+                            }}
+                            className="range-slider range-slider-min"
+                          />
+                          <input
+                            type="range"
+                            min="0"
+                            max="200"
+                            step="5"
+                            value={priceRange.max}
+                            onChange={(e) => {
+                              const newMax = Number(e.target.value);
+                              if (newMax >= priceRange.min) {
+                                setPriceRange({...priceRange, max: newMax});
+                              }
+                            }}
+                            aria-label="Maximum price"
+                            style={{
+                              position: 'absolute',
+                              width: '100%',
+                              appearance: 'none',
+                              background: 'transparent',
+                              margin: 0,
+                              padding: 0,
+                              zIndex: 4
+                            }}
+                            className="range-slider range-slider-max"
+                          />
+                        </div>
                       </div>
                     </div>
                   )}
