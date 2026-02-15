@@ -1757,5 +1757,29 @@
     "nLAACertified": false,
     "format": "Competitive",
     "terrain": "Trail"
+  },
+  {
+    "id": 72,
+    "name": "Canada Day 5k",
+    "nickName": "Canada Day 5k",
+    "date": "2026-07-01",
+    "startTime": "11:00 AM",
+    "distance": 5,
+    "registrationStart": "2026-01-19",
+    "earlyBirdDeadline": "2026-05-31",
+    "earlyBirdCost": "$40.11",
+    "registrationDeadline": "2026-06-24",
+    "registrationCost": "$50.90",
+    "fundraiser": true,
+    "medal": true,
+    "shirt": false,
+    "reception": false,
+    "location": "St.Johns",
+    "startLineLocation": "Bowring Park",
+    "startLineCoordinates": [47.52458142, -52.75325241],
+    "organization": "Running Room / NL Events",
+    "nLAACertified": false,
+    "format": "Fun",
+    "terrain": "Road"
   }
 ]
