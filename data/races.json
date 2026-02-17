@@ -1112,8 +1112,8 @@
   },
   {
     "id": 45,
-    "name": "CIBC Run for the Cure",
-    "nickName": "Run for the Cure",
+    "name": "CIBC Run for the Cure 5k",
+    "nickName": "Run for the Cure 5k",
     "date": "2025-10-05",
     "startTime": "10:00 AM",
     "distance": 5,
@@ -1136,8 +1136,8 @@
   },
   {
     "id": 46,
-    "name": "RBC Race for the Kids",
-    "nickName": "Race for the Kids",
+    "name": "RBC Race for the Kids 5k",
+    "nickName": "Race for the Kids 5k",
     "date": "2025-10-11",
     "startTime": "10:00 AM",
     "distance": 5,
@@ -1806,5 +1806,29 @@
     "nLAACertified": false,
     "format": "Fun",
     "terrain": "Road"
-  }
+  },
+  {
+    "id": 74,
+    "name": "RBC Race for the Kids 2k",
+    "nickName": "Race for the Kids 2k",
+    "date": "2025-10-11",
+    "startTime": "10:05 AM",
+    "distance": 2,
+    "registrationStart": null,
+    "earlyBirdDeadline": null,
+    "earlyBirdCost": null,
+    "registrationDeadline": null,
+    "registrationCost": "$11.50",
+    "fundraiser": true,
+    "medal": false,
+    "shirt": false,
+    "reception": false,
+    "location": "St.Johns",
+    "startLineLocation": "Bowring Park",
+    "startLineCoordinates": [],
+    "organization": "Janeway / RBC",
+    "nLAACertified": false,
+    "format": "Fun",
+    "terrain": "Road"
+  },
 ]
