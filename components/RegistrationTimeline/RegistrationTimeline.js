@@ -47,27 +47,24 @@ export default function RegistrationTimeline({ race }) {
   }
 
   return (
-    <div className="registration-timeline">
-      <h2 className="registration-timeline-title">Registration Timeline</h2>
-      <div className="registration-timeline-container">
-        {timelineItems.map((item, index) => (
-          <div key={`${item.type}-${item.date}`} className="registration-timeline-item">
-            <div className="registration-timeline-marker">
-              <div className={`registration-timeline-dot registration-timeline-dot-${item.type}`}></div>
-              {index < timelineItems.length - 1 && (
-                <div className="registration-timeline-line"></div>
-              )}
-            </div>
-            <div className="registration-timeline-content">
-              <div className="registration-timeline-label">{item.label}</div>
-              <div className="registration-timeline-date">{formatDate(item.date)}</div>
-              {item.cost && (
-                <div className="registration-timeline-cost">{item.cost}</div>
-              )}
-            </div>
+    <div className="registration-timeline-container">
+      {timelineItems.map((item, index) => (
+        <div key={`${item.type}-${item.date}`} className="registration-timeline-item">
+          <div className="registration-timeline-marker">
+            <div className={`registration-timeline-dot registration-timeline-dot-${item.type}`}></div>
+            {index < timelineItems.length - 1 && (
+              <div className="registration-timeline-line"></div>
+            )}
           </div>
-        ))}
-      </div>
+          <div className="registration-timeline-content">
+            <div className="registration-timeline-label">{item.label}</div>
+            <div className="registration-timeline-date">{formatDate(item.date)}</div>
+            {item.cost && (
+              <div className="registration-timeline-cost">{item.cost}</div>
+            )}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

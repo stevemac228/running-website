@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import PaceCalculator from "../../components/PaceCalculator/PaceCalculator";
@@ -399,17 +399,37 @@ export default function RaceDetail() {
           </div>
         </header>
 
-        <RegistrationTimeline race={race} />
-
         <div className="race-detail-grid">
           <section>
             <div className="race-detail-info-grid">
-              {displayEntries.map(({ key, label, value }) => (
-                <div key={key} className="race-detail-info-row">
-                  <div className="race-detail-info-label">{label}</div>
-                  <div className="race-detail-info-value">{value}</div>
-                </div>
-              ))}
+              {displayEntries.map(({ key, label, value }) => {
+                // Insert registration timeline after distance field
+                if (key === "distance") {
+                  return (
+                    <React.Fragment key={key}>
+                      <div className="race-detail-info-row">
+                        <div className="race-detail-info-label">{label}</div>
+                        <div className="race-detail-info-value">{value}</div>
+                      </div>
+                      {race && (
+                        <div className="race-detail-info-row registration-timeline">
+                          <div className="race-detail-info-label registration-timeline-title">Registration</div>
+                          <div className="race-detail-info-value">
+                            <RegistrationTimeline race={race} />
+                          </div>
+                        </div>
+                      )}
+                    </React.Fragment>
+                  );
+                }
+                
+                return (
+                  <div key={key} className="race-detail-info-row">
+                    <div className="race-detail-info-label">{label}</div>
+                    <div className="race-detail-info-value">{value}</div>
+                  </div>
+                );
+              })}
             </div>
           </section>
 

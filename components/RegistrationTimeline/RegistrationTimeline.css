@@ -1,34 +1,43 @@
 .registration-timeline {
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 8px 0;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.07);
 }
 
 .registration-timeline-title {
-  font-size: 20px;
-  margin: 0 0 20px 0;
-  color: #444;
+  min-width: 200px;
+  font-weight: 700;
+  font-size: 16px;
+  color: #333;
+  margin: 0;
+  align-self: flex-start;
+  padding-top: 4px;
 }
 
 .registration-timeline-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   gap: 0;
+  flex: 1;
 }
 
 .registration-timeline-item {
   display: flex;
-  gap: 16px;
+  flex-direction: column;
+  align-items: center;
   position: relative;
+  flex: 1;
 }
 
 .registration-timeline-marker {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  position: relative;
+  width: 100%;
+  margin-bottom: 8px;
 }
 
 .registration-timeline-dot {
@@ -58,63 +67,90 @@
 }
 
 .registration-timeline-line {
-  width: 2px;
+  height: 2px;
   background-color: #e0e0e0;
   flex-grow: 1;
-  margin-top: 4px;
-  margin-bottom: 4px;
-  min-height: 40px;
+  margin-left: 4px;
+  margin-right: 4px;
 }
 
 .registration-timeline-content {
-  flex: 1;
-  padding-bottom: 24px;
-}
-
-.registration-timeline-item:last-child .registration-timeline-content {
-  padding-bottom: 0;
+  text-align: center;
+  width: 100%;
 }
 
 .registration-timeline-label {
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: 600;
+  font-size: 13px;
   color: #333;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .registration-timeline-date {
-  font-size: 14px;
+  font-size: 12px;
   color: #666;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .registration-timeline-cost {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
   color: #4285f4;
-  margin-top: 4px;
 }
 
 /* Mobile responsive styles */
 @media (max-width: 768px) {
   .registration-timeline {
-    padding: 16px;
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
   }
 
   .registration-timeline-title {
-    font-size: 18px;
-    margin-bottom: 16px;
+    min-width: auto;
+    font-size: 14px;
+  }
+
+  .registration-timeline-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .registration-timeline-item {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .registration-timeline-marker {
+    flex-direction: column;
+    width: auto;
+    margin-bottom: 0;
+    margin-right: 12px;
+  }
+
+  .registration-timeline-line {
+    width: 2px;
+    height: 30px;
+    flex-grow: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+
+  .registration-timeline-content {
+    text-align: left;
   }
 
   .registration-timeline-label {
-    font-size: 15px;
-  }
-
-  .registration-timeline-date {
     font-size: 13px;
   }
 
+  .registration-timeline-date {
+    font-size: 12px;
+  }
+
   .registration-timeline-cost {
-    font-size: 16px;
+    font-size: 15px;
   }
 }
