@@ -53,7 +53,7 @@ export default function RegistrationTimeline({ race }) {
       <h2 className="registration-timeline-title">Registration Timeline</h2>
       <div className="registration-timeline-container">
         {timelineItems.map((item, index) => (
-          <div key={index} className="registration-timeline-item">
+          <div key={`${item.type}-${item.date}`} className="registration-timeline-item">
             <div className="registration-timeline-marker">
               <div className={`registration-timeline-dot registration-timeline-dot-${item.type}`}></div>
               {index < timelineItems.length - 1 && (
