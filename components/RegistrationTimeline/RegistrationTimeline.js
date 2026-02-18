@@ -28,7 +28,7 @@ export default function RegistrationTimeline({ race }) {
     });
   }
 
-  if (earlyBirdDeadline && earlyBirdCost) {
+  if (earlyBirdDeadline) {
     timelineItems.push({
       date: earlyBirdDeadline,
       label: "Early Bird Deadline",
@@ -45,8 +45,6 @@ export default function RegistrationTimeline({ race }) {
       type: "deadline",
     });
   }
-
-  if (timelineItems.length === 0) return null;
 
   return (
     <div className="registration-timeline">
