@@ -65,8 +65,10 @@
 }
 
 .registration-timeline-content {
-  text-align: center;
+  text-align: left;
   width: 100%;
+  position: relative;
+  left: -7%;
 }
 
 .registration-timeline-label {
@@ -91,9 +93,11 @@
 /* Mobile responsive styles */
 @media (max-width: 768px) {
   .registration-timeline {
+    display: flex;
     flex-direction: column;
-    gap: 8px;
-    align-items: stretch;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
   }
 
   .registration-timeline-title {
@@ -128,9 +132,11 @@
     margin-bottom: 4px;
   }
 
-  .registration-timeline-content {
-    text-align: left;
-  }
+.registration-timeline-content {
+  text-align: center;
+  width: 100%;
+  padding-left: 2vw;
+}
 
   .registration-timeline-label {
     font-size: 13px;
