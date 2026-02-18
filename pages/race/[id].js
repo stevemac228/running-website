@@ -412,7 +412,7 @@ export default function RaceDetail() {
                         <div className="race-detail-info-value">{value}</div>
                       </div>
                       <div className="race-detail-info-row registration-timeline">
-                        <div className="race-detail-info-label registration-timeline-title">Registration</div>
+                        <div className="race-detail-info-label">Registration</div>
                         <div className="race-detail-info-value">
                           <RegistrationTimeline race={race} />
                         </div>

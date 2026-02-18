@@ -5,16 +5,6 @@
   padding: 8px 0;
 }
 
-.registration-timeline-title {
-  min-width: 200px;
-  font-weight: 700;
-  font-size: 16px;
-  color: #333;
-  margin: 0;
-  align-self: flex-start;
-  padding-top: 4px;
-}
-
 .registration-timeline-container {
   display: flex;
   flex-direction: row;
