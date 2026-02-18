@@ -247,8 +247,9 @@ export default function MapsPage() {
           }
 
           if (!parsed) {
-            // show a quick UI hint by keeping marker popup open while loading
-            if (group.marker) {
+            // For shared markers, don't change popup content, just show loading in console
+            // For non-shared markers, show loading message in popup
+            if (!group.sharedMarker && group.marker) {
               group.marker.setPopupContent(`<div class="custom-popup"><div class="popup-title">${group.name}</div><div>Loading route…</div></div>`);
               if (!group.marker.isPopupOpen || !group.isPopupRequested) {
                 group.marker.openPopup();
@@ -264,19 +265,22 @@ export default function MapsPage() {
             // compute elevation now
             const elevInfo = computeElevation(parsed);
             group.elevInfo = elevInfo;
-            // update popup & sidebar info
-            const distanceLabel = typeof group.rawRace.distance === "number" ? `${group.rawRace.distance}km` : (typeof group.rawRace.distance === "string" ? group.rawRace.distance : null);
-            const popupHtml = buildPopupHtml(group.rawRace, distanceLabel, elevInfo, group.id);
-            if (group.marker) {
-              group.marker.setPopupContent(popupHtml);
+            // For shared markers, don't update popup content - keep the multi-race selection popup
+            // For non-shared markers, update with elevation info
+            if (!group.sharedMarker) {
+              const distanceLabel = typeof group.rawRace.distance === "number" ? `${group.rawRace.distance}km` : (typeof group.rawRace.distance === "string" ? group.rawRace.distance : null);
+              const popupHtml = buildPopupHtml(group.rawRace, distanceLabel, elevInfo, group.id);
+              if (group.marker) {
+                group.marker.setPopupContent(popupHtml);
+              }
             }
             // if we have a layer and group requested to be visible - add it
             if (layer) {
               if (!map.hasLayer(layer)) layer.addTo(map);
             }
           } else {
-            // no segments: update popup to say route not available
-            if (group.marker) {
+            // no segments: For shared markers, don't change popup. For non-shared, show error.
+            if (!group.sharedMarker && group.marker) {
               group.marker.setPopupContent(`<div class="custom-popup"><div class="popup-title">${group.name}</div><div class="popup-elevation">Route not available</div></div>`);
             }
           }
@@ -289,7 +293,11 @@ export default function MapsPage() {
           }
           group.visible = true;
 
-          if (group.marker) {
+          // For shared markers, keep the multi-race selection popup open
+          if (group.sharedMarker && group.marker && !group.marker.isPopupOpen()) {
+            group.isClosingProgrammatically = false;
+            group.marker.openPopup();
+          } else if (!group.sharedMarker && group.marker) {
             group.isClosingProgrammatically = false;
             group.marker.openPopup();
           }
@@ -311,7 +319,17 @@ export default function MapsPage() {
             map.removeLayer(group.layer);
           }
           group.visible = false;
-          if (group.marker && group.marker.isPopupOpen && group.marker.isPopupOpen()) {
+          // For shared markers, check if any other race at this location is still visible
+          // If not, we can close the popup. Otherwise keep it open.
+          if (group.sharedMarker && group.groupsAtLocation) {
+            const anyVisible = group.groupsAtLocation.some(g => g.visible && g !== group);
+            if (!anyVisible && group.marker && group.marker.isPopupOpen && group.marker.isPopupOpen()) {
+              // Restore the multi-race selection popup if it was changed
+              if (group.multiRacePopupHtml) {
+                group.marker.setPopupContent(group.multiRacePopupHtml);
+              }
+            }
+          } else if (!group.sharedMarker && group.marker && group.marker.isPopupOpen && group.marker.isPopupOpen()) {
             group.isClosingProgrammatically = true;
             group.marker.closePopup();
           }
@@ -390,7 +408,7 @@ export default function MapsPage() {
 
         if (racesAtLocation.length > 1) {
           // Multiple races at same location - create selection popup
-          const popupHtml = `
+          const multiRacePopupHtml = `
             <div class="custom-popup multi-race-popup">
               <div class="popup-title">Select a race (${racesAtLocation.length} at this location):</div>
               <ul class="race-selection-list">
@@ -410,7 +428,7 @@ export default function MapsPage() {
             </div>
           `;
           
-          marker.bindPopup(popupHtml, {
+          marker.bindPopup(multiRacePopupHtml, {
             className: "modern-leaflet-popup",
             autoClose: false,
             closeOnClick: false,
@@ -451,6 +469,7 @@ export default function MapsPage() {
               gpxLoaded: false,
               gpxLoading: false,
               sharedMarker: true,
+              multiRacePopupHtml, // Store the multi-race selection popup HTML
               groupsAtLocation: null, // Will be set after all groups created
             };
             
