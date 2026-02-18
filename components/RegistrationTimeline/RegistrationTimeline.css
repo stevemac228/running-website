@@ -90,6 +90,33 @@
   color: #4285f4;
 }
 
+.registration-timeline-calendar-btn {
+  margin-top: 8px;
+  padding: 6px 12px;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.registration-timeline-calendar-btn:hover {
+  background-color: #357ae8;
+}
+
+.registration-timeline-calendar-btn:active {
+  background-color: #2a66c7;
+}
+
+.registration-timeline-calendar-btn:focus {
+  outline: 2px solid #4285f4;
+  outline-offset: 2px;
+}
+
 /* Mobile responsive styles */
 @media (max-width: 768px) {
   .registration-timeline {
@@ -148,5 +175,10 @@
 
   .registration-timeline-cost {
     font-size: 15px;
+  }
+
+  .registration-timeline-calendar-btn {
+    font-size: 11px;
+    padding: 5px 10px;
   }
 }
