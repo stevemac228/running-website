@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { parseGpxToSegments } from "../../utils/parseGpx";
+import { getFirstGpxCoordinate } from "../../utils/getFirstGpxCoordinate";
 
 // Default map view settings - Change these to set initial position and zoom
 const DEFAULT_MAP_CENTER = [47.5758536, -52.83462524]; // [latitude, longitude]
@@ -84,15 +85,14 @@ export default function RacesMapView({ filteredRaces = [], expandedRaceId = null
   const previousRaceIdsRef = useRef([]);
   const previousExpandedRaceIdRef = useRef(null);
 
-  // Get race coordinates with fallback
+  // Get race coordinates - returns a placeholder initially, will be updated from GPX
   const getRaceCoordinates = (race) => {
-    if (race.startLineCoordinates?.length === 2) {
-      const [lat, lng] = race.startLineCoordinates;
-      if (typeof lat === "number" && typeof lng === "number" && isFinite(lat) && isFinite(lng)) {
-        return { lat, lng };
-      }
+    // First check if we have cached GPX coordinates
+    if (race._gpxCoords) {
+      return race._gpxCoords;
     }
 
+    // Fallback to location-based coordinates for initial display
     const locationKey = race.location?.toLowerCase().trim();
     if (locationKey && LOCATION_FALLBACKS[locationKey]) {
       return LOCATION_FALLBACKS[locationKey];
@@ -176,6 +176,20 @@ export default function RacesMapView({ filteredRaces = [], expandedRaceId = null
           link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
           document.head.appendChild(link);
         }
+
+        if (!isMounted) return;
+
+        // Load GPX coordinates for all races first
+        console.log("Loading GPX coordinates for races...");
+        await Promise.all(
+          filteredRaces.map(async (race) => {
+            const gpxCoord = await getFirstGpxCoordinate(race);
+            if (gpxCoord) {
+              race._gpxCoords = gpxCoord;
+            }
+          })
+        );
+        console.log("GPX coordinates loaded");
 
         if (!isMounted) return;
 

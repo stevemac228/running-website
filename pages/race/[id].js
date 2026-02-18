@@ -9,6 +9,7 @@ import { formatDate } from "../../utils/formatDate";
 import { formatTime } from "../../utils/formatTime";
 import { getRaceId } from "../../utils/getRaceId";
 import { parseGpxToSegments } from "../../utils/parseGpx";
+import { getFirstGpxCoordinate } from "../../utils/getFirstGpxCoordinate";
 import { isPreviousYear } from "../../utils/isPreviousYear"; // <-- new import
 
 export default function RaceDetail() {
@@ -114,73 +115,77 @@ export default function RaceDetail() {
   useEffect(() => {
     if (!race) return;
     
-    // Check if coordinates are directly provided
-    if (race.startLineCoordinates && Array.isArray(race.startLineCoordinates) && race.startLineCoordinates.length === 2) {
-      const [lat, lon] = race.startLineCoordinates;
-      if (typeof lat === 'number' && typeof lon === 'number') {
-        setCoords({ lat, lon });
+    let cancelled = false;
+    
+    async function loadCoordinates() {
+      // First, try to get coordinates from GPX file
+      const gpxCoord = await getFirstGpxCoordinate(race);
+      if (gpxCoord && !cancelled) {
+        setCoords({ lat: gpxCoord.lat, lon: gpxCoord.lng });
         setGeoLoading(false);
         return;
       }
+      
+      // prefer startLineLocation then location
+      const parts = [];
+      if (race.startLineLocation) parts.push(race.startLineLocation);
+      if (race.location) parts.push(race.location);
+      const place = parts.join(", ").trim();
+      if (!place) return;
+
+      // Fallback coordinates for common Newfoundland locations
+      const locationFallbacks = {
+        "paradise": { lat: 47.5333, lon: -52.8833 },
+        "octagon pond": { lat: 47.5333, lon: -52.8833 },
+        "st.johns": { lat: 47.5615, lon: -52.7126 },
+        "st johns": { lat: 47.5615, lon: -52.7126 },
+        "mount pearl": { lat: 47.5189, lon: -52.8056 },
+        "cbs": { lat: 47.5008, lon: -52.9986 },
+        "conception bay south": { lat: 47.5008, lon: -52.9986 },
+        "flatrock": { lat: 47.6667, lon: -52.7333 },
+        "north west river": { lat: 53.5233, lon: -60.1444 },
+      };
+
+      async function geocode() {
+        setGeoLoading(true);
+        setGeoError(null);
+        
+        // Check for fallback first
+        const placeLower = place.toLowerCase();
+        for (const [key, coords] of Object.entries(locationFallbacks)) {
+          if (placeLower.includes(key)) {
+            if (!cancelled) {
+              setCoords(coords);
+              setGeoLoading(false);
+            }
+            return;
+          }
+        }
+        
+        try {
+          const q = encodeURIComponent(place);
+          const url = `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`;
+          const res = await fetch(url, { headers: { "Accept-Language": "en" } });
+          if (!res.ok) throw new Error("Network error");
+          const data = await res.json();
+          if (cancelled) return;
+          if (Array.isArray(data) && data.length > 0) {
+            const item = data[0];
+            setCoords({ lat: parseFloat(item.lat), lon: parseFloat(item.lon) });
+          } else {
+            setGeoError("Location not found");
+          }
+        } catch (err) {
+          if (!cancelled) setGeoError("Geocoding failed");
+        } finally {
+          if (!cancelled) setGeoLoading(false);
+        }
+      }
+      geocode();
     }
     
-    // prefer startLineLocation then location
-    const parts = [];
-    if (race.startLineLocation) parts.push(race.startLineLocation);
-    if (race.location) parts.push(race.location);
-    const place = parts.join(", ").trim();
-    if (!place) return;
-
-    // Fallback coordinates for common Newfoundland locations
-    const locationFallbacks = {
-      "paradise": { lat: 47.5333, lon: -52.8833 },
-      "octagon pond": { lat: 47.5333, lon: -52.8833 },
-      "st.johns": { lat: 47.5615, lon: -52.7126 },
-      "st johns": { lat: 47.5615, lon: -52.7126 },
-      "mount pearl": { lat: 47.5189, lon: -52.8056 },
-      "cbs": { lat: 47.5008, lon: -52.9986 },
-      "conception bay south": { lat: 47.5008, lon: -52.9986 },
-      "flatrock": { lat: 47.6667, lon: -52.7333 },
-      "north west river": { lat: 53.5233, lon: -60.1444 },
-    };
-
-    let cancelled = false;
-    async function geocode() {
-      setGeoLoading(true);
-      setGeoError(null);
-      
-      // Check for fallback first
-      const placeLower = place.toLowerCase();
-      for (const [key, coords] of Object.entries(locationFallbacks)) {
-        if (placeLower.includes(key)) {
-          if (!cancelled) {
-            setCoords(coords);
-            setGeoLoading(false);
-          }
-          return;
-        }
-      }
-      
-      try {
-        const q = encodeURIComponent(place);
-        const url = `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`;
-        const res = await fetch(url, { headers: { "Accept-Language": "en" } });
-        if (!res.ok) throw new Error("Network error");
-        const data = await res.json();
-        if (cancelled) return;
-        if (Array.isArray(data) && data.length > 0) {
-          const item = data[0];
-          setCoords({ lat: parseFloat(item.lat), lon: parseFloat(item.lon) });
-        } else {
-          setGeoError("Location not found");
-        }
-      } catch (err) {
-        if (!cancelled) setGeoError("Geocoding failed");
-      } finally {
-        if (!cancelled) setGeoLoading(false);
-      }
-    }
-    geocode();
+    loadCoordinates();
+    
     return () => {
       cancelled = true;
     };
