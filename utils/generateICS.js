@@ -25,8 +25,10 @@ export function generateICS(title, dateString, description = "") {
   const nowSecond = String(now.getUTCSeconds()).padStart(2, "0");
   const timestamp = `${nowYear}${nowMonth}${nowDay}T${nowHour}${nowMinute}${nowSecond}Z`;
   
-  // Generate unique ID
-  const uid = `${timestamp}-${Math.random().toString(36).slice(2, 11)}@runnl.ca`;
+  // Generate unique ID using timestamp and random string
+  // Using timestamp + random for better uniqueness than Math.random() alone
+  const randomPart = Math.random().toString(36).slice(2, 11) + Math.random().toString(36).slice(2, 11);
+  const uid = `${timestamp}-${randomPart}@runnl.ca`;
   
   // Build ICS content
   const icsContent = [

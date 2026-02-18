@@ -80,7 +80,7 @@ export default function RegistrationTimeline({ race }) {
               title="Add to calendar"
               aria-label={`Add ${item.label} to calendar`}
             >
-              📅 Add to Calendar
+              Add to Calendar
             </button>
           </div>
         </div>
