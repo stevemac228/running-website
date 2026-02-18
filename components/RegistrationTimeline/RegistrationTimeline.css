@@ -8,7 +8,7 @@
 .registration-timeline-container {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   gap: 0;
   flex: 1;
 }
@@ -26,7 +26,8 @@
   flex-direction: row;
   align-items: center;
   width: 100%;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  height: 16px;
 }
 
 .registration-timeline-dot {
