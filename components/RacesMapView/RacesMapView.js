@@ -11,6 +11,9 @@ const RACE_COLORS = [
   "#a6cee3", "#b2df8a", "#fb9a99", "#fdbf6f", "#cab2d6",
 ];
 
+const MULTI_RACE_MARKER_COLOR = "#FF6B35";
+const COORDINATE_PRECISION = 6;
+
 const LOCATION_FALLBACKS = {
   paradise: { lat: 47.5333, lng: -52.8833 },
   "octagon pond": { lat: 47.5333, lng: -52.8833 },
@@ -218,7 +221,7 @@ export default function RacesMapView({ filteredRaces = [], expandedRaceId = null
         const racesByCoords = new Map();
         filteredRaces.forEach((race) => {
           const coords = getRaceCoordinates(race);
-          const key = `${coords.lat.toFixed(6)},${coords.lng.toFixed(6)}`;
+          const key = `${coords.lat.toFixed(COORDINATE_PRECISION)},${coords.lng.toFixed(COORDINATE_PRECISION)}`;
           if (!racesByCoords.has(key)) {
             racesByCoords.set(key, []);
           }
@@ -231,7 +234,7 @@ export default function RacesMapView({ filteredRaces = [], expandedRaceId = null
           const coords = getRaceCoordinates(firstRace);
           
           // Determine marker color (use first race's color, or indicate multiple)
-          const color = racesAtLocation.length > 1 ? "#FF6B35" : getMapColor(firstRace);
+          const color = racesAtLocation.length > 1 ? MULTI_RACE_MARKER_COLOR : getMapColor(firstRace);
           
           // Create marker icon
           const markerIcon = L.divIcon({

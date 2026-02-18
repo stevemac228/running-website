@@ -16,6 +16,9 @@ const LOCATION_FALLBACKS = {
   "north west river": { lat: 53.5233, lng: -60.1444 },
 };
 
+const MULTI_RACE_MARKER_COLOR = "#FF6B35";
+const COORDINATE_PRECISION = 6;
+
 const buildPopupHtml = (race, distanceLabel, elevInfo, id) => {
   const uid = String(id ?? Math.random()).replace(/[^a-z0-9_-]/gi, "");
   const elevLine = elevInfo
@@ -361,7 +364,7 @@ export default function MapsPage() {
         racesWithCoords.push({ race, raceId, startLatLng, index });
         
         // Group by coordinates
-        const coordKey = `${startLatLng.lat.toFixed(6)},${startLatLng.lng.toFixed(6)}`;
+        const coordKey = `${startLatLng.lat.toFixed(COORDINATE_PRECISION)},${startLatLng.lng.toFixed(COORDINATE_PRECISION)}`;
         if (!racesByCoords.has(coordKey)) {
           racesByCoords.set(coordKey, []);
         }
@@ -374,7 +377,7 @@ export default function MapsPage() {
         const startLatLng = firstRaceData.startLatLng;
         
         // Determine marker color
-        const color = racesAtLocation.length > 1 ? "#FF6B35" : getMapColor(firstRaceData.race);
+        const color = racesAtLocation.length > 1 ? MULTI_RACE_MARKER_COLOR : getMapColor(firstRaceData.race);
         
         const marker = L.marker([startLatLng.lat, startLatLng.lng], {
           icon: L.divIcon({
