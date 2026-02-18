@@ -1,0 +1,146 @@
+.registration-timeline {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 8px 0;
+}
+
+.registration-timeline-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0;
+  flex: 1;
+}
+
+.registration-timeline-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+}
+
+.registration-timeline-marker {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 12px;
+  height: 16px;
+}
+
+.registration-timeline-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #4285f4;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 2px #4285f4;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.registration-timeline-dot-start {
+  background-color: #34a853;
+  box-shadow: 0 0 0 2px #34a853;
+}
+
+.registration-timeline-dot-earlybird {
+  background-color: #fbbc04;
+  box-shadow: 0 0 0 2px #fbbc04;
+}
+
+.registration-timeline-dot-deadline {
+  background-color: #ea4335;
+  box-shadow: 0 0 0 2px #ea4335;
+}
+
+.registration-timeline-line {
+  height: 2px;
+  background-color: #e0e0e0;
+  flex-grow: 1;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.registration-timeline-content {
+  text-align: center;
+  width: 100%;
+}
+
+.registration-timeline-label {
+  font-weight: 600;
+  font-size: 13px;
+  color: #333;
+  margin-bottom: 2px;
+}
+
+.registration-timeline-date {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.registration-timeline-cost {
+  font-size: 16px;
+  font-weight: 700;
+  color: #4285f4;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .registration-timeline {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .registration-timeline-title {
+    min-width: auto;
+    font-size: 14px;
+  }
+
+  .registration-timeline-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .registration-timeline-item {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .registration-timeline-marker {
+    flex-direction: column;
+    width: auto;
+    margin-bottom: 0;
+    margin-right: 12px;
+  }
+
+  .registration-timeline-line {
+    width: 2px;
+    height: 30px; /* Fixed height for consistent vertical spacing between items */
+    flex-grow: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+
+  .registration-timeline-content {
+    text-align: left;
+  }
+
+  .registration-timeline-label {
+    font-size: 13px;
+  }
+
+  .registration-timeline-date {
+    font-size: 12px;
+  }
+
+  .registration-timeline-cost {
+    font-size: 15px;
+  }
+}
