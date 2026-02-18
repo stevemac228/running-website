@@ -978,6 +978,50 @@ body::-webkit-scrollbar-track {
   padding-left: 0;
 }
 
+/* Multi-race popup styles */
+.multi-race-popup {
+  max-width: 300px;
+}
+
+.race-selection-list {
+  list-style: none;
+  margin: 8px 0 0 0;
+  padding: 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.race-selection-item {
+  padding: 8px 10px;
+  margin: 4px 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.race-selection-item:hover {
+  background-color: rgba(255, 107, 53, 0.1);
+  border-color: #FF6B35;
+  transform: translateX(2px);
+}
+
+.race-selection-item strong {
+  font-size: 0.9rem;
+  color: var(--runnl-dark-text);
+  font-weight: 600;
+}
+
+.race-selection-item .race-distance {
+  font-size: 0.8rem;
+  color: var(--runnl-dark-blue);
+  font-weight: 500;
+}
+
 /* Modern close button */
 .modern-leaflet-popup .leaflet-popup-close-button {
   color: var(--runnl-light-grey);

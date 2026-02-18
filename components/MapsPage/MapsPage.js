@@ -331,6 +331,10 @@ export default function MapsPage() {
       
       const gpxCoordinatesResults = await Promise.all(gpxCoordinatesPromises);
       
+      // Group races by coordinates to handle co-located races
+      const racesByCoords = new Map();
+      const racesWithCoords = [];
+      
       gpxCoordinatesResults.forEach(({ race, gpxCoord }, index) => {
         const raceId = getRaceId(race);
         let startLatLng = null;
@@ -353,9 +357,25 @@ export default function MapsPage() {
 
         // if no startLatLng and no cached GPX start, still add nothing (no marker)
         if (!startLatLng) return;
-
-        // choose color based on race format / nLAACertified
-        const color = getMapColor(race);
+        
+        racesWithCoords.push({ race, raceId, startLatLng, index });
+        
+        // Group by coordinates
+        const coordKey = `${startLatLng.lat.toFixed(6)},${startLatLng.lng.toFixed(6)}`;
+        if (!racesByCoords.has(coordKey)) {
+          racesByCoords.set(coordKey, []);
+        }
+        racesByCoords.get(coordKey).push({ race, raceId, startLatLng, index });
+      });
+      
+      // Create markers for each coordinate group
+      racesByCoords.forEach((racesAtLocation, coordKey) => {
+        const firstRaceData = racesAtLocation[0];
+        const startLatLng = firstRaceData.startLatLng;
+        
+        // Determine marker color
+        const color = racesAtLocation.length > 1 ? "#FF6B35" : getMapColor(firstRaceData.race);
+        
         const marker = L.marker([startLatLng.lat, startLatLng.lng], {
           icon: L.divIcon({
             className: "custom-div-icon",
@@ -365,57 +385,182 @@ export default function MapsPage() {
           }),
         }).addTo(map);
 
-        const distanceValue =
-          typeof race.distance === "number"
-            ? race.distance
-            : typeof race.distance === "string" && race.distance.trim() !== ""
-            ? race.distance.trim()
-            : null;
+        if (racesAtLocation.length > 1) {
+          // Multiple races at same location - create selection popup
+          const popupHtml = `
+            <div class="custom-popup multi-race-popup">
+              <div class="popup-title">Select a race (${racesAtLocation.length} at this location):</div>
+              <ul class="race-selection-list">
+                ${racesAtLocation.map(({ race, index }) => {
+                  const distanceValue = typeof race.distance === "number"
+                    ? race.distance
+                    : typeof race.distance === "string" && race.distance.trim() !== ""
+                    ? race.distance.trim()
+                    : null;
+                  const distanceLabel = typeof distanceValue === "number" ? `${distanceValue}km` : distanceValue;
+                  return `<li class="race-selection-item" data-group-index="${index}">
+                    <strong>${race.name}</strong>
+                    ${distanceLabel ? `<span class="race-distance">${distanceLabel}</span>` : ''}
+                  </li>`;
+                }).join('')}
+              </ul>
+            </div>
+          `;
+          
+          marker.bindPopup(popupHtml, {
+            className: "modern-leaflet-popup",
+            autoClose: false,
+            closeOnClick: false,
+            maxWidth: 300,
+            minWidth: 200,
+          });
+          marker.closePopup();
+          
+          // Store references to all groups at this location
+          const groupsAtLocation = [];
+          
+          // Create groups for each race at this location
+          racesAtLocation.forEach(({ race, raceId, index }) => {
+            const distanceValue =
+              typeof race.distance === "number"
+                ? race.distance
+                : typeof race.distance === "string" && race.distance.trim() !== ""
+                ? race.distance.trim()
+                : null;
 
-        const distanceLabel = typeof distanceValue === "number" ? `${distanceValue}km` : distanceValue;
-        const popupHtml = buildPopupHtml(race, distanceLabel, null, index);
-        marker.bindPopup(popupHtml, {
-          className: "modern-leaflet-popup",
-          autoClose: false,
-          closeOnClick: false,
-        });
-        marker.closePopup();
+            const distanceLabel = typeof distanceValue === "number" ? `${distanceValue}km` : distanceValue;
+            const individualPopupHtml = buildPopupHtml(race, distanceLabel, null, index);
 
-        const group = {
-          id: String(index),
-          raceId,
-          name: race.name,
-          rawRace: race,
-          marker,
-          layer: null,
-          color,
-          visible: false,
-          popupHtml,
-          elevInfo: null,
-          distanceValue,
-          startLatLng,
-          isClosingProgrammatically: false,
-          gpxLoaded: false,
-          gpxLoading: false,
-        };
+            const group = {
+              id: String(index),
+              raceId,
+              name: race.name,
+              rawRace: race,
+              marker: marker, // Share the same marker for all races at this location
+              layer: null,
+              color: getMapColor(race),
+              visible: false,
+              popupHtml: individualPopupHtml,
+              elevInfo: null,
+              distanceValue,
+              startLatLng,
+              isClosingProgrammatically: false,
+              gpxLoaded: false,
+              gpxLoading: false,
+              sharedMarker: true,
+              groupsAtLocation: null, // Will be set after all groups created
+            };
+            
+            groupsAtLocation.push(group);
+            groups.push(group);
+          });
+          
+          // Set reference to all groups at this location for each group
+          groupsAtLocation.forEach(g => {
+            g.groupsAtLocation = groupsAtLocation;
+          });
+          
+          // Handle clicks on race items in popup
+          marker.on("popupopen", () => {
+            const popup = marker.getPopup();
+            const popupElement = popup.getElement();
+            if (popupElement) {
+              const raceItems = popupElement.querySelectorAll('.race-selection-item');
+              raceItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  const groupIndex = item.getAttribute('data-group-index');
+                  const selectedGroup = groupsAtLocation.find(g => g.id === groupIndex);
+                  if (selectedGroup) {
+                    // Close all other groups at this location
+                    groupsAtLocation.forEach(g => {
+                      if (g !== selectedGroup && g.visible) {
+                        setGroupVisibility(g, false, { fromMarker: true });
+                      }
+                    });
+                    // Toggle the selected group
+                    setGroupVisibility(selectedGroup, !selectedGroup.visible, { fromMarker: true });
+                  }
+                });
+              });
+            }
+          });
+          
+          marker.on("popupclose", () => {
+            // Check if any group is closing programmatically
+            const closingProgrammatically = groupsAtLocation.some(g => g.isClosingProgrammatically);
+            if (closingProgrammatically) {
+              groupsAtLocation.forEach(g => {
+                g.isClosingProgrammatically = false;
+              });
+              return;
+            }
+            // Close all visible groups at this location
+            groupsAtLocation.forEach(g => {
+              if (g.visible) {
+                setGroupVisibility(g, false, { fromMarker: true });
+              }
+            });
+          });
+          
+        } else {
+          // Single race at location - original behavior
+          const { race, raceId, index } = racesAtLocation[0];
+          
+          const distanceValue =
+            typeof race.distance === "number"
+              ? race.distance
+              : typeof race.distance === "string" && race.distance.trim() !== ""
+              ? race.distance.trim()
+              : null;
 
-        marker.on("click", (event) => {
-          L.DomEvent.stopPropagation(event);
-          group.isPopupRequested = true;
-          setGroupVisibility(group, !group.visible, { fromMarker: true });
-        });
+          const distanceLabel = typeof distanceValue === "number" ? `${distanceValue}km` : distanceValue;
+          const popupHtml = buildPopupHtml(race, distanceLabel, null, index);
+          marker.bindPopup(popupHtml, {
+            className: "modern-leaflet-popup",
+            autoClose: false,
+            closeOnClick: false,
+          });
+          marker.closePopup();
 
-        marker.on("popupclose", () => {
-          if (group.isClosingProgrammatically) {
-            group.isClosingProgrammatically = false;
-            return;
-          }
-          if (group.visible) {
-            setGroupVisibility(group, false, { fromMarker: true });
-          }
-        });
+          const group = {
+            id: String(index),
+            raceId,
+            name: race.name,
+            rawRace: race,
+            marker,
+            layer: null,
+            color,
+            visible: false,
+            popupHtml,
+            elevInfo: null,
+            distanceValue,
+            startLatLng,
+            isClosingProgrammatically: false,
+            gpxLoaded: false,
+            gpxLoading: false,
+            sharedMarker: false,
+          };
 
-        groups.push(group);
+          marker.on("click", (event) => {
+            L.DomEvent.stopPropagation(event);
+            group.isPopupRequested = true;
+            setGroupVisibility(group, !group.visible, { fromMarker: true });
+          });
+
+          marker.on("popupclose", () => {
+            if (group.isClosingProgrammatically) {
+              group.isClosingProgrammatically = false;
+              return;
+            }
+            if (group.visible) {
+              setGroupVisibility(group, false, { fromMarker: true });
+            }
+          });
+
+          groups.push(group);
+        }
+        
         // extend bounds to include marker start
         globalBounds.extend([startLatLng.lat, startLatLng.lng]);
       });

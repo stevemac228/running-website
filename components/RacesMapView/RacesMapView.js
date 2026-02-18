@@ -214,15 +214,26 @@ export default function RacesMapView({ filteredRaces = [], expandedRaceId = null
         routesRef.current.clear();
         setExpandedRoutes(new Set()); // Clear expanded routes on reinitialize
 
-        // Add markers for each race
-        filteredRaces.forEach((race, index) => {
+        // Group races by coordinates
+        const racesByCoords = new Map();
+        filteredRaces.forEach((race) => {
           const coords = getRaceCoordinates(race);
-          const color = getMapColor(race);
-          
-          // Format distance label
-          const distanceLabel = race.distance ? `${race.distance} km` : null;
+          const key = `${coords.lat.toFixed(6)},${coords.lng.toFixed(6)}`;
+          if (!racesByCoords.has(key)) {
+            racesByCoords.set(key, []);
+          }
+          racesByCoords.get(key).push(race);
+        });
 
-          // Create marker icon - using approach from MapsPage that works correctly
+        // Add markers for each coordinate group
+        racesByCoords.forEach((racesAtLocation, coordKey) => {
+          const firstRace = racesAtLocation[0];
+          const coords = getRaceCoordinates(firstRace);
+          
+          // Determine marker color (use first race's color, or indicate multiple)
+          const color = racesAtLocation.length > 1 ? "#FF6B35" : getMapColor(firstRace);
+          
+          // Create marker icon
           const markerIcon = L.divIcon({
             className: "custom-div-icon",
             html: `<div style="background-color:${color};width:16px;height:16px;border-radius:50%;border:2px solid white;box-shadow:0 0 4px rgba(0,0,0,0.35);"></div>`,
@@ -233,38 +244,99 @@ export default function RacesMapView({ filteredRaces = [], expandedRaceId = null
           // Create and add marker
           const marker = L.marker([coords.lat, coords.lng], { icon: markerIcon });
           
-          // Bind popup only in map-only view
-          if (viewMode === 'map') {
-            const popupHtml = buildPopupHtml(race, distanceLabel, null);
-            marker.bindPopup(popupHtml, { maxWidth: 200, minWidth: 140 });
+          // Handle multiple races at same location
+          if (racesAtLocation.length > 1) {
+            // Build popup with race list
+            const popupHtml = `
+              <div class="custom-popup multi-race-popup">
+                <div class="popup-title">Select a race (${racesAtLocation.length} at this location):</div>
+                <ul class="race-selection-list">
+                  ${racesAtLocation.map(race => {
+                    const distanceLabel = race.distance ? `${race.distance} km` : '';
+                    return `<li class="race-selection-item" data-race-id="${race.id}">
+                      <strong>${race.name}</strong>
+                      ${distanceLabel ? `<span class="race-distance">${distanceLabel}</span>` : ''}
+                    </li>`;
+                  }).join('')}
+                </ul>
+              </div>
+            `;
             
-            // In map-only view, toggle route on click but still show popup
+            marker.bindPopup(popupHtml, { maxWidth: 300, minWidth: 200 });
+            
             marker.on("click", (e) => {
-              setExpandedRoutes((prev) => {
-                const newSet = new Set(prev);
-                if (newSet.has(race.id)) {
-                  newSet.delete(race.id);
-                } else {
-                  newSet.add(race.id);
-                }
-                return newSet;
-              });
+              // Popup will open automatically
             });
-          } else {
-            // In mixed view, call the callback to scroll to card
-            marker.on("click", (e) => {
-              if (onMarkerClick) {
-                onMarkerClick(race.id);
+            
+            // Handle clicks on race items in popup
+            marker.on("popupopen", () => {
+              const popup = marker.getPopup();
+              const popupElement = popup.getElement();
+              if (popupElement) {
+                const raceItems = popupElement.querySelectorAll('.race-selection-item');
+                raceItems.forEach(item => {
+                  item.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const raceId = parseInt(item.getAttribute('data-race-id'));
+                    marker.closePopup();
+                    
+                    if (viewMode === 'map') {
+                      // Toggle route in map-only view
+                      setExpandedRoutes((prev) => {
+                        const newSet = new Set(prev);
+                        if (newSet.has(raceId)) {
+                          newSet.delete(raceId);
+                        } else {
+                          newSet.add(raceId);
+                        }
+                        return newSet;
+                      });
+                    } else if (onMarkerClick) {
+                      // Scroll to card in mixed view
+                      onMarkerClick(raceId);
+                    }
+                  });
+                });
               }
             });
+          } else {
+            // Single race at location - original behavior
+            const race = racesAtLocation[0];
+            const distanceLabel = race.distance ? `${race.distance} km` : null;
+            
+            if (viewMode === 'map') {
+              const popupHtml = buildPopupHtml(race, distanceLabel, null);
+              marker.bindPopup(popupHtml, { maxWidth: 200, minWidth: 140 });
+              
+              marker.on("click", (e) => {
+                setExpandedRoutes((prev) => {
+                  const newSet = new Set(prev);
+                  if (newSet.has(race.id)) {
+                    newSet.delete(race.id);
+                  } else {
+                    newSet.add(race.id);
+                  }
+                  return newSet;
+                });
+              });
+            } else {
+              marker.on("click", (e) => {
+                if (onMarkerClick) {
+                  onMarkerClick(race.id);
+                }
+              });
+            }
           }
           
           marker.addTo(map);
 
-          markersRef.current.set(race.id, { marker, color, race, distanceLabel });
+          // Store marker for all races at this location
+          racesAtLocation.forEach(race => {
+            markersRef.current.set(race.id, { marker, color, race, distanceLabel: race.distance ? `${race.distance} km` : null });
+          });
         });
 
-        console.log("Map initialized with", filteredRaces.length, "markers");
+        console.log("Map initialized with", racesByCoords.size, "markers for", filteredRaces.length, "races");
         
         // Set up resize observer after map is created
         if (containerRef.current) {
