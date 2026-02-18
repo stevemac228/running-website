@@ -53,7 +53,6 @@ export default function Home() {
       <Header />
       <main className="homepage">
         <div className="hero-section">
-          <span className="hero-tagline">Newfoundland & Labrador</span>
           <h1 className="hero-title">
             Find Your Next <span className="hero-title-highlight">Race</span>
           </h1>
@@ -81,11 +80,11 @@ export default function Home() {
               <div className="hero-stat-label">Races</div>
             </div>
             <div className="hero-stat">
-              <div className="hero-stat-number">5K–Ultra</div>
+              <div className="hero-stat-number">1K–Ultra</div>
               <div className="hero-stat-label">Distances</div>
             </div>
             <div className="hero-stat">
-              <div className="hero-stat-number">All NL</div>
+              <div className="hero-stat-number">NL&LAB</div>
               <div className="hero-stat-label">Locations</div>
             </div>
           </div>

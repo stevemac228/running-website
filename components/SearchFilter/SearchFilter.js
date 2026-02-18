@@ -195,7 +195,7 @@ export default function SearchFilter({ onSearch, initialValue = "", showDropdown
         <img src="/icons/search.svg" alt="Search" className="search-icon" />
         <input
           type="text"
-          placeholder="Search races, marathon, trail..."
+          placeholder="Search races, locations, distances..."
           value={inputValue}
           onChange={handleChange}
           onKeyDown={onKeyDown}
