@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import PaceCalculator from "../../components/PaceCalculator/PaceCalculator";
@@ -406,20 +406,20 @@ export default function RaceDetail() {
                 // Insert registration timeline after distance field
                 if (key === "distance") {
                   return (
-                    <React.Fragment key={key}>
-                      <div className="race-detail-info-row">
+                    <>
+                      <div key={key} className="race-detail-info-row">
                         <div className="race-detail-info-label">{label}</div>
                         <div className="race-detail-info-value">{value}</div>
                       </div>
                       {race && (
-                        <div className="race-detail-info-row registration-timeline">
+                        <div key="registration-timeline" className="race-detail-info-row registration-timeline">
                           <div className="race-detail-info-label registration-timeline-title">Registration</div>
                           <div className="race-detail-info-value">
                             <RegistrationTimeline race={race} />
                           </div>
                         </div>
                       )}
-                    </React.Fragment>
+                    </>
                   );
                 }
                 
