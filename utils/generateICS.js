@@ -26,7 +26,7 @@ export function generateICS(title, dateString, description = "") {
   const timestamp = `${nowYear}${nowMonth}${nowDay}T${nowHour}${nowMinute}${nowSecond}Z`;
   
   // Generate unique ID
-  const uid = `${timestamp}-${Math.random().toString(36).substr(2, 9)}@runnl.ca`;
+  const uid = `${timestamp}-${Math.random().toString(36).slice(2, 11)}@runnl.ca`;
   
   // Build ICS content
   const icsContent = [

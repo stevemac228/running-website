@@ -24,7 +24,7 @@ export default function RegistrationTimeline({ race }) {
     const title = `${raceName} - ${item.label}`;
     const description = `${item.label} for ${raceName}${item.cost ? ` - ${item.cost}` : ""}`;
     const icsContent = generateICS(title, item.date, description);
-    const filename = `${raceName.replace(/[^a-z0-9]/gi, "-")}-${item.type}.ics`;
+    const filename = `${raceName.replace(/[^a-z0-9]/gi, "-").replace(/-+/g, "-").replace(/^-|-$/g, "")}-${item.type}.ics`;
     downloadICS(icsContent, filename);
   };
 
