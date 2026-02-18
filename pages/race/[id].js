@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, useRef } from "react";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import PaceCalculator from "../../components/PaceCalculator/PaceCalculator";
+import RegistrationTimeline from "../../components/RegistrationTimeline/RegistrationTimeline";
 import racesData from "../../data/races.json";
 import { formatDate } from "../../utils/formatDate";
 import { formatTime } from "../../utils/formatTime";
@@ -54,11 +55,6 @@ export default function RaceDetail() {
       "startLineLocation",
       "startTime",
       "distance",
-      "registrationStart",
-      "earlyBirdDeadline",
-      "earlyBirdCost",
-      "registrationDeadline",
-      "registrationCost",
       "fundraiser",
       "medal",
       "shirt",
@@ -402,6 +398,8 @@ export default function RaceDetail() {
             {race.startTime ? `• ${formatTime(race.startTime)}` : null}
           </div>
         </header>
+
+        <RegistrationTimeline race={race} />
 
         <div className="race-detail-grid">
           <section>

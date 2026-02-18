@@ -1,0 +1,120 @@
+.registration-timeline {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.registration-timeline-title {
+  font-size: 20px;
+  margin: 0 0 20px 0;
+  color: #444;
+}
+
+.registration-timeline-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.registration-timeline-item {
+  display: flex;
+  gap: 16px;
+  position: relative;
+}
+
+.registration-timeline-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.registration-timeline-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #4285f4;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 2px #4285f4;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.registration-timeline-dot-start {
+  background-color: #34a853;
+  box-shadow: 0 0 0 2px #34a853;
+}
+
+.registration-timeline-dot-earlybird {
+  background-color: #fbbc04;
+  box-shadow: 0 0 0 2px #fbbc04;
+}
+
+.registration-timeline-dot-deadline {
+  background-color: #ea4335;
+  box-shadow: 0 0 0 2px #ea4335;
+}
+
+.registration-timeline-line {
+  width: 2px;
+  background-color: #e0e0e0;
+  flex-grow: 1;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  min-height: 40px;
+}
+
+.registration-timeline-content {
+  flex: 1;
+  padding-bottom: 24px;
+}
+
+.registration-timeline-item:last-child .registration-timeline-content {
+  padding-bottom: 0;
+}
+
+.registration-timeline-label {
+  font-weight: 700;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.registration-timeline-date {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.registration-timeline-cost {
+  font-size: 18px;
+  font-weight: 600;
+  color: #4285f4;
+  margin-top: 4px;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .registration-timeline {
+    padding: 16px;
+  }
+
+  .registration-timeline-title {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .registration-timeline-label {
+    font-size: 15px;
+  }
+
+  .registration-timeline-date {
+    font-size: 13px;
+  }
+
+  .registration-timeline-cost {
+    font-size: 16px;
+  }
+}
