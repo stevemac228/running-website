@@ -129,7 +129,7 @@
 
   .registration-timeline-line {
     width: 2px;
-    height: 30px;
+    height: 30px; /* Fixed height for consistent vertical spacing between items */
     flex-grow: 0;
     margin-left: 0;
     margin-right: 0;
