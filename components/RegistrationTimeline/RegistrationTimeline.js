@@ -1,5 +1,6 @@
 import { formatDate } from "../../utils/formatDate";
 import { generateICS, downloadICS } from "../../utils/generateICS";
+import { sanitizeFilename } from "../../utils/sanitizeFilename";
 
 export default function RegistrationTimeline({ race }) {
   if (!race) return null;
@@ -24,7 +25,7 @@ export default function RegistrationTimeline({ race }) {
     const title = `${raceName} - ${item.label}`;
     const description = `${item.label} for ${raceName}${item.cost ? ` - ${item.cost}` : ""}`;
     const icsContent = generateICS(title, item.date, description);
-    const filename = `${raceName.replace(/[^a-z0-9]/gi, "-").replace(/-+/g, "-").replace(/^-|-$/g, "")}-${item.type}.ics`;
+    const filename = `${sanitizeFilename(raceName)}-${item.type}.ics`;
     downloadICS(icsContent, filename);
   };
 
