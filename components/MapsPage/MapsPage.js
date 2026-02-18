@@ -16,6 +16,9 @@ const LOCATION_FALLBACKS = {
   "north west river": { lat: 53.5233, lng: -60.1444 },
 };
 
+const MULTI_RACE_MARKER_COLOR = "#FF6B35";
+const COORDINATE_PRECISION = 6;
+
 const buildPopupHtml = (race, distanceLabel, elevInfo, id) => {
   const uid = String(id ?? Math.random()).replace(/[^a-z0-9_-]/gi, "");
   const elevLine = elevInfo
@@ -244,8 +247,9 @@ export default function MapsPage() {
           }
 
           if (!parsed) {
-            // show a quick UI hint by keeping marker popup open while loading
-            if (group.marker) {
+            // For shared markers, don't change popup content, just show loading in console
+            // For non-shared markers, show loading message in popup
+            if (!group.sharedMarker && group.marker) {
               group.marker.setPopupContent(`<div class="custom-popup"><div class="popup-title">${group.name}</div><div>Loading route…</div></div>`);
               if (!group.marker.isPopupOpen || !group.isPopupRequested) {
                 group.marker.openPopup();
@@ -261,19 +265,22 @@ export default function MapsPage() {
             // compute elevation now
             const elevInfo = computeElevation(parsed);
             group.elevInfo = elevInfo;
-            // update popup & sidebar info
-            const distanceLabel = typeof group.rawRace.distance === "number" ? `${group.rawRace.distance}km` : (typeof group.rawRace.distance === "string" ? group.rawRace.distance : null);
-            const popupHtml = buildPopupHtml(group.rawRace, distanceLabel, elevInfo, group.id);
-            if (group.marker) {
-              group.marker.setPopupContent(popupHtml);
+            // For shared markers, don't update popup content - keep the multi-race selection popup
+            // For non-shared markers, update with elevation info
+            if (!group.sharedMarker) {
+              const distanceLabel = typeof group.rawRace.distance === "number" ? `${group.rawRace.distance}km` : (typeof group.rawRace.distance === "string" ? group.rawRace.distance : null);
+              const popupHtml = buildPopupHtml(group.rawRace, distanceLabel, elevInfo, group.id);
+              if (group.marker) {
+                group.marker.setPopupContent(popupHtml);
+              }
             }
             // if we have a layer and group requested to be visible - add it
             if (layer) {
               if (!map.hasLayer(layer)) layer.addTo(map);
             }
           } else {
-            // no segments: update popup to say route not available
-            if (group.marker) {
+            // no segments: For shared markers, don't change popup. For non-shared, show error.
+            if (!group.sharedMarker && group.marker) {
               group.marker.setPopupContent(`<div class="custom-popup"><div class="popup-title">${group.name}</div><div class="popup-elevation">Route not available</div></div>`);
             }
           }
@@ -286,7 +293,11 @@ export default function MapsPage() {
           }
           group.visible = true;
 
-          if (group.marker) {
+          // For shared markers, keep the multi-race selection popup open
+          if (group.sharedMarker && group.marker && !group.marker.isPopupOpen()) {
+            group.isClosingProgrammatically = false;
+            group.marker.openPopup();
+          } else if (!group.sharedMarker && group.marker) {
             group.isClosingProgrammatically = false;
             group.marker.openPopup();
           }
@@ -308,7 +319,17 @@ export default function MapsPage() {
             map.removeLayer(group.layer);
           }
           group.visible = false;
-          if (group.marker && group.marker.isPopupOpen && group.marker.isPopupOpen()) {
+          // For shared markers, check if any other race at this location is still visible
+          // If not, we can close the popup. Otherwise keep it open.
+          if (group.sharedMarker && group.groupsAtLocation) {
+            const anyVisible = group.groupsAtLocation.some(g => g.visible && g !== group);
+            if (!anyVisible && group.marker && group.marker.isPopupOpen && group.marker.isPopupOpen()) {
+              // Restore the multi-race selection popup if it was changed
+              if (group.multiRacePopupHtml) {
+                group.marker.setPopupContent(group.multiRacePopupHtml);
+              }
+            }
+          } else if (!group.sharedMarker && group.marker && group.marker.isPopupOpen && group.marker.isPopupOpen()) {
             group.isClosingProgrammatically = true;
             group.marker.closePopup();
           }
@@ -330,6 +351,10 @@ export default function MapsPage() {
       });
       
       const gpxCoordinatesResults = await Promise.all(gpxCoordinatesPromises);
+      
+      // Group races by coordinates to handle co-located races
+      const racesByCoords = new Map();
+      const racesWithCoords = [];
       
       gpxCoordinatesResults.forEach(({ race, gpxCoord }, index) => {
         const raceId = getRaceId(race);
@@ -353,9 +378,25 @@ export default function MapsPage() {
 
         // if no startLatLng and no cached GPX start, still add nothing (no marker)
         if (!startLatLng) return;
-
-        // choose color based on race format / nLAACertified
-        const color = getMapColor(race);
+        
+        racesWithCoords.push({ race, raceId, startLatLng, index });
+        
+        // Group by coordinates
+        const coordKey = `${startLatLng.lat.toFixed(COORDINATE_PRECISION)},${startLatLng.lng.toFixed(COORDINATE_PRECISION)}`;
+        if (!racesByCoords.has(coordKey)) {
+          racesByCoords.set(coordKey, []);
+        }
+        racesByCoords.get(coordKey).push({ race, raceId, startLatLng, index });
+      });
+      
+      // Create markers for each coordinate group
+      racesByCoords.forEach((racesAtLocation, coordKey) => {
+        const firstRaceData = racesAtLocation[0];
+        const startLatLng = firstRaceData.startLatLng;
+        
+        // Determine marker color
+        const color = racesAtLocation.length > 1 ? MULTI_RACE_MARKER_COLOR : getMapColor(firstRaceData.race);
+        
         const marker = L.marker([startLatLng.lat, startLatLng.lng], {
           icon: L.divIcon({
             className: "custom-div-icon",
@@ -365,57 +406,183 @@ export default function MapsPage() {
           }),
         }).addTo(map);
 
-        const distanceValue =
-          typeof race.distance === "number"
-            ? race.distance
-            : typeof race.distance === "string" && race.distance.trim() !== ""
-            ? race.distance.trim()
-            : null;
+        if (racesAtLocation.length > 1) {
+          // Multiple races at same location - create selection popup
+          const multiRacePopupHtml = `
+            <div class="custom-popup multi-race-popup">
+              <div class="popup-title">Select a race (${racesAtLocation.length} at this location):</div>
+              <ul class="race-selection-list">
+                ${racesAtLocation.map(({ race, index }) => {
+                  const distanceValue = typeof race.distance === "number"
+                    ? race.distance
+                    : typeof race.distance === "string" && race.distance.trim() !== ""
+                    ? race.distance.trim()
+                    : null;
+                  const distanceLabel = typeof distanceValue === "number" ? `${distanceValue}km` : distanceValue;
+                  return `<li class="race-selection-item" data-group-index="${index}">
+                    <strong>${race.name}</strong>
+                    ${distanceLabel ? `<span class="race-distance">${distanceLabel}</span>` : ''}
+                  </li>`;
+                }).join('')}
+              </ul>
+            </div>
+          `;
+          
+          marker.bindPopup(multiRacePopupHtml, {
+            className: "modern-leaflet-popup",
+            autoClose: false,
+            closeOnClick: false,
+            maxWidth: 300,
+            minWidth: 200,
+          });
+          marker.closePopup();
+          
+          // Store references to all groups at this location
+          const groupsAtLocation = [];
+          
+          // Create groups for each race at this location
+          racesAtLocation.forEach(({ race, raceId, index }) => {
+            const distanceValue =
+              typeof race.distance === "number"
+                ? race.distance
+                : typeof race.distance === "string" && race.distance.trim() !== ""
+                ? race.distance.trim()
+                : null;
 
-        const distanceLabel = typeof distanceValue === "number" ? `${distanceValue}km` : distanceValue;
-        const popupHtml = buildPopupHtml(race, distanceLabel, null, index);
-        marker.bindPopup(popupHtml, {
-          className: "modern-leaflet-popup",
-          autoClose: false,
-          closeOnClick: false,
-        });
-        marker.closePopup();
+            const distanceLabel = typeof distanceValue === "number" ? `${distanceValue}km` : distanceValue;
+            const individualPopupHtml = buildPopupHtml(race, distanceLabel, null, index);
 
-        const group = {
-          id: String(index),
-          raceId,
-          name: race.name,
-          rawRace: race,
-          marker,
-          layer: null,
-          color,
-          visible: false,
-          popupHtml,
-          elevInfo: null,
-          distanceValue,
-          startLatLng,
-          isClosingProgrammatically: false,
-          gpxLoaded: false,
-          gpxLoading: false,
-        };
+            const group = {
+              id: String(index),
+              raceId,
+              name: race.name,
+              rawRace: race,
+              marker: marker, // Share the same marker for all races at this location
+              layer: null,
+              color: getMapColor(race),
+              visible: false,
+              popupHtml: individualPopupHtml,
+              elevInfo: null,
+              distanceValue,
+              startLatLng,
+              isClosingProgrammatically: false,
+              gpxLoaded: false,
+              gpxLoading: false,
+              sharedMarker: true,
+              multiRacePopupHtml, // Store the multi-race selection popup HTML
+              groupsAtLocation: null, // Will be set after all groups created
+            };
+            
+            groupsAtLocation.push(group);
+            groups.push(group);
+          });
+          
+          // Set reference to all groups at this location for each group
+          groupsAtLocation.forEach(g => {
+            g.groupsAtLocation = groupsAtLocation;
+          });
+          
+          // Handle clicks on race items in popup
+          marker.on("popupopen", () => {
+            const popup = marker.getPopup();
+            const popupElement = popup.getElement();
+            if (popupElement) {
+              const raceItems = popupElement.querySelectorAll('.race-selection-item');
+              raceItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  const groupIndex = item.getAttribute('data-group-index');
+                  const selectedGroup = groupsAtLocation.find(g => g.id === groupIndex);
+                  if (selectedGroup) {
+                    // Close all other groups at this location
+                    groupsAtLocation.forEach(g => {
+                      if (g !== selectedGroup && g.visible) {
+                        setGroupVisibility(g, false, { fromMarker: true });
+                      }
+                    });
+                    // Toggle the selected group
+                    setGroupVisibility(selectedGroup, !selectedGroup.visible, { fromMarker: true });
+                  }
+                });
+              });
+            }
+          });
+          
+          marker.on("popupclose", () => {
+            // Check if any group is closing programmatically
+            const closingProgrammatically = groupsAtLocation.some(g => g.isClosingProgrammatically);
+            if (closingProgrammatically) {
+              groupsAtLocation.forEach(g => {
+                g.isClosingProgrammatically = false;
+              });
+              return;
+            }
+            // Close all visible groups at this location
+            groupsAtLocation.forEach(g => {
+              if (g.visible) {
+                setGroupVisibility(g, false, { fromMarker: true });
+              }
+            });
+          });
+          
+        } else {
+          // Single race at location - original behavior
+          const { race, raceId, index } = racesAtLocation[0];
+          
+          const distanceValue =
+            typeof race.distance === "number"
+              ? race.distance
+              : typeof race.distance === "string" && race.distance.trim() !== ""
+              ? race.distance.trim()
+              : null;
 
-        marker.on("click", (event) => {
-          L.DomEvent.stopPropagation(event);
-          group.isPopupRequested = true;
-          setGroupVisibility(group, !group.visible, { fromMarker: true });
-        });
+          const distanceLabel = typeof distanceValue === "number" ? `${distanceValue}km` : distanceValue;
+          const popupHtml = buildPopupHtml(race, distanceLabel, null, index);
+          marker.bindPopup(popupHtml, {
+            className: "modern-leaflet-popup",
+            autoClose: false,
+            closeOnClick: false,
+          });
+          marker.closePopup();
 
-        marker.on("popupclose", () => {
-          if (group.isClosingProgrammatically) {
-            group.isClosingProgrammatically = false;
-            return;
-          }
-          if (group.visible) {
-            setGroupVisibility(group, false, { fromMarker: true });
-          }
-        });
+          const group = {
+            id: String(index),
+            raceId,
+            name: race.name,
+            rawRace: race,
+            marker,
+            layer: null,
+            color,
+            visible: false,
+            popupHtml,
+            elevInfo: null,
+            distanceValue,
+            startLatLng,
+            isClosingProgrammatically: false,
+            gpxLoaded: false,
+            gpxLoading: false,
+            sharedMarker: false,
+          };
 
-        groups.push(group);
+          marker.on("click", (event) => {
+            L.DomEvent.stopPropagation(event);
+            group.isPopupRequested = true;
+            setGroupVisibility(group, !group.visible, { fromMarker: true });
+          });
+
+          marker.on("popupclose", () => {
+            if (group.isClosingProgrammatically) {
+              group.isClosingProgrammatically = false;
+              return;
+            }
+            if (group.visible) {
+              setGroupVisibility(group, false, { fromMarker: true });
+            }
+          });
+
+          groups.push(group);
+        }
+        
         // extend bounds to include marker start
         globalBounds.extend([startLatLng.lat, startLatLng.lng]);
       });
