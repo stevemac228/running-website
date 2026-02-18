@@ -1,6 +1,7 @@
 import { getRaceId } from "../../utils/getRaceId";
 import races from "../../data/races.json";
 import { parseGpxToSegments } from "../../utils/parseGpx";
+import { getFirstGpxCoordinate } from "../../utils/getFirstGpxCoordinate";
 import { useEffect, useRef, useState } from "react";
 
 const LOCATION_FALLBACKS = {
@@ -322,14 +323,21 @@ export default function MapsPage() {
       map.on("zoomend", updateSidebar);
 
       // Instead of fetching all GPX at init, create markers/groups with start location only.
-      races.forEach((race, index) => {
+      // First, load GPX first coordinates for all races
+      const gpxCoordinatesPromises = races.map(async (race) => {
+        const gpxCoord = await getFirstGpxCoordinate(race);
+        return { race, gpxCoord };
+      });
+      
+      const gpxCoordinatesResults = await Promise.all(gpxCoordinatesPromises);
+      
+      gpxCoordinatesResults.forEach(({ race, gpxCoord }, index) => {
         const raceId = getRaceId(race);
         let startLatLng = null;
-        if (Array.isArray(race.startLineCoordinates) && race.startLineCoordinates.length === 2) {
-          const [lat, lon] = race.startLineCoordinates;
-          if (typeof lat === "number" && typeof lon === "number") {
-            startLatLng = { lat, lng: lon };
-          }
+        
+        // Use GPX first coordinate if available
+        if (gpxCoord) {
+          startLatLng = { lat: gpxCoord.lat, lng: gpxCoord.lng };
         }
 
         // try to quickly derive start from fallback locations (no GPX fetch)
