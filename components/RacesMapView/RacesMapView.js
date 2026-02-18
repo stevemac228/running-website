@@ -81,15 +81,16 @@ export default function RacesMapView({ filteredRaces = [], expandedRaceId = null
   const mapInstanceRef = useRef(null);
   const markersRef = useRef(new Map());
   const routesRef = useRef(new Map());
+  const gpxCoordsRef = useRef(new Map());
   const [expandedRoutes, setExpandedRoutes] = useState(new Set());
   const previousRaceIdsRef = useRef([]);
   const previousExpandedRaceIdRef = useRef(null);
 
-  // Get race coordinates - returns a placeholder initially, will be updated from GPX
+  // Get race coordinates using GPX cache or fallback
   const getRaceCoordinates = (race) => {
     // First check if we have cached GPX coordinates
-    if (race._gpxCoords) {
-      return race._gpxCoords;
+    if (gpxCoordsRef.current.has(race.id)) {
+      return gpxCoordsRef.current.get(race.id);
     }
 
     // Fallback to location-based coordinates for initial display
@@ -180,16 +181,14 @@ export default function RacesMapView({ filteredRaces = [], expandedRaceId = null
         if (!isMounted) return;
 
         // Load GPX coordinates for all races first
-        console.log("Loading GPX coordinates for races...");
         await Promise.all(
           filteredRaces.map(async (race) => {
             const gpxCoord = await getFirstGpxCoordinate(race);
             if (gpxCoord) {
-              race._gpxCoords = gpxCoord;
+              gpxCoordsRef.current.set(race.id, gpxCoord);
             }
           })
         );
-        console.log("GPX coordinates loaded");
 
         if (!isMounted) return;
 
