@@ -1,5 +1,6 @@
 import { formatDate } from "../../utils/formatDate";
-import { generateAddEventURL } from "../../utils/generateAddEventURL";
+import { generateAddEventData } from "../../utils/generateAddEventURL";
+import { useEffect } from "react";
 
 export default function RegistrationTimeline({ race }) {
   if (!race) return null;
@@ -18,12 +19,30 @@ export default function RegistrationTimeline({ race }) {
   
   if (!hasRegistrationData) return null;
 
-  // Function to generate AddEvent.com URL for a deadline
-  const getAddToCalendarUrl = (item) => {
+  // Load AddEvent.com script
+  useEffect(() => {
+    // Check if script is already loaded
+    if (document.querySelector('script[src*="addevent.com"]')) {
+      return;
+    }
+    
+    const script = document.createElement("script");
+    script.src = "https://cdn.addevent.com/libs/atc/1.6.1/atc.min.js";
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+    
+    return () => {
+      // Cleanup is optional - script can persist
+    };
+  }, []);
+
+  // Function to get AddEvent.com data attributes for a deadline
+  const getAddEventData = (item) => {
     const raceName = race.name || "Race";
     const title = `${raceName} - ${item.label}`;
     const description = `${item.label} for ${raceName}${item.cost ? ` - ${item.cost}` : ""}`;
-    return generateAddEventURL(title, item.date, description);
+    return generateAddEventData(title, item.date, description);
   };
 
   // Build timeline items
@@ -72,12 +91,11 @@ export default function RegistrationTimeline({ race }) {
               <div className="registration-timeline-cost">{item.cost}</div>
             )}
             <a
-              href={getAddToCalendarUrl(item)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="registration-timeline-calendar-btn"
+              href="#"
+              className="registration-timeline-calendar-btn addeventatc"
               title="Add to calendar"
               aria-label={`Add ${item.label} to calendar`}
+              {...getAddEventData(item)}
             >
               Add to Calendar
             </a>

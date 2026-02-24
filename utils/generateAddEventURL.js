@@ -1,29 +1,29 @@
 /**
- * Generate an AddEvent.com URL for adding an event to calendar
+ * Generate event data attributes for AddEvent.com button
  * @param {string} title - Event title
  * @param {string} dateString - Date in YYYY-MM-DD format
  * @param {string} description - Event description
- * @returns {string} - AddEvent.com URL
+ * @returns {object} - Data attributes for AddEvent button
  */
-export function generateAddEventURL(title, dateString, description = "") {
+export function generateAddEventData(title, dateString, description = "") {
   // Validate and parse the date string (YYYY-MM-DD)
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
     console.error("Invalid date format. Expected YYYY-MM-DD, got:", dateString);
-    return "#";
+    return {};
   }
   
   const parts = dateString.split("-");
-  const startDate = `${parts[1]}/${parts[2]}/${parts[0]}`; // MM/DD/YYYY format for AddEvent
-  const endDate = startDate; // Same day event
+  // Format: MM/DD/YYYY
+  const formattedDate = `${parts[1]}/${parts[2]}/${parts[0]}`;
   
-  // URL encode parameters - AddEvent.com expects string "true" for allday parameter
-  const params = new URLSearchParams({
-    title: title,
-    start: startDate,
-    end: endDate,
-    description: description,
-    allday: "true"
-  });
-  
-  return `https://www.addevent.com/event/create?${params.toString()}`;
+  return {
+    "data-id": "addevent-button",
+    "data-title": title,
+    "data-start": formattedDate,
+    "data-end": formattedDate,
+    "data-description": description,
+    "data-allday": "true"
+  };
 }
+
+
