@@ -42,7 +42,25 @@ export default function RegistrationTimeline({ race }) {
   const getAddEventData = (item) => {
     const raceName = race.name || "Race";
     const title = `${raceName} - ${item.label}`;
-    const description = `${item.label} for ${raceName}${item.cost ? ` - ${item.cost}` : ""}`;
+    
+    // Build comprehensive description with race information
+    let description = `${item.label} for ${raceName}`;
+    if (item.cost) {
+      description += ` - ${item.cost}`;
+    }
+    if (race.date) {
+      description += `\n\nRace Date: ${formatDate(race.date)}`;
+    }
+    if (race.startTime) {
+      description += ` at ${race.startTime}`;
+    }
+    if (race.location) {
+      description += `\nLocation: ${race.location}`;
+    }
+    if (race.website) {
+      description += `\n\nMore info: ${race.website}`;
+    }
+    
     return generateAddEventData(title, item.date, description);
   };
 
