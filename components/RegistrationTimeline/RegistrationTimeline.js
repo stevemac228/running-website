@@ -30,6 +30,7 @@ export default function RegistrationTimeline({ race }) {
     script.src = "https://cdn.addevent.com/libs/atc/1.6.1/atc.min.js";
     script.async = true;
     script.defer = true;
+    // Note: SRI not included as AddEvent.com may update CDN files
     document.body.appendChild(script);
     
     return () => {
@@ -91,10 +92,11 @@ export default function RegistrationTimeline({ race }) {
               <div className="registration-timeline-cost">{item.cost}</div>
             )}
             <a
-              href="#"
+              href="javascript:void(0)"
               className="registration-timeline-calendar-btn addeventatc"
               title="Add to calendar"
               aria-label={`Add ${item.label} to calendar`}
+              role="button"
               {...getAddEventData(item)}
             >
               Add to Calendar

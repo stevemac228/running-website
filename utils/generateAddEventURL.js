@@ -17,7 +17,6 @@ export function generateAddEventData(title, dateString, description = "") {
   const formattedDate = `${parts[1]}/${parts[2]}/${parts[0]}`;
   
   return {
-    "data-id": "addevent-button",
     "data-title": title,
     "data-start": formattedDate,
     "data-end": formattedDate,
