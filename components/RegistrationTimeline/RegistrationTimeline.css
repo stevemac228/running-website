@@ -91,6 +91,7 @@
 }
 
 .registration-timeline-calendar-btn {
+  display: inline-block;
   margin-top: 8px;
   padding: 6px 12px;
   background-color: #4285f4;
@@ -102,6 +103,7 @@
   cursor: pointer;
   transition: background-color 0.2s ease;
   white-space: nowrap;
+  text-decoration: none;
 }
 
 .registration-timeline-calendar-btn:hover {

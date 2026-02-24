@@ -1,6 +1,5 @@
 import { formatDate } from "../../utils/formatDate";
-import { generateICS, downloadICS } from "../../utils/generateICS";
-import { sanitizeFilename } from "../../utils/sanitizeFilename";
+import { generateAddEventURL } from "../../utils/generateAddEventURL";
 
 export default function RegistrationTimeline({ race }) {
   if (!race) return null;
@@ -19,14 +18,12 @@ export default function RegistrationTimeline({ race }) {
   
   if (!hasRegistrationData) return null;
 
-  // Function to handle adding deadline to calendar
-  const handleAddToCalendar = (item) => {
+  // Function to generate AddEvent.com URL for a deadline
+  const getAddToCalendarUrl = (item) => {
     const raceName = race.name || "Race";
     const title = `${raceName} - ${item.label}`;
     const description = `${item.label} for ${raceName}${item.cost ? ` - ${item.cost}` : ""}`;
-    const icsContent = generateICS(title, item.date, description);
-    const filename = `${sanitizeFilename(raceName)}-${item.type}.ics`;
-    downloadICS(icsContent, filename);
+    return generateAddEventURL(title, item.date, description);
   };
 
   // Build timeline items
@@ -74,14 +71,16 @@ export default function RegistrationTimeline({ race }) {
             {item.cost && (
               <div className="registration-timeline-cost">{item.cost}</div>
             )}
-            <button
+            <a
+              href={getAddToCalendarUrl(item)}
+              target="_blank"
+              rel="noopener noreferrer"
               className="registration-timeline-calendar-btn"
-              onClick={() => handleAddToCalendar(item)}
               title="Add to calendar"
               aria-label={`Add ${item.label} to calendar`}
             >
               Add to Calendar
-            </button>
+            </a>
           </div>
         </div>
       ))}
