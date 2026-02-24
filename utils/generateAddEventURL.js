@@ -6,12 +6,17 @@
  * @returns {string} - AddEvent.com URL
  */
 export function generateAddEventURL(title, dateString, description = "") {
-  // Parse the date string (YYYY-MM-DD)
+  // Validate and parse the date string (YYYY-MM-DD)
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+    console.error("Invalid date format. Expected YYYY-MM-DD, got:", dateString);
+    return "#";
+  }
+  
   const parts = dateString.split("-");
   const startDate = `${parts[1]}/${parts[2]}/${parts[0]}`; // MM/DD/YYYY format for AddEvent
   const endDate = startDate; // Same day event
   
-  // URL encode parameters
+  // URL encode parameters - AddEvent.com expects string "true" for allday parameter
   const params = new URLSearchParams({
     title: title,
     start: startDate,
