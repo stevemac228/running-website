@@ -305,8 +305,14 @@ export default function Races() {
         const dateA = parseUSDate(a.date);
         const dateB = parseUSDate(b.date);
         switch (sortOption) {
-          case "date-asc":
-            return compareMonthDay(dateA, dateB);
+          case "date-asc": {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const aIsPast = dateA < today;
+            const bIsPast = dateB < today;
+            if (aIsPast !== bIsPast) return aIsPast ? 1 : -1;
+            return dateA - dateB;
+          }
           case "date-desc":
             return compareMonthDay(dateB, dateA);
           case "distance-asc":
