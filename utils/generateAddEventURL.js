@@ -6,20 +6,17 @@
  * @returns {object} - Data attributes for AddEvent button
  */
 export function generateAddEventData(title, dateString, description = "") {
-  // Validate and parse the date string (YYYY-MM-DD)
+  // Validate the date string (YYYY-MM-DD)
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
     console.error("Invalid date format. Expected YYYY-MM-DD, got:", dateString);
     return {};
   }
   
-  const parts = dateString.split("-");
-  // Format: MM/DD/YYYY
-  const formattedDate = `${parts[1]}/${parts[2]}/${parts[0]}`;
-  
+  // AddEvent.com expects dates in YYYY-MM-DD format
   return {
     "data-title": title,
-    "data-start": formattedDate,
-    "data-end": formattedDate,
+    "data-start": dateString,
+    "data-end": dateString,
     "data-description": description,
     "data-allday": "true"
   };
