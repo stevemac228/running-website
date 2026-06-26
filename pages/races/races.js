@@ -65,7 +65,24 @@ function compareMonthDayLatest(dateA, dateB) {
   const bRecency = (todayIndex - bIndex + daysInYear) % daysInYear;
   if (aRecency !== bRecency) return aRecency - bRecency;
 
-  return dateB - dateA;
+  return 0;
+}
+
+function compareMonthDaySoonest(dateA, dateB) {
+  const todayIndex = getMonthDayIndex(new Date());
+  const aIndex = getMonthDayIndex(dateA);
+  const bIndex = getMonthDayIndex(dateB);
+  const daysInYear = 366;
+
+  if (Number.isNaN(aIndex) && Number.isNaN(bIndex)) return 0;
+  if (Number.isNaN(aIndex)) return 1;
+  if (Number.isNaN(bIndex)) return -1;
+
+  const aUpcoming = (aIndex - todayIndex + daysInYear) % daysInYear;
+  const bUpcoming = (bIndex - todayIndex + daysInYear) % daysInYear;
+  if (aUpcoming !== bUpcoming) return aUpcoming - bUpcoming;
+
+  return 0;
 }
 
 // Normalize distance to a number (supports "∞" and string inputs)
@@ -332,15 +349,19 @@ export default function Races() {
         const dateB = parseUSDate(b.date);
         switch (sortOption) {
           case "date-asc": {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const aIsPast = dateA < today;
-            const bIsPast = dateB < today;
-            if (aIsPast !== bIsPast) return aIsPast ? 1 : -1;
-            return dateA - dateB;
+            const byMonthDay = compareMonthDaySoonest(dateA, dateB);
+            if (byMonthDay !== 0) return byMonthDay;
+            const byName = a.name.localeCompare(b.name);
+            if (byName !== 0) return byName;
+            return a.id - b.id;
           }
-          case "date-desc":
-            return compareMonthDayLatest(dateA, dateB);
+          case "date-desc": {
+            const byMonthDay = compareMonthDayLatest(dateA, dateB);
+            if (byMonthDay !== 0) return byMonthDay;
+            const byName = a.name.localeCompare(b.name);
+            if (byName !== 0) return byName;
+            return a.id - b.id;
+          }
           case "distance-asc":
             return toDistanceNumber(a.distance) - toDistanceNumber(b.distance);
           case "distance-desc":
