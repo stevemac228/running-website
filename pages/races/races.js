@@ -42,6 +42,14 @@ function parseUSDate(dateStr) {
   return new Date(s); // fallback
 }
 
+// Treat 2025 dates as 2026 for sorting (used as prior-year placeholders)
+function normalizeYearForSort(date) {
+  if (!(date instanceof Date) || isNaN(date)) return date;
+  const d = new Date(date);
+  if (d.getFullYear() === 2025) d.setFullYear(2026);
+  return d;
+}
+
 // Normalize distance to a number (supports "∞" and string inputs)
 function toDistanceNumber(d) {
   if (typeof d === "number") return d;
@@ -302,11 +310,17 @@ export default function Races() {
         return true;
       })
       .sort((a, b) => {
-        const dateA = parseUSDate(a.date);
-        const dateB = parseUSDate(b.date);
+        const dateA = normalizeYearForSort(parseUSDate(a.date));
+        const dateB = normalizeYearForSort(parseUSDate(b.date));
         switch (sortOption) {
-          case "date-asc":
-            return compareMonthDay(dateA, dateB);
+          case "date-asc": {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const aIsPast = dateA < today;
+            const bIsPast = dateB < today;
+            if (aIsPast !== bIsPast) return aIsPast ? 1 : -1;
+            return dateA - dateB;
+          }
           case "date-desc":
             return compareMonthDay(dateB, dateA);
           case "distance-asc":
