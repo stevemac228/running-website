@@ -558,14 +558,14 @@ body::-webkit-scrollbar-track {
   font-weight: 600;
 }
 
-.elevation-area {
-  fill: url(#elevationAreaGradient);
+.elevation-area-base {
+  fill: rgba(46, 106, 60, 0.06);
 }
 
-.elevation-line {
+.elevation-line-base {
   fill: none;
-  stroke: #2e6a3c;
-  stroke-width: 2.2;
+  stroke: rgba(36, 85, 50, 0.35);
+  stroke-width: 1.6;
 }
 
 .elevation-aid-line {
@@ -591,16 +591,16 @@ body::-webkit-scrollbar-track {
   font-weight: 700;
 }
 
-.elevation-segment-band {
-  fill: rgba(46, 106, 60, 0.2);
-  stroke: rgba(46, 106, 60, 0.55);
-  stroke-width: 1;
-}
-
 .elevation-segment-text {
   font-size: 9px;
   fill: #244f30;
   font-weight: 600;
+}
+
+.elevation-segment-range {
+  font-size: 8px;
+  fill: #3f6050;
+  font-weight: 500;
 }
 
 .elevation-hover-line {

@@ -44,6 +44,20 @@ function findNearestPoint(points, distanceKm) {
     : previous;
 }
 
+function getSegmentPoints(points, startKm, endKm) {
+  if (!Array.isArray(points) || points.length < 2) return [];
+  const startPoint = findNearestPoint(points, startKm);
+  const endPoint = findNearestPoint(points, endKm);
+  if (!startPoint || !endPoint) return [];
+  const between = points.filter((point) => point.distanceKm >= startKm && point.distanceKm <= endKm);
+  const combined = [startPoint, ...between, endPoint].sort((a, b) => a.distanceKm - b.distanceKm);
+  const unique = [];
+  for (const point of combined) {
+    if (!unique.length || unique[unique.length - 1].distanceKm !== point.distanceKm) unique.push(point);
+  }
+  return unique.length >= 2 ? unique : [];
+}
+
 export default function ElevationChart({ race }) {
   const [profile, setProfile] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -183,6 +197,32 @@ export default function ElevationChart({ race }) {
         })
         .filter(Boolean)
     : [];
+  const segmentPalette = ["#6ab57d", "#58a56c", "#46945b", "#36834b", "#2e6a3c", "#245532"];
+  const segmentDrawData = courseSegments
+    .map((segment, index) => {
+      const color = segmentPalette[index % segmentPalette.length];
+      const points = getSegmentPoints(chart.sampled, segment.startKm, segment.endKm);
+      if (points.length < 2) return null;
+      const linePath = points
+        .map((point, pointIndex) => `${pointIndex === 0 ? "M" : "L"}${chart.xFor(point.distanceKm)},${chart.yFor(point.elevationM)}`)
+        .join(" ");
+      const areaPath = `${linePath} L${chart.xFor(points[points.length - 1].distanceKm)},${chart.margin.top + chart.plotHeight} L${chart.xFor(points[0].distanceKm)},${chart.margin.top + chart.plotHeight} Z`;
+      const startX = chart.xFor(Math.min(Math.max(segment.startKm, 0), chart.maxDistance));
+      const endX = chart.xFor(Math.min(Math.max(segment.endKm, 0), chart.maxDistance));
+      const bandWidth = Math.max(endX - startX, 2);
+      const centerX = startX + bandWidth / 2;
+      return {
+        ...segment,
+        color,
+        gradientId: `elevation-segment-gradient-${race?.id || "race"}-${index}`,
+        linePath,
+        areaPath,
+        startX,
+        bandWidth,
+        centerX,
+      };
+    })
+    .filter(Boolean);
 
   return (
     <div className="elevation-chart-wrapper">
@@ -211,10 +251,12 @@ export default function ElevationChart({ race }) {
           onMouseLeave={() => setHover(null)}
         >
           <defs>
-            <linearGradient id="elevationAreaGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#2e6a3c" stopOpacity="0.28" />
-              <stop offset="100%" stopColor="#2e6a3c" stopOpacity="0.03" />
-            </linearGradient>
+            {segmentDrawData.map((segment) => (
+              <linearGradient key={segment.gradientId} id={segment.gradientId} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={segment.color} stopOpacity="0.33" />
+                <stop offset="100%" stopColor={segment.color} stopOpacity="0.04" />
+              </linearGradient>
+            ))}
           </defs>
 
           {chart.yTicks.map((tick) => (
@@ -234,8 +276,15 @@ export default function ElevationChart({ race }) {
             </g>
           ))}
 
-          <path d={chart.area} className="elevation-area" />
-          <path d={chart.line} className="elevation-line" />
+          <path d={chart.area} className="elevation-area-base" />
+          <path d={chart.line} className="elevation-line-base" />
+
+          {segmentDrawData.map((segment) => (
+            <g key={`${segment.name}-shape-${segment.startKm}-${segment.endKm}`}>
+              <path d={segment.areaPath} fill={`url(#${segment.gradientId})`} />
+              <path d={segment.linePath} fill="none" stroke={segment.color} strokeWidth="2.4" />
+            </g>
+          ))}
 
           {aidStations
             .filter((station) => Number.isFinite(station?.distanceKm))
@@ -260,28 +309,31 @@ export default function ElevationChart({ race }) {
               );
             })}
 
-          {courseSegments.map((segment) => {
-            const startX = chart.xFor(Math.min(Math.max(segment.startKm, 0), chart.maxDistance));
-            const endX = chart.xFor(Math.min(Math.max(segment.endKm, 0), chart.maxDistance));
-            const width = Math.max(endX - startX, 2);
-            const centerX = startX + width / 2;
+          {segmentDrawData.map((segment) => {
             return (
               <g key={`${segment.name}-${segment.startKm}-${segment.endKm}`}>
                 <rect
-                  x={startX}
+                  x={segment.startX}
                   y={chart.margin.top + chart.plotHeight + 54}
-                  width={width}
+                  width={segment.bandWidth}
                   height="8"
                   rx="3"
-                  className="elevation-segment-band"
+                  fill={segment.color}
+                  fillOpacity="0.22"
+                  stroke={segment.color}
+                  strokeOpacity="0.65"
+                  strokeWidth="1"
                 />
                 <text
-                  x={centerX}
+                  x={segment.centerX}
                   y={chart.margin.top + chart.plotHeight + 73}
                   textAnchor="middle"
                   className="elevation-segment-text"
                 >
-                  {segment.name}
+                  <tspan x={segment.centerX}>{segment.name}</tspan>
+                  <tspan x={segment.centerX} dy="11" className="elevation-segment-range">
+                    {segment.startKm.toFixed(2)}–{segment.endKm.toFixed(2)} km
+                  </tspan>
                 </text>
               </g>
             );
