@@ -1274,7 +1274,49 @@
     "organization": null,
     "nLAACertified": false,
     "format": "Competitive",
-    "terrain": "Trail"
+    "terrain": "Trail",
+    "hasElevationChart": true,
+    "elevationAidStations": [
+      {
+        "name": "Aid 1",
+        "distanceKm": 10.5
+      },
+      {
+        "name": "Aid 2",
+        "distanceKm": 21.4
+      },
+      {
+        "name": "Aid 3",
+        "distanceKm": 33.8
+      },
+      {
+        "name": "Aid 4",
+        "distanceKm": 44.7
+      }
+    ],
+    "elevationCourseSegments": [
+      [
+        "Stiles Cove",
+        [
+          1.35,
+          8.32
+        ]
+      ],
+      [
+        "Trail 2",
+        [
+          9,
+          15.2
+        ]
+      ],
+      [
+        "Trail 3",
+        [
+          16,
+          22.56
+        ]
+      ]
+    ]
   },
   {
     "id": 54,

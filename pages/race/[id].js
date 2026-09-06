@@ -5,6 +5,7 @@ import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import PaceCalculator from "../../components/PaceCalculator/PaceCalculator";
 import RegistrationTimeline from "../../components/RegistrationTimeline/RegistrationTimeline";
+import ElevationChart from "../../components/ElevationChart/ElevationChart";
 import racesData from "../../data/races.json";
 import { formatDate } from "../../utils/formatDate";
 import { formatTime } from "../../utils/formatTime";
@@ -481,6 +482,13 @@ export default function RaceDetail() {
               <PaceCalculator distance={race.distance} />
             )}
           </aside>
+
+          {race.hasElevationChart && (
+            <section className="race-detail-elevation-section">
+              <h2 className="race-detail-section-title">Elevation Profile</h2>
+              <ElevationChart race={race} />
+            </section>
+          )}
         </div>
       </main>
 
