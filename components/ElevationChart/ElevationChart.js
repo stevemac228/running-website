@@ -111,7 +111,7 @@ export default function ElevationChart({ race }) {
 
     const sampled = downsample(profile);
     const width = 1000;
-    const height = 250;
+    const height = 270;
     const margin = { top: 16, right: 18, bottom: 66, left: 60 };
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.top - margin.bottom;
@@ -170,28 +170,34 @@ export default function ElevationChart({ race }) {
 
   return (
     <div className="elevation-chart-wrapper">
-      <div
-        className="elevation-chart-container"
-        onMouseMove={(event) => {
-          const rect = event.currentTarget.getBoundingClientRect();
-          const pointerX = event.clientX - rect.left;
-          const clamped = Math.min(Math.max(pointerX, chart.margin.left), chart.margin.left + chart.plotWidth);
-          const distanceKm = ((clamped - chart.margin.left) / chart.plotWidth) * chart.maxDistance;
+      <div className="elevation-chart-container">
+        <svg
+          className="elevation-chart-svg"
+          viewBox={`0 0 ${chart.width} ${chart.height}`}
+          role="img"
+          aria-label={`${race?.name || "Race"} elevation profile`}
+          onMouseMove={(event) => {
+            const svgRect = event.currentTarget.getBoundingClientRect();
+            const containerRect = event.currentTarget.parentElement.getBoundingClientRect();
+            const svgX = ((event.clientX - svgRect.left) / svgRect.width) * chart.width;
+            const clamped = Math.min(Math.max(svgX, chart.margin.left), chart.margin.left + chart.plotWidth);
+            const distanceKm = ((clamped - chart.margin.left) / chart.plotWidth) * chart.maxDistance;
           const point = findNearestPoint(profile, distanceKm);
           if (!point) return;
           setHover({
             point,
-            x: chart.xFor(point.distanceKm),
+            x: clamped,
             y: chart.yFor(point.elevationM),
+            tooltipLeft: event.clientX - containerRect.left,
+            tooltipTop: event.clientY - containerRect.top,
           });
-        }}
-        onMouseLeave={() => setHover(null)}
-      >
-        <svg className="elevation-chart-svg" viewBox={`0 0 ${chart.width} ${chart.height}`} role="img" aria-label={`${race?.name || "Race"} elevation profile`}>
+          }}
+          onMouseLeave={() => setHover(null)}
+        >
           <defs>
             <linearGradient id="elevationAreaGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#ff3b30" stopOpacity="0.28" />
-              <stop offset="100%" stopColor="#ff3b30" stopOpacity="0.03" />
+              <stop offset="0%" stopColor="#2e6a3c" stopOpacity="0.28" />
+              <stop offset="100%" stopColor="#2e6a3c" stopOpacity="0.03" />
             </linearGradient>
           </defs>
 
@@ -266,7 +272,7 @@ export default function ElevationChart({ race }) {
           <rect x={chart.margin.left + chart.plotWidth - 5} y={chart.margin.top + chart.plotHeight - 5} width="10" height="10" className="elevation-finish-box" />
         </svg>
         {hover && (
-          <div className="elevation-chart-tooltip" style={{ left: `${(hover.x / chart.width) * 100}%`, top: `${(hover.y / chart.height) * 100}%` }}>
+          <div className="elevation-chart-tooltip" style={{ left: `${hover.tooltipLeft}px`, top: `${hover.tooltipTop}px` }}>
             <div>{hover.point.distanceKm.toFixed(2)} km</div>
             <div>{Math.round(hover.point.elevationM)} m</div>
           </div>

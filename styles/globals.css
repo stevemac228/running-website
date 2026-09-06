@@ -513,7 +513,7 @@ body::-webkit-scrollbar-track {
 
 .elevation-chart-wrapper {
   width: 100%;
-  max-width: 1080px;
+  max-width: 1160px;
   margin: 0 auto;
 }
 
@@ -539,7 +539,7 @@ body::-webkit-scrollbar-track {
 
 .elevation-grid-line-vertical {
   stroke-dasharray: 3 5;
-  stroke: rgba(255, 59, 48, 0.28);
+  stroke: rgba(46, 106, 60, 0.28);
 }
 
 .elevation-axis-line {
@@ -564,18 +564,18 @@ body::-webkit-scrollbar-track {
 
 .elevation-line {
   fill: none;
-  stroke: #ff2d2d;
+  stroke: #2e6a3c;
   stroke-width: 2.2;
 }
 
 .elevation-aid-line {
-  stroke: rgba(255, 59, 48, 0.6);
+  stroke: rgba(46, 106, 60, 0.6);
   stroke-width: 1;
   stroke-dasharray: 3 4;
 }
 
 .elevation-aid-dot {
-  fill: #ff3b30;
+  fill: #2e6a3c;
   stroke: #ffffff;
   stroke-width: 1;
 }
@@ -587,18 +587,18 @@ body::-webkit-scrollbar-track {
 }
 
 .elevation-aid-distance {
-  fill: #ff2d2d;
+  fill: #2e6a3c;
   font-weight: 700;
 }
 
 .elevation-hover-line {
-  stroke: rgba(27, 39, 95, 0.8);
+  stroke: rgba(46, 106, 60, 0.85);
   stroke-width: 1.5;
   stroke-dasharray: 4 3;
 }
 
 .elevation-hover-dot {
-  fill: #1b275f;
+  fill: #2e6a3c;
   stroke: #fff;
   stroke-width: 1.5;
 }
