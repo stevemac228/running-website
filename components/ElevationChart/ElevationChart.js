@@ -111,8 +111,8 @@ export default function ElevationChart({ race }) {
 
     const sampled = downsample(profile);
     const width = 1000;
-    const height = 270;
-    const margin = { top: 16, right: 18, bottom: 66, left: 60 };
+    const height = 290;
+    const margin = { top: 16, right: 18, bottom: 88, left: 60 };
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.top - margin.bottom;
     const maxDistance = Math.max(sampled[sampled.length - 1].distanceKm, 0.001);
@@ -167,6 +167,22 @@ export default function ElevationChart({ race }) {
   if (!chart) return null;
 
   const aidStations = Array.isArray(race?.elevationAidStations) ? race.elevationAidStations : [];
+  const courseSegments = Array.isArray(race?.elevationCourseSegments)
+    ? race.elevationCourseSegments
+        .map((entry) => {
+          if (!Array.isArray(entry) || entry.length !== 2) return null;
+          const [name, bounds] = entry;
+          if (typeof name !== "string" || !Array.isArray(bounds) || bounds.length !== 2) return null;
+          const [startKm, endKm] = bounds;
+          if (!Number.isFinite(startKm) || !Number.isFinite(endKm)) return null;
+          return {
+            name,
+            startKm: Math.min(startKm, endKm),
+            endKm: Math.max(startKm, endKm),
+          };
+        })
+        .filter(Boolean)
+    : [];
 
   return (
     <div className="elevation-chart-wrapper">
@@ -212,7 +228,6 @@ export default function ElevationChart({ race }) {
 
           {chart.xTicks.map((tick) => (
             <g key={`x-${tick.value}`}>
-              <line x1={tick.x} y1={chart.margin.top} x2={tick.x} y2={chart.margin.top + chart.plotHeight} className="elevation-grid-line elevation-grid-line-vertical" />
               <text x={tick.x} y={chart.margin.top + chart.plotHeight + 20} textAnchor="middle" className="elevation-axis-text">
                 {tick.value} km
               </text>
@@ -244,6 +259,33 @@ export default function ElevationChart({ race }) {
                 </g>
               );
             })}
+
+          {courseSegments.map((segment) => {
+            const startX = chart.xFor(Math.min(Math.max(segment.startKm, 0), chart.maxDistance));
+            const endX = chart.xFor(Math.min(Math.max(segment.endKm, 0), chart.maxDistance));
+            const width = Math.max(endX - startX, 2);
+            const centerX = startX + width / 2;
+            return (
+              <g key={`${segment.name}-${segment.startKm}-${segment.endKm}`}>
+                <rect
+                  x={startX}
+                  y={chart.margin.top + chart.plotHeight + 54}
+                  width={width}
+                  height="8"
+                  rx="3"
+                  className="elevation-segment-band"
+                />
+                <text
+                  x={centerX}
+                  y={chart.margin.top + chart.plotHeight + 73}
+                  textAnchor="middle"
+                  className="elevation-segment-text"
+                >
+                  {segment.name}
+                </text>
+              </g>
+            );
+          })}
 
           <line x1={chart.margin.left} y1={chart.margin.top + chart.plotHeight} x2={chart.margin.left + chart.plotWidth} y2={chart.margin.top + chart.plotHeight} className="elevation-axis-line" />
           <line x1={chart.margin.left} y1={chart.margin.top} x2={chart.margin.left} y2={chart.margin.top + chart.plotHeight} className="elevation-axis-line" />

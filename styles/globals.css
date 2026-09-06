@@ -591,6 +591,18 @@ body::-webkit-scrollbar-track {
   font-weight: 700;
 }
 
+.elevation-segment-band {
+  fill: rgba(46, 106, 60, 0.2);
+  stroke: rgba(46, 106, 60, 0.55);
+  stroke-width: 1;
+}
+
+.elevation-segment-text {
+  font-size: 9px;
+  fill: #244f30;
+  font-weight: 600;
+}
+
 .elevation-hover-line {
   stroke: rgba(46, 106, 60, 0.85);
   stroke-width: 1.5;

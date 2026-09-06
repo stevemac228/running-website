@@ -1293,6 +1293,29 @@
         "name": "Aid 4",
         "distanceKm": 44.7
       }
+    ],
+    "elevationCourseSegments": [
+      [
+        "Stiles Cove",
+        [
+          1.35,
+          8.32
+        ]
+      ],
+      [
+        "Trail 2",
+        [
+          9,
+          15.2
+        ]
+      ],
+      [
+        "Trail 3",
+        [
+          16,
+          22.56
+        ]
+      ]
     ]
   },
   {
