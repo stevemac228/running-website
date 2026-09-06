@@ -508,20 +508,22 @@ body::-webkit-scrollbar-track {
 }
 
 .race-detail-elevation-section {
-  margin-top: 28px;
+  margin-top: 22px;
 }
 
 .elevation-chart-wrapper {
   width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
 }
 
 .elevation-chart-container {
   position: relative;
   width: 100%;
   background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(5, 24, 76, 0.12);
   border-radius: 10px;
-  padding: 8px;
+  padding: 6px 8px 4px;
 }
 
 .elevation-chart-svg {
@@ -531,38 +533,39 @@ body::-webkit-scrollbar-track {
 }
 
 .elevation-grid-line {
-  stroke: rgba(0, 0, 0, 0.12);
+  stroke: rgba(28, 52, 110, 0.18);
   stroke-width: 1;
 }
 
 .elevation-grid-line-vertical {
-  stroke-dasharray: 4 5;
+  stroke-dasharray: 3 5;
+  stroke: rgba(255, 59, 48, 0.28);
 }
 
 .elevation-axis-line {
-  stroke: rgba(0, 0, 0, 0.7);
-  stroke-width: 1.5;
+  stroke: rgba(20, 36, 83, 0.46);
+  stroke-width: 1.2;
 }
 
 .elevation-axis-text {
-  font-size: 12px;
-  fill: #555;
+  font-size: 11px;
+  fill: #687294;
 }
 
 .elevation-axis-label {
-  font-size: 13px;
-  fill: #222;
+  font-size: 12px;
+  fill: #142453;
   font-weight: 600;
 }
 
 .elevation-area {
-  fill: rgba(255, 66, 66, 0.15);
+  fill: url(#elevationAreaGradient);
 }
 
 .elevation-line {
   fill: none;
-  stroke: #ff3b30;
-  stroke-width: 2;
+  stroke: #ff2d2d;
+  stroke-width: 2.2;
 }
 
 .elevation-aid-line {
@@ -573,14 +576,19 @@ body::-webkit-scrollbar-track {
 
 .elevation-aid-dot {
   fill: #ff3b30;
-  stroke: #fff;
+  stroke: #ffffff;
   stroke-width: 1;
 }
 
 .elevation-aid-text {
   font-size: 10px;
-  fill: #8a1f1f;
+  fill: #0f1f55;
   font-weight: 600;
+}
+
+.elevation-aid-distance {
+  fill: #ff2d2d;
+  font-weight: 700;
 }
 
 .elevation-hover-line {
@@ -606,6 +614,19 @@ body::-webkit-scrollbar-track {
   padding: 6px 8px;
   pointer-events: none;
   white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+}
+
+.elevation-start-dot {
+  fill: #58c84a;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+}
+
+.elevation-finish-box {
+  fill: #ffffff;
+  stroke: #0e1632;
+  stroke-width: 1.5;
 }
 
 /* Race Detail Page - Mobile Responsive */
@@ -714,7 +735,7 @@ body::-webkit-scrollbar-track {
     border-radius: 0;
     border-left: none;
     border-right: none;
-    padding: 6px 2px;
+    padding: 4px 2px;
   }
 
   .elevation-axis-text {
@@ -726,7 +747,7 @@ body::-webkit-scrollbar-track {
   }
 
   .elevation-aid-text {
-    font-size: 9px;
+    font-size: 8px;
   }
 }
 /* #endregion */

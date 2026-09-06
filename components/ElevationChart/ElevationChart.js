@@ -111,8 +111,8 @@ export default function ElevationChart({ race }) {
 
     const sampled = downsample(profile);
     const width = 1000;
-    const height = 320;
-    const margin = { top: 16, right: 18, bottom: 44, left: 56 };
+    const height = 250;
+    const margin = { top: 16, right: 18, bottom: 66, left: 60 };
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.top - margin.bottom;
     const maxDistance = Math.max(sampled[sampled.length - 1].distanceKm, 0.001);
@@ -127,8 +127,8 @@ export default function ElevationChart({ race }) {
     const line = sampled.map((point, index) => `${index === 0 ? "M" : "L"}${xFor(point.distanceKm)},${yFor(point.elevationM)}`).join(" ");
     const area = `${line} L${xFor(sampled[sampled.length - 1].distanceKm)},${margin.top + plotHeight} L${xFor(sampled[0].distanceKm)},${margin.top + plotHeight} Z`;
 
-    const yTicks = Array.from({ length: 5 }, (_, index) => {
-      const ratio = index / 4;
+    const yTicks = Array.from({ length: 4 }, (_, index) => {
+      const ratio = index / 3;
       const elevation = maxElevation - ratio * elevationRange;
       return {
         y: margin.top + ratio * plotHeight,
@@ -136,8 +136,8 @@ export default function ElevationChart({ race }) {
       };
     });
 
-    const xTicks = Array.from({ length: 6 }, (_, index) => {
-      const ratio = index / 5;
+    const xTicks = Array.from({ length: 5 }, (_, index) => {
+      const ratio = index / 4;
       const distance = ratio * maxDistance;
       return {
         x: margin.left + ratio * plotWidth,
@@ -188,11 +188,18 @@ export default function ElevationChart({ race }) {
         onMouseLeave={() => setHover(null)}
       >
         <svg className="elevation-chart-svg" viewBox={`0 0 ${chart.width} ${chart.height}`} role="img" aria-label={`${race?.name || "Race"} elevation profile`}>
+          <defs>
+            <linearGradient id="elevationAreaGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#ff3b30" stopOpacity="0.28" />
+              <stop offset="100%" stopColor="#ff3b30" stopOpacity="0.03" />
+            </linearGradient>
+          </defs>
+
           {chart.yTicks.map((tick) => (
             <g key={`y-${tick.value}`}>
               <line x1={chart.margin.left} y1={tick.y} x2={chart.margin.left + chart.plotWidth} y2={tick.y} className="elevation-grid-line" />
               <text x={chart.margin.left - 8} y={tick.y + 4} textAnchor="end" className="elevation-axis-text">
-                {tick.value}
+                {tick.value.toLocaleString()} M
               </text>
             </g>
           ))}
@@ -201,7 +208,7 @@ export default function ElevationChart({ race }) {
             <g key={`x-${tick.value}`}>
               <line x1={tick.x} y1={chart.margin.top} x2={tick.x} y2={chart.margin.top + chart.plotHeight} className="elevation-grid-line elevation-grid-line-vertical" />
               <text x={tick.x} y={chart.margin.top + chart.plotHeight + 20} textAnchor="middle" className="elevation-axis-text">
-                {tick.value}
+                {tick.value} km
               </text>
             </g>
           ))}
@@ -220,8 +227,13 @@ export default function ElevationChart({ race }) {
                 <g key={`${station.name}-${station.distanceKm}`}>
                   <line x1={stationX} y1={chart.margin.top} x2={stationX} y2={chart.margin.top + chart.plotHeight} className="elevation-aid-line" />
                   <circle cx={stationX} cy={stationY} r="4" className="elevation-aid-dot" />
-                  <text x={stationX} y={chart.margin.top - 2} textAnchor="middle" className="elevation-aid-text">
-                    {station.name}
+                  <text x={stationX} y={chart.margin.top + chart.plotHeight + 36} textAnchor="middle" className="elevation-aid-text">
+                    <tspan x={stationX} className="elevation-aid-distance">
+                      {station.distanceKm.toFixed(1)} KM
+                    </tspan>
+                    <tspan x={stationX} dy="12">
+                      {station.name}
+                    </tspan>
                   </text>
                 </g>
               );
@@ -249,6 +261,9 @@ export default function ElevationChart({ race }) {
               <circle cx={hover.x} cy={hover.y} r="4" className="elevation-hover-dot" />
             </g>
           )}
+
+          <circle cx={chart.margin.left} cy={chart.margin.top + chart.plotHeight} r="4.5" className="elevation-start-dot" />
+          <rect x={chart.margin.left + chart.plotWidth - 5} y={chart.margin.top + chart.plotHeight - 5} width="10" height="10" className="elevation-finish-box" />
         </svg>
         {hover && (
           <div className="elevation-chart-tooltip" style={{ left: `${(hover.x / chart.width) * 100}%`, top: `${(hover.y / chart.height) * 100}%` }}>
