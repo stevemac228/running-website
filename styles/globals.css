@@ -508,6 +508,7 @@ body::-webkit-scrollbar-track {
 }
 
 .race-detail-elevation-section {
+  grid-column: 1 / -1;
   margin-top: 22px;
 }
 

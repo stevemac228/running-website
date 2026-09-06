@@ -482,14 +482,14 @@ export default function RaceDetail() {
               <PaceCalculator distance={race.distance} />
             )}
           </aside>
-        </div>
 
-        {race.hasElevationChart && (
-          <section className="race-detail-elevation-section">
-            <h2 className="race-detail-section-title">Elevation Profile</h2>
-            <ElevationChart race={race} />
-          </section>
-        )}
+          {race.hasElevationChart && (
+            <section className="race-detail-elevation-section">
+              <h2 className="race-detail-section-title">Elevation Profile</h2>
+              <ElevationChart race={race} />
+            </section>
+          )}
+        </div>
       </main>
 
       <Footer />
