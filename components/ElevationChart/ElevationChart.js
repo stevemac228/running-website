@@ -53,7 +53,12 @@ export default function ElevationChart({ race }) {
   useEffect(() => {
     let cancelled = false;
     async function loadProfile() {
-      if (!race?.hasElevationChart) return;
+      if (!race?.hasElevationChart) {
+        setProfile([]);
+        setError(null);
+        setLoading(false);
+        return;
+      }
       setLoading(true);
       setError(null);
       setHover(null);
@@ -110,7 +115,7 @@ export default function ElevationChart({ race }) {
     const margin = { top: 16, right: 18, bottom: 44, left: 56 };
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.top - margin.bottom;
-    const maxDistance = sampled[sampled.length - 1].distanceKm;
+    const maxDistance = Math.max(sampled[sampled.length - 1].distanceKm, 0.001);
     const elevations = sampled.map((point) => point.elevationM);
     const minElevation = Math.floor(Math.min(...elevations));
     const maxElevation = Math.ceil(Math.max(...elevations));
@@ -201,6 +206,9 @@ export default function ElevationChart({ race }) {
             </g>
           ))}
 
+          <path d={chart.area} className="elevation-area" />
+          <path d={chart.line} className="elevation-line" />
+
           {aidStations
             .filter((station) => Number.isFinite(station?.distanceKm))
             .map((station) => {
@@ -218,9 +226,6 @@ export default function ElevationChart({ race }) {
                 </g>
               );
             })}
-
-          <path d={chart.area} className="elevation-area" />
-          <path d={chart.line} className="elevation-line" />
 
           <line x1={chart.margin.left} y1={chart.margin.top + chart.plotHeight} x2={chart.margin.left + chart.plotWidth} y2={chart.margin.top + chart.plotHeight} className="elevation-axis-line" />
           <line x1={chart.margin.left} y1={chart.margin.top} x2={chart.margin.left} y2={chart.margin.top + chart.plotHeight} className="elevation-axis-line" />
