@@ -507,6 +507,107 @@ body::-webkit-scrollbar-track {
   background: #7ebc6f;
 }
 
+.race-detail-elevation-section {
+  margin-top: 28px;
+}
+
+.elevation-chart-wrapper {
+  width: 100%;
+}
+
+.elevation-chart-container {
+  position: relative;
+  width: 100%;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  padding: 8px;
+}
+
+.elevation-chart-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.elevation-grid-line {
+  stroke: rgba(0, 0, 0, 0.12);
+  stroke-width: 1;
+}
+
+.elevation-grid-line-vertical {
+  stroke-dasharray: 4 5;
+}
+
+.elevation-axis-line {
+  stroke: rgba(0, 0, 0, 0.7);
+  stroke-width: 1.5;
+}
+
+.elevation-axis-text {
+  font-size: 12px;
+  fill: #555;
+}
+
+.elevation-axis-label {
+  font-size: 13px;
+  fill: #222;
+  font-weight: 600;
+}
+
+.elevation-area {
+  fill: rgba(255, 66, 66, 0.15);
+}
+
+.elevation-line {
+  fill: none;
+  stroke: #ff3b30;
+  stroke-width: 2;
+}
+
+.elevation-aid-line {
+  stroke: rgba(255, 59, 48, 0.6);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
+.elevation-aid-dot {
+  fill: #ff3b30;
+  stroke: #fff;
+  stroke-width: 1;
+}
+
+.elevation-aid-text {
+  font-size: 10px;
+  fill: #8a1f1f;
+  font-weight: 600;
+}
+
+.elevation-hover-line {
+  stroke: rgba(27, 39, 95, 0.8);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+.elevation-hover-dot {
+  fill: #1b275f;
+  stroke: #fff;
+  stroke-width: 1.5;
+}
+
+.elevation-chart-tooltip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 10px));
+  background: rgba(27, 39, 95, 0.95);
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.25;
+  border-radius: 6px;
+  padding: 6px 8px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
 /* Race Detail Page - Mobile Responsive */
 @media (max-width: 768px) {
   .race-detail-main {
@@ -603,6 +704,29 @@ body::-webkit-scrollbar-track {
   .race-detail-coordinates {
     font-size: 12px;
     padding: 0;
+  }
+
+  .race-detail-elevation-section .race-detail-section-title {
+    padding: 0 12px;
+  }
+
+  .elevation-chart-container {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    padding: 6px 2px;
+  }
+
+  .elevation-axis-text {
+    font-size: 10px;
+  }
+
+  .elevation-axis-label {
+    font-size: 11px;
+  }
+
+  .elevation-aid-text {
+    font-size: 9px;
   }
 }
 /* #endregion */
