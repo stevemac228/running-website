@@ -100,6 +100,20 @@ export default function RaceDetail() {
     return entries;
   }, [race]);
 
+  const heroStats = useMemo(() => {
+    if (!race) return [];
+
+    const distanceValue =
+      typeof race.distance === "number" ? `${race.distance} km` : race.distance || "—";
+
+    return [
+      { label: "Distance", value: distanceValue },
+      { label: "Terrain", value: race.terrain || "—" },
+      { label: "Format", value: race.format || "—" },
+      { label: "Start", value: race.startTime ? formatTime(race.startTime) : "—" },
+    ];
+  }, [race]);
+
   // Human readable label from camelCase / keys
   function humanLabel(k) {
     return String(k)
@@ -397,23 +411,33 @@ export default function RaceDetail() {
       <Header />
 
       <main className="race-detail-main">
-        <header className="race-detail-header">
+        <section className="race-detail-hero">
+          <div className="race-detail-hero-meta">
+            <span>{race.location || "Newfoundland and Labrador"}</span>
+            {race.nLAACertified ? <span className="race-detail-hero-badge">NLAA Certified</span> : null}
+          </div>
           <h1 className="race-detail-title">{race.name}</h1>
           <div className="race-detail-subtitle">
             {race.date ? (
-              <>
-                {" "}
-                <span className={isPreviousYear(race.date) ? "race-date-previous-year" : ""}>
-                  {formatDate(race.date)}
-                </span>
-              </>
-            ) : null}{" "}
-            {race.startTime ? `• ${formatTime(race.startTime)}` : null}
+              <span className={isPreviousYear(race.date) ? "race-date-previous-year" : ""}>
+                {formatDate(race.date)}
+              </span>
+            ) : null}
+            {race.startTime ? <span>• {formatTime(race.startTime)}</span> : null}
           </div>
-        </header>
+          <div className="race-detail-hero-stats">
+            {heroStats.map((item) => (
+              <div key={item.label} className="race-detail-hero-stat">
+                <div className="race-detail-hero-stat-label">{item.label}</div>
+                <div className="race-detail-hero-stat-value">{item.value}</div>
+              </div>
+            ))}
+          </div>
+        </section>
 
-        <div className="race-detail-grid">
-          <section>
+        <div className="race-detail-content-shell">
+          <div className="race-detail-grid">
+            <section className="race-detail-content-card">
             <div className="race-detail-info-grid">
               {displayEntries.map(({ key, label, value }) => {
                 // Insert registration timeline after distance field
@@ -449,7 +473,7 @@ export default function RaceDetail() {
               )}
           </section>
 
-          <aside>
+          <aside className="race-detail-map-card">
             <h2 className="race-detail-section-title">Race Map</h2>
 
             <div className="race-detail-map-container">
@@ -495,14 +519,15 @@ export default function RaceDetail() {
             )}
 
 
-          </aside>
+            </aside>
 
-          {race.hasElevationChart && (
-            <section className="race-detail-elevation-section">
-              <h2 className="race-detail-section-title">Elevation Profile</h2>
-              <ElevationChart race={race} />
-            </section>
-          )}
+            {race.hasElevationChart && (
+              <section className="race-detail-elevation-section">
+                <h2 className="race-detail-section-title">Elevation Profile</h2>
+                <ElevationChart race={race} />
+              </section>
+            )}
+          </div>
         </div>
       </main>
 
