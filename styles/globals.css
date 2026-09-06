@@ -402,7 +402,7 @@ body::-webkit-scrollbar-track {
 
 .race-detail-grid {
   display: grid;
-  grid-template-columns: 1fr 380px;
+  grid-template-columns: minmax(0, 1fr) 40vw;
   gap: 24px;
   align-items: start;
 }
@@ -425,6 +425,13 @@ body::-webkit-scrollbar-track {
   border-bottom: 2px solid rgba(0, 0, 0, 0.07);
 }
 
+/* Keep aside same height as section in desktop grid */
+.race-detail-grid > aside {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .race-detail-info-label {
   min-width: 200px;
   font-weight: 700;
@@ -436,7 +443,7 @@ body::-webkit-scrollbar-track {
 
 .race-detail-map-container {
   width: 100%;
-  height: 320px;
+  height: 100%;
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
@@ -514,21 +521,20 @@ body::-webkit-scrollbar-track {
 
 .elevation-chart-wrapper {
   width: 100%;
-  margin: 0;
+  max-width: 2200px; /* increased width */
+  margin: 0 auto;   /* center horizontally */
 }
 
 .elevation-chart-container {
   position: relative;
   width: 100%;
-  background: #fff;
-  border: 1px solid rgba(5, 24, 76, 0.12);
-  border-radius: 10px;
   padding: 6px 8px 4px;
+  box-sizing: border-box;
 }
 
 .elevation-chart-svg {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
 }
 
@@ -556,6 +562,7 @@ body::-webkit-scrollbar-track {
   font-size: 12px;
   fill: #142453;
   font-weight: 600;
+  transform: translateY(20px); /* move axis name further away from graph */
 }
 
 .elevation-area-base {
@@ -564,13 +571,13 @@ body::-webkit-scrollbar-track {
 
 .elevation-line-base {
   fill: none;
-  stroke: rgba(36, 85, 50, 0.35);
-  stroke-width: 1.6;
+  stroke: rgba(34, 143, 65, 0.432);
+  stroke-width: 1.2;
 }
 
 .elevation-aid-line {
-  stroke: rgba(46, 106, 60, 0.6);
-  stroke-width: 1;
+  stroke: rgba(44, 145, 68, 0.6);
+  stroke-width: 1.6;
   stroke-dasharray: 3 4;
 }
 
@@ -584,6 +591,7 @@ body::-webkit-scrollbar-track {
   font-size: 10px;
   fill: #0f1f55;
   font-weight: 600;
+  transform: translateY(20px); /* move aid station labels down a bit */
 }
 
 .elevation-aid-distance {
@@ -684,7 +692,7 @@ body::-webkit-scrollbar-track {
   }
 
   .race-detail-map-container {
-    height: 280px;
+    height: 100%;
     border-radius: 0;
     border: none;
     width: 100%;
@@ -1253,10 +1261,16 @@ body::-webkit-scrollbar-track {
   color: var(--runnl-dark-text);
 }
 
-/* Mobile: stack sections vertically */
-@media (max-width: 1024px) {
-  .registrations-container {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
+/* Elevation segment bar styles */
+.elevation-segment-bar-line {
+  stroke: #23ad48;
+  stroke-width: 1.5;
+  stroke-linecap: butt;
+  opacity: 0.8;
+}
+
+.elevation-segment-bar-cap {
+  stroke: #23ad48;
+  stroke-width: 1.5;
+  opacity: 0.9;
 }

@@ -1259,7 +1259,7 @@
     "nickName": "ECT 50",
     "date": "2026-10-24",
     "startTime": "7:35 AM",
-    "distance": 50,
+    "distance": 49.45,
     "registrationStart": "2026-03-16",
     "earlyBirdDeadline": null,
     "earlyBirdCost": null,
@@ -1268,7 +1268,7 @@
     "fundraiser": false,
     "medal": false,
     "shirt": false,
-    "reception": false,
+    "reception": true,
     "location": "Flatrock",
     "startLineLocation": "Flatrock",
     "organization": null,
@@ -1278,42 +1278,52 @@
     "hasElevationChart": true,
     "elevationAidStations": [
       {
-        "name": "Aid 1",
-        "distanceKm": 10.5
+        "name": "Flatrock Aid Station",
+        "distanceKm": 15.68
       },
       {
-        "name": "Aid 2",
-        "distanceKm": 21.4
+        "name": "Middle Cove Beach Aid Station",
+        "distanceKm": 29.8
       },
       {
-        "name": "Aid 3",
-        "distanceKm": 33.8
-      },
-      {
-        "name": "Aid 4",
-        "distanceKm": 44.7
+        "name": "Marine Labs Aid Station",
+        "distanceKm": 41.46
       }
     ],
     "elevationCourseSegments": [
       [
-        "Stiles Cove",
+        "Stiles Cove Path",
         [
-          1.35,
-          8.32
+          1.32,
+          14.92
         ]
       ],
       [
-        "Trail 2",
+        "Father Troy Path",
         [
-          9,
-          15.2
+          16.46,
+          25.1
         ]
       ],
       [
-        "Trail 3",
+        "Silver Mine Head Path",
         [
-          16,
-          22.56
+          27,
+          29
+        ]
+      ],
+      [
+        "Cobblers Path",
+        [
+          32,
+          36.9
+        ]
+      ],
+      [
+        "Sugarloaf Path",
+        [
+          40.8,
+          48.6
         ]
       ]
     ]

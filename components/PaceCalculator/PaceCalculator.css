@@ -3,7 +3,7 @@
   border: 1px solid var(--runnl-border);
   border-radius: 12px;
   padding: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
   box-shadow: var(--shadow-sm);
 }
 
@@ -16,7 +16,7 @@
 
 .pace-calculator-grid {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 1.25rem;
 }
 

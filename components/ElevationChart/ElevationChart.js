@@ -58,6 +58,17 @@ function getSegmentPoints(points, startKm, endKm) {
   return unique.length >= 2 ? unique : [];
 }
 
+function normalizeNumber(value, decimals = 3) {
+  const fixed = Number(value.toFixed(decimals));
+  return Number.isInteger(fixed) ? Math.round(fixed) : fixed;
+}
+
+function formatNumber(value, decimals = 2) {
+  if (!Number.isFinite(value)) return "";
+  const rounded = Number(value.toFixed(decimals));
+  return Number.isInteger(rounded) ? String(Math.round(rounded)) : String(rounded);
+}
+
 export default function ElevationChart({ race }) {
   const [profile, setProfile] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -91,8 +102,8 @@ export default function ElevationChart({ race }) {
             if (i > 0) distanceMeters += distanceInMeters(segment[i - 1], point);
             if (typeof point.ele === "number" && Number.isFinite(point.ele)) {
               points.push({
-                distanceKm: distanceMeters / 1000,
-                elevationM: point.ele,
+                distanceKm: normalizeNumber(distanceMeters / 1000),
+                elevationM: normalizeNumber(point.ele, 2),
               });
             }
           }
@@ -124,7 +135,7 @@ export default function ElevationChart({ race }) {
     if (!profile.length) return null;
 
     const sampled = downsample(profile);
-    const width = 1000;
+    const width = 1800; // was 1000
     const height = 290;
     const margin = { top: 16, right: 18, bottom: 88, left: 60 };
     const plotWidth = width - margin.left - margin.right;
@@ -197,7 +208,7 @@ export default function ElevationChart({ race }) {
         })
         .filter(Boolean)
     : [];
-  const segmentPalette = ["#6ab57d", "#58a56c", "#46945b", "#36834b", "#2e6a3c", "#245532"];
+  const segmentPalette = ["#23ad48"];
   const segmentDrawData = courseSegments
     .map((segment, index) => {
       const color = segmentPalette[index % segmentPalette.length];
@@ -218,11 +229,16 @@ export default function ElevationChart({ race }) {
         linePath,
         areaPath,
         startX,
+        endX,
         bandWidth,
         centerX,
       };
     })
     .filter(Boolean);
+
+  const aidTextY = chart.margin.top + chart.plotHeight + 24;
+  const segmentBarY = chart.margin.top + chart.plotHeight + 8;
+  const segmentLabelY = chart.margin.top + chart.plotHeight + 20;
 
   return (
     <div className="elevation-chart-wrapper">
@@ -230,23 +246,41 @@ export default function ElevationChart({ race }) {
         <svg
           className="elevation-chart-svg"
           viewBox={`0 0 ${chart.width} ${chart.height}`}
+          preserveAspectRatio="xMidYMid meet"
           role="img"
           aria-label={`${race?.name || "Race"} elevation profile`}
           onMouseMove={(event) => {
             const svgRect = event.currentTarget.getBoundingClientRect();
             const containerRect = event.currentTarget.parentElement.getBoundingClientRect();
+
             const svgX = ((event.clientX - svgRect.left) / svgRect.width) * chart.width;
-            const clamped = Math.min(Math.max(svgX, chart.margin.left), chart.margin.left + chart.plotWidth);
-            const distanceKm = ((clamped - chart.margin.left) / chart.plotWidth) * chart.maxDistance;
-          const point = findNearestPoint(profile, distanceKm);
-          if (!point) return;
-          setHover({
-            point,
-            x: clamped,
-            y: chart.yFor(point.elevationM),
-            tooltipLeft: event.clientX - containerRect.left,
-            tooltipTop: event.clientY - containerRect.top,
-          });
+            const svgY = ((event.clientY - svgRect.top) / svgRect.height) * chart.height;
+
+            const minX = chart.margin.left;
+            const maxX = chart.margin.left + chart.plotWidth;
+            const minY = chart.margin.top;
+            const maxY = chart.margin.top + chart.plotHeight;
+
+            const isInsidePlot = svgX >= minX && svgX <= maxX && svgY >= minY && svgY <= maxY;
+            if (!isInsidePlot) {
+              setHover(null);
+              return;
+            }
+
+            const distanceKm = ((svgX - chart.margin.left) / chart.plotWidth) * chart.maxDistance;
+            const point = findNearestPoint(profile, distanceKm);
+            if (!point) {
+              setHover(null);
+              return;
+            }
+
+            setHover({
+              point,
+              x: svgX,
+              y: chart.yFor(point.elevationM),
+              tooltipLeft: event.clientX - containerRect.left,
+              tooltipTop: event.clientY - containerRect.top,
+            });
           }}
           onMouseLeave={() => setHover(null)}
         >
@@ -267,22 +301,14 @@ export default function ElevationChart({ race }) {
               </text>
             </g>
           ))}
-
-          {chart.xTicks.map((tick) => (
-            <g key={`x-${tick.value}`}>
-              <text x={tick.x} y={chart.margin.top + chart.plotHeight + 20} textAnchor="middle" className="elevation-axis-text">
-                {tick.value} km
-              </text>
-            </g>
-          ))}
-
+          
           <path d={chart.area} className="elevation-area-base" />
           <path d={chart.line} className="elevation-line-base" />
 
           {segmentDrawData.map((segment) => (
             <g key={`${segment.name}-shape-${segment.startKm}-${segment.endKm}`}>
               <path d={segment.areaPath} fill={`url(#${segment.gradientId})`} />
-              <path d={segment.linePath} fill="none" stroke={segment.color} strokeWidth="2.4" />
+              <path d={segment.linePath} fill="none" stroke={segment.color} strokeWidth="1.4" />
             </g>
           ))}
 
@@ -297,11 +323,11 @@ export default function ElevationChart({ race }) {
                 <g key={`${station.name}-${station.distanceKm}`}>
                   <line x1={stationX} y1={chart.margin.top} x2={stationX} y2={chart.margin.top + chart.plotHeight} className="elevation-aid-line" />
                   <circle cx={stationX} cy={stationY} r="4" className="elevation-aid-dot" />
-                  <text x={stationX} y={chart.margin.top + chart.plotHeight + 36} textAnchor="middle" className="elevation-aid-text">
+                  <text x={stationX} y={aidTextY} textAnchor="middle" className="elevation-aid-text">
                     <tspan x={stationX} className="elevation-aid-distance">
-                      {station.distanceKm.toFixed(1)} KM
+                      {formatNumber(station.distanceKm, 1)} KM
                     </tspan>
-                    <tspan x={stationX} dy="12">
+                    <tspan x={stationX} dy="10">
                       {station.name}
                     </tspan>
                   </text>
@@ -312,48 +338,45 @@ export default function ElevationChart({ race }) {
           {segmentDrawData.map((segment) => {
             return (
               <g key={`${segment.name}-${segment.startKm}-${segment.endKm}`}>
-                <rect
-                  x={segment.startX}
-                  y={chart.margin.top + chart.plotHeight + 54}
-                  width={segment.bandWidth}
-                  height="8"
-                  rx="3"
-                  fill={segment.color}
-                  fillOpacity="0.22"
-                  stroke={segment.color}
-                  strokeOpacity="0.65"
-                  strokeWidth="1"
+                <line
+                  x1={segment.startX}
+                  y1={segmentBarY}
+                  x2={segment.endX}
+                  y2={segmentBarY}
+                  className="elevation-segment-bar-line"
+                />
+                <line
+                  x1={segment.startX}
+                  y1={segmentBarY - 4}
+                  x2={segment.startX}
+                  y2={segmentBarY + 4}
+                  className="elevation-segment-bar-cap"
+                />
+                <line
+                  x1={segment.endX}
+                  y1={segmentBarY - 4}
+                  x2={segment.endX}
+                  y2={segmentBarY + 4}
+                  className="elevation-segment-bar-cap"
                 />
                 <text
                   x={segment.centerX}
-                  y={chart.margin.top + chart.plotHeight + 73}
+                  y={segmentLabelY}
                   textAnchor="middle"
                   className="elevation-segment-text"
                 >
                   <tspan x={segment.centerX}>{segment.name}</tspan>
-                  <tspan x={segment.centerX} dy="11" className="elevation-segment-range">
-                    {segment.startKm.toFixed(2)}–{segment.endKm.toFixed(2)} km
+                  <tspan x={segment.centerX} dy="10" className="elevation-segment-range">
+                    {formatNumber(segment.startKm, 1)}–{formatNumber(segment.endKm, 1)} km
                   </tspan>
                 </text>
               </g>
             );
           })}
-
+          
           <line x1={chart.margin.left} y1={chart.margin.top + chart.plotHeight} x2={chart.margin.left + chart.plotWidth} y2={chart.margin.top + chart.plotHeight} className="elevation-axis-line" />
           <line x1={chart.margin.left} y1={chart.margin.top} x2={chart.margin.left} y2={chart.margin.top + chart.plotHeight} className="elevation-axis-line" />
 
-          <text x={chart.margin.left + chart.plotWidth / 2} y={chart.height - 8} textAnchor="middle" className="elevation-axis-label">
-            Distance (km)
-          </text>
-          <text
-            x="16"
-            y={chart.margin.top + chart.plotHeight / 2}
-            transform={`rotate(-90 16 ${chart.margin.top + chart.plotHeight / 2})`}
-            textAnchor="middle"
-            className="elevation-axis-label"
-          >
-            Elevation (m)
-          </text>
 
           {hover && (
             <g>
@@ -367,7 +390,7 @@ export default function ElevationChart({ race }) {
         </svg>
         {hover && (
           <div className="elevation-chart-tooltip" style={{ left: `${hover.tooltipLeft}px`, top: `${hover.tooltipTop}px` }}>
-            <div>{hover.point.distanceKm.toFixed(2)} km</div>
+            <div>{formatNumber(hover.point.distanceKm, 1)} km</div>
             <div>{Math.round(hover.point.elevationM)} m</div>
           </div>
         )}

@@ -192,13 +192,19 @@ export default function RaceDetail() {
   useEffect(() => {
     if (!race || !coords || !mapRef.current) return;
 
-    let mounted = true;
+    let cancelled = false;
 
     async function initMap() {
       try {
-        // Load Leaflet
         const L = (await import("leaflet")).default;
-        
+        if (cancelled || !mapRef.current) return;
+
+        // ensure we never stack map instances on the same element
+        if (mapInstanceRef.current) {
+          mapInstanceRef.current.remove();
+          mapInstanceRef.current = null;
+        }
+
         // Add Leaflet CSS if not present
         if (!document.querySelector('link[data-leaflet]')) {
           const link = document.createElement("link");
@@ -208,9 +214,9 @@ export default function RaceDetail() {
           document.head.appendChild(link);
         }
 
-        // Create map centered on start location
         const map = L.map(mapRef.current).setView([coords.lat, coords.lon], 13);
-        
+        mapInstanceRef.current = map; // set immediately so cleanup can always remove safely
+
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
           attribution: "&copy; OpenStreetMap contributors",
         }).addTo(map);
@@ -260,12 +266,15 @@ export default function RaceDetail() {
 
         try {
           const gpxRes = await fetch(gpxUrl);
+          if (cancelled || !mapRef.current?.isConnected) return;
+
           if (gpxRes.ok) {
             const gpxText = await gpxRes.text();
+            if (cancelled || !mapRef.current?.isConnected) return;
+
             const segments = parseGpxToSegments(gpxText);
-            
+
             if (segments && segments.length > 0) {
-              // Draw the route
               const allLatLngs = [];
               segments.forEach((segment) => {
                 const latlngs = segment.map((pt) => [pt.lat, pt.lon]);
@@ -289,20 +298,22 @@ export default function RaceDetail() {
                 }
               });
 
-              // Fit map to show entire route
-              if (allLatLngs.length > 0) {
+              if (allLatLngs.length > 0 && !cancelled && mapRef.current?.isConnected) {
                 const bounds = L.latLngBounds(allLatLngs);
-                map.fitBounds(bounds.pad(0.1));
+                map.invalidateSize();
+                requestAnimationFrame(() => {
+                  if (!cancelled && mapRef.current?.isConnected) {
+                    map.fitBounds(bounds.pad(0.1));
+                  }
+                });
               }
             }
           }
         } catch (err) {
-          // GPX file not found or error loading - map will just show start location
           console.log("GPX not available for this race");
         }
 
-        if (mounted) {
-          mapInstanceRef.current = map;
+        if (!cancelled) {
           setMapLoaded(true);
         }
       } catch (err) {
@@ -313,7 +324,8 @@ export default function RaceDetail() {
     initMap();
 
     return () => {
-      mounted = false;
+      cancelled = true;
+      setMapLoaded(false);
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
@@ -430,6 +442,11 @@ export default function RaceDetail() {
                 );
               })}
             </div>
+            
+            {/* Pace Calculator */}
+              {race.distance && (
+                <PaceCalculator distance={race.distance} />
+              )}
           </section>
 
           <aside>
@@ -477,10 +494,7 @@ export default function RaceDetail() {
               </div>
             )}
 
-            {/* Pace Calculator */}
-            {race.distance && (
-              <PaceCalculator distance={race.distance} />
-            )}
+
           </aside>
 
           {race.hasElevationChart && (
