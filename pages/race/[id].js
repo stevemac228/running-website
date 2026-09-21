@@ -12,7 +12,6 @@ import { formatTime } from "../../utils/formatTime";
 import { getRaceId } from "../../utils/getRaceId";
 import { parseGpxToSegments } from "../../utils/parseGpx";
 import { getFirstGpxCoordinate } from "../../utils/getFirstGpxCoordinate";
-import { isPreviousYear } from "../../utils/isPreviousYear"; // <-- new import
 
 export default function RaceDetail() {
   const router = useRouter();
@@ -110,7 +109,7 @@ export default function RaceDetail() {
       { label: "Distance", value: distanceValue },
       { label: "Terrain", value: race.terrain || "—" },
       { label: "Format", value: race.format || "—" },
-      { label: "Start", value: race.startTime ? formatTime(race.startTime) : "—" },
+      { label: "Date", value: race.date ? formatDate(race.date) : "—" },
     ];
   }, [race]);
 
@@ -418,12 +417,7 @@ export default function RaceDetail() {
           </div>
           <h1 className="race-detail-title">{race.name}</h1>
           <div className="race-detail-subtitle">
-            {race.date ? (
-              <span className={isPreviousYear(race.date) ? "race-date-previous-year" : ""}>
-                {formatDate(race.date)}
-              </span>
-            ) : null}
-            {race.startTime ? <span>• {formatTime(race.startTime)}</span> : null}
+            {race.startTime ? <span>{formatTime(race.startTime)}</span> : null}
           </div>
           <div className="race-detail-hero-stats">
             {heroStats.map((item) => (
