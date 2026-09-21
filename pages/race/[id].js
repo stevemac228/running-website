@@ -109,7 +109,8 @@ export default function RaceDetail() {
       { label: "Distance", value: distanceValue },
       { label: "Terrain", value: race.terrain || "—" },
       { label: "Format", value: race.format || "—" },
-      { label: "Date", value: race.date ? formatDate(race.date) : "—" },
+      { label: "Location", value: race.location || "—" },
+      { label: "Date", value: race.date ? formatDate(race.date) + (race.startTime ? ` @ ${formatTime(race.startTime)}` : "") : "—" },
     ];
   }, [race]);
 
@@ -412,13 +413,9 @@ export default function RaceDetail() {
       <main className="race-detail-main">
         <section className="race-detail-hero">
           <div className="race-detail-hero-meta">
-            <span>{race.location || "Newfoundland and Labrador"}</span>
             {race.nLAACertified ? <span className="race-detail-hero-badge">NLAA Certified</span> : null}
           </div>
           <h1 className="race-detail-title">{race.name}</h1>
-          <div className="race-detail-subtitle">
-            {race.startTime ? <span>{formatTime(race.startTime)}</span> : null}
-          </div>
           <div className="race-detail-hero-stats">
             {heroStats.map((item) => (
               <div key={item.label} className="race-detail-hero-stat">
